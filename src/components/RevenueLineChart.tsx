@@ -45,7 +45,7 @@ export default function RevenueLineChart() {
     datasets: [
       {
         type: "bar" as const,
-        label: "Despesas",
+        label: "Receitas",
         data: [
           1200, 1900, 3000, 500, 2000, 1800, 2200, 1500, 2500, 2100, 2300, 2400,
         ],
@@ -63,9 +63,9 @@ export default function RevenueLineChart() {
         backgroundColor: "rgba(135, 206, 235, 1)",
         pointBackgroundColor: "#4169E1",
         pointBorderColor: "#fff",
-        pointRadius: 5,
+        pointRadius: 0,
         fill: false,
-        tension: 0.4,
+        tension: 0.1,
       },
     ],
   };

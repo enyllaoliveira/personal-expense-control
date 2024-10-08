@@ -49,8 +49,8 @@ export default function ExpenseLineChart() {
         data: [
           1200, 1900, 3000, 500, 2000, 1800, 2200, 1500, 2500, 2100, 2300, 2400,
         ],
-        backgroundColor: "rgba(75, 192, 192, 0.2)",
-        borderColor: "rgba(65, 105, 225, 1)  ",
+        backgroundColor: "rgba(255, 99, 132, 0.2)",
+        borderColor: "rgba(255, 178, 178, 0.2)",
         borderWidth: 1,
       },
       {
@@ -59,11 +59,11 @@ export default function ExpenseLineChart() {
         data: [
           1000, 1700, 2800, 400, 1800, 1600, 2100, 1400, 2300, 2000, 2200, 2300,
         ],
-        borderColor: "#4169E1",
-        backgroundColor: "rgba(135, 206, 235, 1)",
+        borderColor: "rgba(255, 99, 132, 1)",
+        backgroundColor: "rgba(255, 99, 132, 1)",
         pointBackgroundColor: "#4169E1",
         pointBorderColor: "#fff",
-        pointRadius: 4,
+        pointRadius: 0,
         fill: false,
         tension: 0.1,
       },

@@ -5,7 +5,7 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 export const doughnutDataToRevenue = {
-  labels: ["Emprego 1", "Emprego 1", "Lazer", "Educação", "Saúde", "Outros"],
+  labels: ["Emprego 1", "Emprego 2", "Aplicações financeiras"],
   datasets: [
     {
       label: "Distribuição de Despesas",
