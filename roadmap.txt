@@ -1,0 +1,23 @@
+1. conectar front ao back 
+usando cors para conectar o front ao back + token para autenticar 
+2. autenticação do usuário - axios e usercontext para gerenciamento do estado do usuário
+3. persistencia de autenticação do usuário, por meio do armazenamento do token JWT no localStorage ou cookies
+
+Context API: Criar contextos para despesas e receitas no frontend, facilitando o gerenciamento do estado em toda a aplicação.
+
+front: 
+4.criar formulários e interfaces para gerenciar os dados do cartão de crédito no frontend e conectar isso às rotas do backend.
+5.criar a interface para o usuário inserir, visualizar e gerenciar despesas e receitas. Conectar isso com as rotas do backend.
+6. formatar para real
+
+back:
+7. criar rotas para adicionar, editar, listar e deletar valores de cartão de crédito 
+8. criar rotas para adicionar, listar, editar e deletar despesas e receitas 
+9. trabalhar com regex para trabalhar com vírgula (valor financeiro)
+
+
+Futuro:
+Filtros e visualizações: Criar filtros para que o usuário visualize despesas e receitas por categoria, período, etc.
+Segurança JWT: Garantir que todas as rotas protegidas do backend exijam autenticação usando JWT.
+Testes: Realizar testes manuais ou automatizados para garantir que todas as rotas, tanto do frontend quanto do backend, estejam funcionando corretamente.
+Deploy: Preparar o frontend e o backend para deploy (ex: frontend no Vercel/Netlify e backend no Heroku ou servidor VPS).
