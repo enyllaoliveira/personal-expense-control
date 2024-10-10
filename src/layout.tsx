@@ -6,7 +6,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html lang="pt-BR">
       <body className="font-sans overflow-x-hidden scroll-smooth mr-auto pt-6">
         {" "}
-        <a className="ml-auto" href="/registro">
+        <a href="/registro">
           <FiLogIn />
         </a>
         {children}

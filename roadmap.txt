@@ -1,4 +1,11 @@
-1. conectar front ao back 
+feito:
+criação do dashboard inicial - front 
+criação telas de registro e login - front
+criação das rotas de usuário - back
+conectar ao banco de dados - back
+conectar front ao back - feito
+
+
 usando cors para conectar o front ao back + token para autenticar 
 2. autenticação do usuário - axios e usercontext para gerenciamento do estado do usuário
 3. persistencia de autenticação do usuário, por meio do armazenamento do token JWT no localStorage ou cookies
@@ -16,7 +23,7 @@ back:
 9. trabalhar com regex para trabalhar com vírgula (valor financeiro)
 
 
-Futuro:
+backlog:
 Filtros e visualizações: Criar filtros para que o usuário visualize despesas e receitas por categoria, período, etc.
 Segurança JWT: Garantir que todas as rotas protegidas do backend exijam autenticação usando JWT.
 Testes: Realizar testes manuais ou automatizados para garantir que todas as rotas, tanto do frontend quanto do backend, estejam funcionando corretamente.
