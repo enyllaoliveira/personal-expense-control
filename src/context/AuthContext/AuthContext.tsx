@@ -5,6 +5,8 @@ import {
   FormEvent,
   ReactNode,
 } from "react";
+import axios from "axios";
+
 import { useNavigate } from "react-router-dom";
 import { useApi } from "../../hooks/useApi";
 
@@ -45,6 +47,7 @@ export function UserProvider({ children }: UserProviderProps) {
       email: email,
       password: password,
     };
+    console.log("Enviando dados de registro:", userData);
     try {
       const response = await api.register(userData);
       if (response?.status === 201) {
@@ -52,7 +55,11 @@ export function UserProvider({ children }: UserProviderProps) {
         navigate("/login");
       }
     } catch (err) {
-      console.error("Erro ao registrar usuário:", err);
+      if (axios.isAxiosError(err)) {
+        console.error("Erro de Axios:", err.response?.data || err.message);
+      } else {
+        console.error("Erro desconhecido:", err);
+      }
     }
   };
   const handleLogin = async (e: FormEvent) => {

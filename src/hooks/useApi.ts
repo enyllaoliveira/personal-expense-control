@@ -22,13 +22,15 @@ export class useApi {
     try {
       const response = await api.post(
         `${import.meta.env.VITE_API_URL}/login`,
-        userData
+        userData,
+        { withCredentials: true }
       );
 
       console.log("Usuário logado com sucesso:", response.status);
       return response;
     } catch (error) {
       console.error("Erro ao logar usuário:", error);
+      throw error;
     }
   }
 }
