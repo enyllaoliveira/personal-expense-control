@@ -1,17 +1,38 @@
-import { useState } from "react";
+import { FormEvent, useState } from "react";
+import { useApi } from "../../hooks/useApi";
+import { useNavigate } from "react-router-dom";
 
 export function Login() {
+  const api = new useApi();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    const userData = {
+      email: email,
+      password: password,
+    };
+    try {
+      const response = await api.login(userData);
+      if (response?.status === 200) {
+        console.log("Usuário logado com sucesso:", response);
+        navigate("/dashboard");
+      }
+    } catch (err) {
+      console.error("Erro ao logar usuário:", err);
+    }
+  };
 
   return (
     <div className="flex w-full h-screen items-center justify-center flex-col">
-      <link href="/">
+      {/* <link href="/">
         <h1 className="h-9 text-lg font-medium text-white"> Área de login</h1>
-      </link>
+      </link> */}
 
       <form
-        // onSubmit={handleSubmit}
+        onSubmit={handleSubmit}
         className="w-full max-w-xl flex flex-col px-2"
       >
         <input
