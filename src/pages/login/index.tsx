@@ -1,36 +1,19 @@
-import { FormEvent, useState } from "react";
-import { useApi } from "../../hooks/useApi";
-import { useNavigate } from "react-router-dom";
+import { useUserContext } from "../../context/AuthContext/AuthContext";
 
-export function Login() {
-  const api = new useApi();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const navigate = useNavigate();
+export default function Login() {
+  const userContext = useUserContext();
 
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    const userData = {
-      email: email,
-      password: password,
-    };
-    try {
-      const response = await api.login(userData);
-      if (response?.status === 200) {
-        console.log("Usuário logado com sucesso:", response);
-        navigate("/dashboard");
-      }
-    } catch (err) {
-      console.error("Erro ao logar usuário:", err);
-    }
-  };
+  if (!userContext) {
+    return <div>Contexto de usuário não encontrado!</div>;
+  }
+  const { handleLogin, email, password, setEmail, setPassword } = userContext;
 
   return (
     <div className="flex w-full h-screen items-center justify-center flex-col">
       <h1 className="h-9 text-lg font-medium text-black"> Área de login</h1>
 
       <form
-        onSubmit={handleSubmit}
+        onSubmit={handleLogin}
         className="w-full max-w-xl flex flex-col px-2 gap-4"
       >
         <label className="flex flex-col items-start">

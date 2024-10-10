@@ -4,10 +4,10 @@ criação telas de registro e login - front
 criação das rotas de usuário - back
 conectar ao banco de dados - back
 conectar front ao back - feito
+autenticação do usuário - axios e usercontext para gerenciamento do estado do usuário
 
 
 usando cors para conectar o front ao back + token para autenticar 
-2. autenticação do usuário - axios e usercontext para gerenciamento do estado do usuário
 3. persistencia de autenticação do usuário, por meio do armazenamento do token JWT no localStorage ou cookies
 
 Context API: Criar contextos para despesas e receitas no frontend, facilitando o gerenciamento do estado em toda a aplicação.

@@ -1,30 +1,20 @@
-import { FormEvent, useState } from "react";
-import { useApi } from "../../hooks/useApi";
-import { useNavigate } from "react-router-dom";
+import { useUserContext } from "../../context/AuthContext/AuthContext";
 
-export function Registro() {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const api = new useApi();
-  const navigate = useNavigate();
-  const handleRegister = async (e: FormEvent) => {
-    e.preventDefault();
-    const userData = {
-      name: name,
-      email: email,
-      password: password,
-    };
-    try {
-      const response = await api.register(userData);
-      if (response?.status === 201) {
-        console.log("Usuário registrado:", response);
-        navigate("/login");
-      }
-    } catch (err) {
-      console.error("Erro ao registrar usuário:", err);
-    }
-  };
+export default function Registro() {
+  const userContext = useUserContext();
+
+  if (!userContext) {
+    return <div>Contexto de usuário não encontrado!</div>;
+  }
+  const {
+    handleRegister,
+    name,
+    email,
+    password,
+    setName,
+    setEmail,
+    setPassword,
+  } = userContext;
 
   return (
     <div className="flex w-full h-screen items-center justify-center flex-col">
@@ -38,7 +28,6 @@ export function Registro() {
           {" "}
           Digite o seu nome
           <input
-            // placeholder="Digite o seu nome"
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
