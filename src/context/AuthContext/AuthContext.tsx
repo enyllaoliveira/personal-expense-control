@@ -4,6 +4,7 @@ import {
   useContext,
   FormEvent,
   ReactNode,
+  useEffect,
 } from "react";
 import axios from "axios";
 
@@ -36,9 +37,24 @@ export function UserProvider({ children }: UserProviderProps) {
   const api = new useApi();
   const navigate = useNavigate();
   const [name, setName] = useState("");
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<User | null>(null);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
+
+  useEffect(() => {
+    if (user) {
+      localStorage.setItem("user", JSON.stringify(user));
+    } else {
+      localStorage.removeItem("user");
+    }
+  }, [user]);
 
   const handleRegister = async (e: FormEvent) => {
     e.preventDefault();
@@ -67,9 +83,10 @@ export function UserProvider({ children }: UserProviderProps) {
     const userData = { email, password };
     try {
       const response = await api.login(userData);
+      console.log("Usuário logado com sucesso:", response.data);
       if (response?.status === 200) {
-        setUser(response.data);
-        navigate("/dashboard");
+        setUser(response.data.user);
+        navigate("/meu-painel");
       }
     } catch (err) {
       console.error("Erro ao logar usuário:", err);
@@ -95,6 +112,6 @@ export function UserProvider({ children }: UserProviderProps) {
   );
 }
 
-export function useUserContext() {
+export function AuthContext() {
   return useContext(UserContext);
 }

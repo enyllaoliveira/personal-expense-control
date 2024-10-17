@@ -1,10 +1,10 @@
-import { useUserContext } from "../../context/AuthContext/AuthContext";
+import { AuthContext } from "../../context/AuthContext/AuthContext";
 
 export default function Login() {
-  const userContext = useUserContext();
+  const userContext = AuthContext();
 
   if (!userContext) {
-    return <div>Contexto de usuário não encontrado!</div>;
+    return <div>Contexto de usuário não encontrado!ss</div>;
   }
   const { handleLogin, email, password, setEmail, setPassword } = userContext;
 

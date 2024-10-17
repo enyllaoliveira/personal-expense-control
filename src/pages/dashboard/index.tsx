@@ -1,5 +1,5 @@
 import ExpenseLineChart from "../../components/ExpenseLineChart";
-import { doughnutDataToExpense } from "../../components/ExpensePierChat";
+import { doughnutDataToExpense } from "../../components/Forms/ExpensePierChatMock";
 import {
   stackedBarData,
   stackedOptions,
