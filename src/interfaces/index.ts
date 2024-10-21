@@ -1,6 +1,9 @@
 export interface Expense {
-    category?: string;
-    amount: number;
-    month?: string;
-    date?: string; 
-  }
+  id: string;
+  descricao?: string;
+  valor?: string;
+  data_pagamento?: string;
+  categoria_id?: string;
+  criado_em?: string;
+  atualizado_em?: string;
+}

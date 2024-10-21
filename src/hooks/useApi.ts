@@ -1,6 +1,7 @@
 import api from "../services/api";
 import Income from "../interfaces/income";
 import { AxiosResponse } from "axios";
+import { Expense } from "../interfaces";
 export class useApi {
   public async register(userData: {
     name: string;
@@ -40,15 +41,13 @@ export class useApi {
       const response = await api.get(
         `${import.meta.env.VITE_API_URL}/receitas?userId=${userId}`
       );
-
-      console.log("Lista de lançamentos", response);
       return response;
     } catch (error) {
       console.error("Erro ao adicionar receita:", error);
     }
   }
 
-  public async sendIncomes(incomesData: {
+  public async createIncome(incomesData: {
     userId: string;
     amount: string;
     description: string;
@@ -98,6 +97,130 @@ export class useApi {
       return response;
     } catch (error) {
       console.error("Erro ao editar lançamento:", error);
+      throw error;
+    }
+  }
+
+  public async getExpensesById(id: string | number) {
+    try {
+      const response = await api.get(
+        `${import.meta.env.VITE_API_URL}/despesas?userId=${id}`
+      );
+      return response;
+    } catch (error) {
+      console.error("Erro ao adicionar receita:", error);
+    }
+  }
+
+  public async createExpense(expensesData: {
+    valor: string;
+    descricao: string;
+    data_pagamento: string;
+    usuario_id: string;
+    categoria_id: string;
+  }) {
+    try {
+      const response = await api.post(
+        `${import.meta.env.VITE_API_URL}/despesas`,
+        expensesData,
+        { withCredentials: true }
+      );
+
+      console.log("Despesa adicionada com sucesso:", response.status);
+      return response;
+    } catch (error) {
+      console.error("Erro ao adicionar despesa:", error);
+    }
+  }
+
+  public async editExpenses(id: string, updateData: Partial<Expense>) {
+    try {
+      const response = await api.put(
+        `${import.meta.env.VITE_API_URL}/despesas/${id}`,
+        updateData
+      );
+      console.log("Despesa editada com sucesso:", response.status);
+      return response;
+    } catch (error) {
+      console.error("Erro ao editar despesa:", error);
+    }
+  }
+
+  public async deleteExpenses(id: string) {
+    try {
+      const response = await api.delete(
+        `${import.meta.env.VITE_API_URL}/despesas/${id}`,
+        { withCredentials: true }
+      );
+
+      console.log("Despesa excluída com sucesso:", response);
+      return response;
+    } catch (error) {
+      console.error("Erro ao excluir despesa:", error);
+      throw error;
+    }
+  }
+
+  public async getCategories(): Promise<
+    { id: number; nome: string; tipo: string }[]
+  > {
+    try {
+      const response = await api.get(
+        `${import.meta.env.VITE_API_URL}/categorias`
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Erro ao buscar categorias:", error);
+      throw error;
+    }
+  }
+
+  public async createCategory(categoriesData: {
+    nome: string;
+    tipo: string;
+    descricao_extra: boolean;
+  }) {
+    try {
+      const response = await api.post(
+        `${import.meta.env.VITE_API_URL}/categorias`,
+        categoriesData
+      );
+
+      console.log("categoria criada com sucesso:", response.data);
+      return response.data;
+    } catch (error) {
+      console.error("Erro ao buscar categorias:", error);
+    }
+  }
+
+  public async editCategories(categoriesData: {
+    id: string;
+    nome: string;
+    tipo: string;
+    descricao_extra: boolean;
+  }) {
+    try {
+      const response = await api.put(
+        `${import.meta.env.VITE_API_URL}/categorias/${categoriesData.id}`,
+        categoriesData
+      );
+
+      console.log("categoria editada com sucesso:", response.data);
+      return response.data;
+    } catch (error) {
+      console.error("Erro ao buscar categorias:", error);
+    }
+  }
+
+  public async deleteCategories(id: string) {
+    try {
+      const response = await api.delete(
+        `${import.meta.env.VITE_API_URL}/categorias/${id}`
+      );
+      console.log("categoria deletada");
+      return response;
+    } catch (error) {
+      console.error("Erro ao excluir despesa:", error);
       throw error;
     }
   }

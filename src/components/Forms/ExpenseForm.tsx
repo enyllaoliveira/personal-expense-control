@@ -1,7 +1,8 @@
 import { formatCurrency, formatDate } from "../../utils/FormattedValues";
 import { useDataInformation } from "../../context/DataContext/DataContext";
-
 import DoughnutChartComponent from "../ExpensePierChat";
+import { AuthContext } from "../../context/AuthContext/AuthContext";
+import { useEffect } from "react";
 export default function IncomeForm() {
   const {
     incomes,
@@ -13,8 +14,13 @@ export default function IncomeForm() {
     formData,
     formatIncomesForChart,
     editingIncome,
+    handleGetIncomes,
   } = useDataInformation();
-
+  const userContext = AuthContext();
+  const user = userContext?.user;
+  useEffect(() => {
+    if (user?.id) handleGetIncomes(user?.id);
+  }, [user]);
   return (
     <main className="flex gap-4">
       {incomes.length > 0 ? (
@@ -75,7 +81,7 @@ export default function IncomeForm() {
             <input
               type="date"
               name="receipt_date"
-              value={formData.receipt_date}
+              value={formData.receipt_date || ""}
               onChange={handleChange}
               required
               className="mt-1 block w-full border p-2"

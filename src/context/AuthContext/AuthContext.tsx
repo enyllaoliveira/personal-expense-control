@@ -63,7 +63,6 @@ export function UserProvider({ children }: UserProviderProps) {
       email: email,
       password: password,
     };
-    console.log("Enviando dados de registro:", userData);
     try {
       const response = await api.register(userData);
       if (response?.status === 201) {

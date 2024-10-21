@@ -9,7 +9,9 @@ export const formatCurrency = (value: string | number): string => {
   });
 };
 
-export const formatDate = (date: string | Date): string => {
+export const formatDate = (date?: string | Date): string => {
+  if (!date) return "Data indisponível";
+
   const parsedDate = new Date(date);
   if (isNaN(parsedDate.getTime())) {
     return "Data inválida";

@@ -36,6 +36,7 @@ const DataContext = createContext<{
   formatIncomesForChart: (incomes: Income[]) => DoughnutChartData;
   formData: FormValues;
   editingIncome: Income | null;
+  handleGetIncomes: (user: string | number) => void;
 } | null>(null);
 
 export function DataProvider({ children }: DataProviderProps) {
@@ -68,7 +69,7 @@ export function DataProvider({ children }: DataProviderProps) {
     }
 
     try {
-      const response = await api.sendIncomes({
+      const response = await api.createIncome({
         userId: String(user?.id),
         amount: formData.value,
         description: formData.description,
@@ -127,11 +128,16 @@ export function DataProvider({ children }: DataProviderProps) {
 
   const startEditing = (income: Income) => {
     setEditingIncome(income);
+
+    const formattedDate = income.created_at
+      ? new Date(income.created_at).toISOString().split("T")[0]
+      : "";
+
     setFormData({
       userId: user?.id,
       value: income.amount.toString(),
       description: income.description,
-      receipt_date: income.receipt_date,
+      receipt_date: formattedDate,
     });
   };
 
@@ -214,6 +220,7 @@ export function DataProvider({ children }: DataProviderProps) {
         handleDelete,
         startEditing,
         handleUpdate,
+        handleGetIncomes,
         incomes,
         formatIncomesForChart,
         formData,
