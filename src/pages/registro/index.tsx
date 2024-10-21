@@ -1,3 +1,4 @@
+import Button from "../../components/Commons/Button";
 import { AuthContext } from "../../context/AuthContext/AuthContext";
 
 export default function Registro() {
@@ -17,14 +18,17 @@ export default function Registro() {
   } = userContext;
 
   return (
-    <div className="flex w-full h-screen items-center justify-center flex-col">
-      <h1 className="h-9 text-lg font-medium text-black"> Área de registro</h1>
+    <div className="flex w-full h-screen items-center justify-center flex-col mx-auto text-white gap-4">
+      <div className="gap-1 flex flex-col">
+        <h1 className="text-lg font-extrabold"> Área de registro</h1>
+        <h2> Digite os dados abaixo para se cadastrar</h2>
+      </div>
 
       <form
         onSubmit={handleRegister}
-        className="w-full max-w-xl flex flex-col px-2 gap-4"
+        className="w-full max-w-xl flex flex-col px-2 gap-4 font-semibold  "
       >
-        <label className="flex flex-col items-start">
+        <label className="flex flex-col items-start gap-1">
           {" "}
           Digite o seu nome
           <input
@@ -34,7 +38,7 @@ export default function Registro() {
             className="border rounded-md px-2 h-8 border-gray-400 text-gray-400 w-full"
           />
         </label>
-        <label className="flex flex-col items-start">
+        <label className="flex flex-col items-start gap-1">
           {" "}
           Digite o seu e-mail
           <input
@@ -45,7 +49,7 @@ export default function Registro() {
           />
         </label>
 
-        <label className="flex flex-col items-start">
+        <label className="flex flex-col items-start gap-1">
           {" "}
           Digite a sua senha
           <input
@@ -56,12 +60,9 @@ export default function Registro() {
             className="border rounded-md px-2 h-8 border-gray-400 text-gray-400 w-full"
           />
         </label>
-        <button
-          type="submit"
-          className="h-9 bg-blue-600 rounded border-0 text-lg font-medium text-white "
-        >
+        <Button variant="primary" type="submit">
           Registrar
-        </button>
+        </Button>
         <p>
           {" "}
           Já tem uma conta?{" "}

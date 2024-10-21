@@ -3,6 +3,7 @@ import { useDataRevenueInformation } from "../../context/ExpensesContext/Expense
 import { useEffect } from "react";
 import { AuthContext } from "../../context/AuthContext/AuthContext";
 import DoughnutChartComponent from "../ExpensePierChat";
+import Button from "../Commons/Button";
 export default function RevenueForm() {
   const {
     expenses,
@@ -23,19 +24,20 @@ export default function RevenueForm() {
     handleGetExpense(String(user?.id));
   }, [user]);
   return (
-    <main className="flex gap-4">
+    <main className="flex gap-4 sm:flex-col px-4">
       {expenses.length > 0 ? (
-        <div className="w-1/3">
+        <div className="w-[700px] sm:px-4 sm:w-full">
           <DoughnutChartComponent data={formatIncomesForChart(expenses)} />
         </div>
       ) : (
         <p>Nenhuma despesa disponível para exibir no gráfico.</p>
       )}
-      <div className="w-1/3 ml-auto">
+      <div className="w-1/3 ml-auto sm:w-full ">
         <h2 className="text-xl font-bold mb-4">
           {editingExpense ? "Editar Despesa" : "Adicionar Despesa"}
         </h2>
         <form
+          className="text-start "
           id="expense-form"
           onSubmit={(e) => {
             e.preventDefault();
@@ -46,11 +48,8 @@ export default function RevenueForm() {
             }
           }}
         >
-          <div className="mb-4">
-            <label
-              htmlFor="value"
-              className="block text-sm font-medium text-gray-700"
-            >
+          <div className="mb-4 text-white">
+            <label htmlFor="value" className="block text-sm font-medium ">
               Valor:
             </label>
             <input
@@ -59,15 +58,12 @@ export default function RevenueForm() {
               value={formData.value}
               onChange={handleChange}
               required
-              className="mt-1 block w-full border p-2"
+              className="mt-1 block w-full border rounded-md p-2"
               placeholder="Insira o valor"
             />
           </div>
           <div className="mb-4">
-            <label
-              htmlFor="description"
-              className="block text-sm font-medium text-gray-700"
-            >
+            <label htmlFor="description" className="block text-sm font-medium ">
               Descrição:
             </label>
             <textarea
@@ -75,15 +71,12 @@ export default function RevenueForm() {
               value={formData.description}
               onChange={handleChange}
               required
-              className="mt-1 block w-full border p-2"
+              className="mt-1 block w-full border rounded-md p-2"
               placeholder="Descrição da despesa"
             />
           </div>
           <div className="mb-4">
-            <label
-              htmlFor="receipt_date"
-              className="block text-sm font-medium text-gray-700"
-            >
+            <label htmlFor="receipt_date" className="block text-sm font-medium">
               Data de Recebimento:
             </label>
             <input
@@ -92,37 +85,37 @@ export default function RevenueForm() {
               value={formData.payment_data}
               onChange={handleChange}
               required
-              className="mt-1 block w-full border p-2"
+              className="mt-1 block w-full border rounded-md p-2"
             />
           </div>
 
           <select
             name="categoria_id"
             value={formData.categoria_id}
-            className="w-full border p-2 mb-4"
+            className="w-full border p-2 mb-4 text-primary-gray-800 rounded-md  font-semibold"
             onChange={handleChange}
           >
-            <option value="">Selecione uma opção</option>
+            <option className="bg-primary-gray-700 border rounded-md " value="">
+              Selecione uma opção
+            </option>
             {categorias.map((categoria) => (
-              <option key={categoria.id} value={categoria.id}>
+              <option
+                className="bg-primary-gray-700 font-medium"
+                key={categoria.id}
+                value={categoria.id}
+              >
                 {categoria.nome}
               </option>
             ))}
           </select>
           {formData.categoria_id === "18" ? (
-            <button
-              type="submit"
-              className="bg-blue-500 text-white py-2 px-4 rounded hidden"
-            >
+            <Button variant="primary" type="submit" className="w-full">
               {editingExpense ? "Atualizar Despesa" : "Salvar Despesa"}
-            </button>
+            </Button>
           ) : (
-            <button
-              type="submit"
-              className="bg-blue-500 text-white py-2 px-4 rounded"
-            >
+            <Button variant="primary" type="submit" className="w-full">
               {editingExpense ? "Atualizar Despesa" : "Salvar Despesa"}
-            </button>
+            </Button>
           )}
           {formData.categoria_id === "18" && (
             <div className="mb-4">
@@ -141,12 +134,15 @@ export default function RevenueForm() {
                 className="mt-1 block w-full border p-2"
                 placeholder="Digite o nome da nova categoria"
               />
-              <button
-                type="submit"
-                className="bg-red-500 text-white py-2 px-4 rounded"
-              >
-                Criar nova categoria e salvar despesa
-              </button>
+              <div className="flex justify-between">
+                <button
+                  type="submit"
+                  className="bg-red-500 text-white py-2 px-4 rounded"
+                >
+                  Criar nova categoria e salvar despesa
+                </button>
+                {editingExpense && <button> Cancelar </button>}
+              </div>
             </div>
           )}
         </form>

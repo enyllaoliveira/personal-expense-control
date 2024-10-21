@@ -3,6 +3,7 @@ import { useDataInformation } from "../../context/DataContext/DataContext";
 import DoughnutChartComponent from "../ExpensePierChat";
 import { AuthContext } from "../../context/AuthContext/AuthContext";
 import { useEffect } from "react";
+import Button from "../Commons/Button";
 export default function IncomeForm() {
   const {
     incomes,
@@ -22,25 +23,26 @@ export default function IncomeForm() {
     if (user?.id) handleGetIncomes(user?.id);
   }, [user]);
   return (
-    <main className="flex gap-4">
+    <main className="flex gap-4 sm:flex-col px-4">
       {incomes.length > 0 ? (
-        <div className="w-1/3">
+        <div className="w-[700px] sm:px-4 sm:w-full">
           <DoughnutChartComponent data={formatIncomesForChart(incomes)} />
         </div>
       ) : (
         <p>Nenhuma receita disponível para exibir no gráfico.</p>
       )}
 
-      <div className="w-1/3 ml-auto">
+      <div className="w-1/3 ml-auto sm:w-full ">
         <h2 className="text-xl font-bold mb-4">
           {editingIncome ? "Editar Receita" : "Adicionar Receita"}
         </h2>
-        <form onSubmit={editingIncome ? handleUpdate : handleSubmit}>
-          <div className="mb-4">
-            <label
-              htmlFor="value"
-              className="block text-sm font-medium text-gray-700"
-            >
+        <form
+          id="income-form"
+          className="text-start"
+          onSubmit={editingIncome ? handleUpdate : handleSubmit}
+        >
+          <div className="mb-4 text-white">
+            <label htmlFor="value" className="block text-sm font-medium ">
               Valor:
             </label>
             <input
@@ -49,16 +51,13 @@ export default function IncomeForm() {
               value={formData.value}
               onChange={handleChange}
               required
-              className="mt-1 block w-full border p-2"
+              className="mt-1 block w-full border rounded-md p-2"
               placeholder="Insira o valor"
             />
           </div>
 
           <div className="mb-4">
-            <label
-              htmlFor="description"
-              className="block text-sm font-medium text-gray-700"
-            >
+            <label htmlFor="description" className="block text-sm font-medium">
               Descrição:
             </label>
             <textarea
@@ -66,16 +65,13 @@ export default function IncomeForm() {
               value={formData.description}
               onChange={handleChange}
               required
-              className="mt-1 block w-full border p-2"
+              className="mt-1 block w-full border rounded p-2"
               placeholder="Descrição da receita"
             />
           </div>
 
           <div className="mb-4">
-            <label
-              htmlFor="receipt_date"
-              className="block text-sm font-medium text-gray-700"
-            >
+            <label htmlFor="receipt_date" className="block text-sm font-medium">
               Data de Recebimento:
             </label>
             <input
@@ -84,16 +80,20 @@ export default function IncomeForm() {
               value={formData.receipt_date || ""}
               onChange={handleChange}
               required
-              className="mt-1 block w-full border p-2"
+              className="mt-1 block w-full border rounded p-2"
             />
           </div>
-
-          <button
-            type="submit"
-            className="bg-blue-500 text-white py-2 px-4 rounded"
-          >
-            {editingIncome ? "Atualizar Receita" : "Salvar Receita"}
-          </button>
+          <div className="flex justify-between mx-auto gap-4">
+            <Button variant="primary" type="submit" className="w-full">
+              {editingIncome ? "Atualizar Receita" : "Salvar Receita"}
+            </Button>
+            {editingIncome && (
+              <Button variant="secondary" className="w-full">
+                {" "}
+                Cancelar{" "}
+              </Button>
+            )}
+          </div>
         </form>
 
         <div>

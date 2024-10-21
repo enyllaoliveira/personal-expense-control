@@ -11,41 +11,39 @@ import { Bar, Doughnut } from "react-chartjs-2";
 
 export default function Dashboard() {
   return (
-    <div>
-      <RootLayout>
-        <div className="flex flex-col">
-          <div className="flex justify-between mx-auto">
-            <div className="flex items-center">
-              <div className="w-full md:w-1/2 p-2">
-                <ExpenseLineChart />
-              </div>
-
-              <div
-                className="w-full md:w-1/2 p-2"
-                style={{ position: "relative", height: "400px", width: "100%" }}
-              >
-                <Doughnut data={doughnutDataToExpense} />
-              </div>
+    <RootLayout>
+      <div className="flex flex-col overflow-auto mx-auto my-12 sm:my-4">
+        <div className="flex sm:flex-col justify-between mx-auto gap-36 sm:gap-1">
+          <div className="flex sm:flex-col items-center">
+            <div className="w-full sm:w-full md:w-1/2">
+              {" "}
+              <ExpenseLineChart />
             </div>
-            <div className="flex items-center">
-              <div className="w-full md:w-1/2 p-2">
-                <RevenueLineChart />
-              </div>
-
-              <div
-                className="w-full md:w-1/2 p-2"
-                style={{ position: "relative", height: "400px", width: "100%" }}
-              >
-                <Doughnut data={doughnutDataToRevenue} />
-              </div>
+            <div
+              className="w-full sm:w-full md:w-1/2 justify-center items-center flex"
+              style={{ position: "relative", height: "400px", width: "100%" }}
+            >
+              <Doughnut data={doughnutDataToExpense} />
             </div>
           </div>
+          <div className="flex sm:flex-col items-center">
+            <div className="w-full sm:w-full md:w-1/2 justify-center items-center flex">
+              <RevenueLineChart />
+            </div>
 
-          <div className="mx-auto w-full">
-            <Bar data={stackedBarData} options={stackedOptions} />
+            <div
+              className="w-full sm:w-full md:w-1/2 justify-center items-center flex"
+              style={{ position: "relative", height: "400px", width: "100%" }}
+            >
+              <Doughnut data={doughnutDataToRevenue} />
+            </div>
           </div>
         </div>
-      </RootLayout>
-    </div>
+
+        <div className="mx-auto w-full">
+          <Bar data={stackedBarData} options={stackedOptions} />
+        </div>
+      </div>
+    </RootLayout>
   );
 }

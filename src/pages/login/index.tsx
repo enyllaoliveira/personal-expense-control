@@ -1,3 +1,4 @@
+import Button from "../../components/Commons/Button";
 import { AuthContext } from "../../context/AuthContext/AuthContext";
 
 export default function Login() {
@@ -9,14 +10,16 @@ export default function Login() {
   const { handleLogin, email, password, setEmail, setPassword } = userContext;
 
   return (
-    <div className="flex w-full h-screen items-center justify-center flex-col">
-      <h1 className="h-9 text-lg font-medium text-black"> Área de login</h1>
-
+    <div className="flex w-full h-screen items-center justify-center flex-col text-white font-semibold gap-4">
+      <div className="gap-1 flex flex-col">
+        <h1 className="text-lg font-extrabold"> Área de login</h1>
+        <h2> Bem-vindo de volta! Preencha os dados para acessar seu painel.</h2>
+      </div>
       <form
         onSubmit={handleLogin}
         className="w-full max-w-xl flex flex-col px-2 gap-4"
       >
-        <label className="flex flex-col items-start">
+        <label className="flex flex-col items-start gap-1">
           {" "}
           Digite o seu nome
           <input
@@ -27,7 +30,7 @@ export default function Login() {
             className="border rounded-md px-2 h-8 border-gray-400 text-gray-400 w-full"
           />
         </label>
-        <label className="flex flex-col items-start">
+        <label className="flex flex-col items-start gap-1">
           {" "}
           Digite o seu nome
           <input
@@ -38,16 +41,13 @@ export default function Login() {
             className="border rounded-md px-2 h-8 border-gray-400 text-gray-400 w-full"
           />
         </label>
-        <button
-          type="submit"
-          className="h-9 bg-blue-600 rounded border-0 text-lg font-medium text-white"
-        >
+        <Button variant="primary" type="submit">
           {" "}
           Acessar{" "}
-        </button>
+        </Button>
         <p>
           {" "}
-          Aindan não tem uma conta?{" "}
+          Ainda não tem uma conta?{" "}
           <a href="/registro" className="underline ">
             {" "}
             Clique aqui para fazer o seu cadastro
