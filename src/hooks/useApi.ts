@@ -13,10 +13,10 @@ export class useApi {
         `${import.meta.env.VITE_API_URL}/register`,
         userData
       );
-      console.log("Usuário registrado com sucesso:", response.status);
       return response;
     } catch (error) {
       console.error("Erro ao registrar usuário:", error);
+      throw error;
     }
   }
 
@@ -24,11 +24,8 @@ export class useApi {
     try {
       const response = await api.post(
         `${import.meta.env.VITE_API_URL}/login`,
-        userData,
-        { withCredentials: true }
+        userData
       );
-
-      console.log("Usuário logado com sucesso:", response);
       return response;
     } catch (error) {
       console.error("Erro ao logar usuário:", error);
@@ -36,14 +33,26 @@ export class useApi {
     }
   }
 
+  public async logout(): Promise<AxiosResponse> {
+    try {
+      const response = await api.post("/logout", {}, { withCredentials: true });
+      return response;
+    } catch (error) {
+      console.error("Erro ao realizar logout:", error);
+      throw error;
+    }
+  }
+
   public async getIncomesById(userId: string | number) {
     try {
       const response = await api.get(
-        `${import.meta.env.VITE_API_URL}/receitas?userId=${userId}`
+        `${import.meta.env.VITE_API_URL}/receitas?userId=${userId}`,
+        { withCredentials: true }
       );
       return response;
     } catch (error) {
       console.error("Erro ao adicionar receita:", error);
+      throw error;
     }
   }
 
@@ -59,11 +68,10 @@ export class useApi {
         incomesData,
         { withCredentials: true }
       );
-
-      console.log("Lançamento adicionado com sucesso:", response.status);
       return response;
     } catch (error) {
       console.error("Erro ao adicionar receita:", error);
+      throw error;
     }
   }
 
@@ -77,8 +85,6 @@ export class useApi {
         updateData,
         { withCredentials: true }
       );
-
-      console.log("Lançamento editado com sucesso:", response.status);
       return response;
     } catch (error) {
       console.error("Erro ao editar lançamento:", error);
@@ -92,8 +98,6 @@ export class useApi {
         `${import.meta.env.VITE_API_URL}/receitas/${id}`,
         { withCredentials: true }
       );
-
-      console.log("Lançamento excluído com sucesso:", response);
       return response;
     } catch (error) {
       console.error("Erro ao editar lançamento:", error);
@@ -104,11 +108,13 @@ export class useApi {
   public async getExpensesById(id: string | number) {
     try {
       const response = await api.get(
-        `${import.meta.env.VITE_API_URL}/despesas?userId=${id}`
+        `${import.meta.env.VITE_API_URL}/despesas?userId=${id}`,
+        { withCredentials: true }
       );
       return response;
     } catch (error) {
       console.error("Erro ao adicionar receita:", error);
+      throw error;
     }
   }
 
@@ -117,7 +123,8 @@ export class useApi {
     descricao: string;
     data_pagamento: string;
     usuario_id: string;
-    categoria_id: string;
+    categoria_id: string | number;
+    novaCategoria?: string;
   }) {
     try {
       const response = await api.post(
@@ -125,11 +132,10 @@ export class useApi {
         expensesData,
         { withCredentials: true }
       );
-
-      console.log("Despesa adicionada com sucesso:", response.status);
       return response;
     } catch (error) {
       console.error("Erro ao adicionar despesa:", error);
+      throw error;
     }
   }
 
@@ -137,12 +143,13 @@ export class useApi {
     try {
       const response = await api.put(
         `${import.meta.env.VITE_API_URL}/despesas/${id}`,
-        updateData
+        updateData,
+        { withCredentials: true }
       );
-      console.log("Despesa editada com sucesso:", response.status);
       return response;
     } catch (error) {
       console.error("Erro ao editar despesa:", error);
+      throw error;
     }
   }
 
@@ -152,11 +159,22 @@ export class useApi {
         `${import.meta.env.VITE_API_URL}/despesas/${id}`,
         { withCredentials: true }
       );
-
-      console.log("Despesa excluída com sucesso:", response);
       return response;
     } catch (error) {
       console.error("Erro ao excluir despesa:", error);
+      throw error;
+    }
+  }
+
+  public async getCategoriesByID(userId: string | number) {
+    try {
+      const response = await api.get(
+        `${import.meta.env.VITE_API_URL}/categorias?userId=${userId}`,
+        { withCredentials: true }
+      );
+      return response;
+    } catch (error) {
+      console.error("Erro ao buscar categorias:", error);
       throw error;
     }
   }
@@ -166,7 +184,8 @@ export class useApi {
   > {
     try {
       const response = await api.get(
-        `${import.meta.env.VITE_API_URL}/categorias`
+        `${import.meta.env.VITE_API_URL}/categorias`,
+        { withCredentials: true }
       );
       return response.data;
     } catch (error) {
@@ -179,14 +198,14 @@ export class useApi {
     nome: string;
     tipo: string;
     descricao_extra: boolean;
+    id: string | number;
   }) {
     try {
       const response = await api.post(
         `${import.meta.env.VITE_API_URL}/categorias`,
-        categoriesData
+        categoriesData,
+        { withCredentials: true }
       );
-
-      console.log("categoria criada com sucesso:", response.data);
       return response.data;
     } catch (error) {
       console.error("Erro ao buscar categorias:", error);
@@ -202,22 +221,22 @@ export class useApi {
     try {
       const response = await api.put(
         `${import.meta.env.VITE_API_URL}/categorias/${categoriesData.id}`,
-        categoriesData
+        categoriesData,
+        { withCredentials: true }
       );
-
-      console.log("categoria editada com sucesso:", response.data);
       return response.data;
     } catch (error) {
       console.error("Erro ao buscar categorias:", error);
+      throw error;
     }
   }
 
   public async deleteCategories(id: string) {
     try {
       const response = await api.delete(
-        `${import.meta.env.VITE_API_URL}/categorias/${id}`
+        `${import.meta.env.VITE_API_URL}/categorias/${id}`,
+        { withCredentials: true }
       );
-      console.log("categoria deletada");
       return response;
     } catch (error) {
       console.error("Erro ao excluir despesa:", error);

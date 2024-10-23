@@ -22,6 +22,7 @@ export default function IncomeForm() {
   useEffect(() => {
     if (user?.id) handleGetIncomes(user?.id);
   }, [user]);
+
   return (
     <main className="flex gap-4 sm:flex-col px-4">
       {incomes.length > 0 ? (
@@ -29,7 +30,9 @@ export default function IncomeForm() {
           <DoughnutChartComponent data={formatIncomesForChart(incomes)} />
         </div>
       ) : (
-        <p>Nenhuma receita disponível para exibir no gráfico.</p>
+        <p className="text-center mx-auto my-auto">
+          Adicione uma despesa para criar seu gráfico.
+        </p>
       )}
 
       <div className="w-1/3 ml-auto sm:w-full ">
@@ -51,7 +54,7 @@ export default function IncomeForm() {
               value={formData.value}
               onChange={handleChange}
               required
-              className="mt-1 block w-full border rounded-md p-2"
+              className="mt-1 block w-full border rounded-md p-2 text-black"
               placeholder="Insira o valor"
             />
           </div>
@@ -65,7 +68,7 @@ export default function IncomeForm() {
               value={formData.description}
               onChange={handleChange}
               required
-              className="mt-1 block w-full border rounded p-2"
+              className="mt-1 block w-full border rounded p-2 text-black"
               placeholder="Descrição da receita"
             />
           </div>
@@ -80,7 +83,7 @@ export default function IncomeForm() {
               value={formData.receipt_date || ""}
               onChange={handleChange}
               required
-              className="mt-1 block w-full border rounded p-2"
+              className="mt-1 block w-full border rounded p-2 text-black"
             />
           </div>
           <div className="flex justify-between mx-auto gap-4">
@@ -99,7 +102,7 @@ export default function IncomeForm() {
         <div>
           <h2 className="text-xl font-bold mb-4">Suas Receitas</h2>
           {incomes.length === 0 ? (
-            <p>Nenhuma receita encontrada.</p>
+            <p>Nenhuma receita adicionada.</p>
           ) : (
             <ul>
               {incomes.map((income) => (

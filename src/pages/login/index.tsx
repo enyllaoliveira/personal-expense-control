@@ -21,7 +21,7 @@ export default function Login() {
       >
         <label className="flex flex-col items-start gap-1">
           {" "}
-          Digite o seu nome
+          Digite o seu e-mail
           <input
             placeholder="Digite o seu e-mail"
             type="email"
@@ -32,7 +32,7 @@ export default function Login() {
         </label>
         <label className="flex flex-col items-start gap-1">
           {" "}
-          Digite o seu nome
+          Digite a sua senha
           <input
             placeholder="************"
             type="password"

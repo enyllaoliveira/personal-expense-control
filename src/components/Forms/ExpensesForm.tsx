@@ -1,33 +1,43 @@
 import { formatCurrency, formatDate } from "../../utils/FormattedValues";
-import { useDataRevenueInformation } from "../../context/ExpensesContext/ExpenseContext";
+import { useDataInformation } from "../../context/DataContext/DataContext";
 import { useEffect } from "react";
 import { AuthContext } from "../../context/AuthContext/AuthContext";
 import DoughnutChartComponent from "../ExpensePierChat";
 import Button from "../Commons/Button";
-export default function RevenueForm() {
+export default function ExpensesForm() {
   const {
     expenses,
-    handleChange,
+    handleChangeExpenses,
     handleDeleteExpense,
     handleAddExpense,
     handleEditExpense,
-    startEditing,
-    formData,
+    startEditingExpenses,
+    formDataExpenses,
     editingExpense,
     handleGetExpense,
     categorias,
-    formatIncomesForChart,
-  } = useDataRevenueInformation();
+    formatIncomesForChartToExpense,
+    fetchCategories,
+  } = useDataInformation();
   const userContext = AuthContext();
   const user = userContext?.user;
   useEffect(() => {
     handleGetExpense(String(user?.id));
   }, [user]);
+  useEffect(() => {
+    console.log("Categorias atualizadas", categorias);
+  }, [categorias]);
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
   return (
     <main className="flex gap-4 sm:flex-col px-4">
       {expenses.length > 0 ? (
         <div className="w-[700px] sm:px-4 sm:w-full">
-          <DoughnutChartComponent data={formatIncomesForChart(expenses)} />
+          <DoughnutChartComponent
+            data={formatIncomesForChartToExpense(expenses)}
+          />
         </div>
       ) : (
         <p>Nenhuma despesa disponível para exibir no gráfico.</p>
@@ -55,10 +65,10 @@ export default function RevenueForm() {
             <input
               type="number"
               name="value"
-              value={formData.value}
-              onChange={handleChange}
+              value={formDataExpenses.value}
+              onChange={handleChangeExpenses}
               required
-              className="mt-1 block w-full border rounded-md p-2"
+              className="mt-1 block w-full border rounded-md p-2 text-black"
               placeholder="Insira o valor"
             />
           </div>
@@ -68,10 +78,10 @@ export default function RevenueForm() {
             </label>
             <textarea
               name="description"
-              value={formData.description}
-              onChange={handleChange}
+              value={formDataExpenses.description}
+              onChange={handleChangeExpenses}
               required
-              className="mt-1 block w-full border rounded-md p-2"
+              className="mt-1 block w-full border rounded-md p-2 text-black"
               placeholder="Descrição da despesa"
             />
           </div>
@@ -82,33 +92,28 @@ export default function RevenueForm() {
             <input
               type="date"
               name="payment_data"
-              value={formData.payment_data}
-              onChange={handleChange}
+              value={formDataExpenses.payment_data}
+              onChange={handleChangeExpenses}
               required
-              className="mt-1 block w-full border rounded-md p-2"
+              className="mt-1 block w-full border rounded-md p-2 text-black"
             />
           </div>
 
           <select
             name="categoria_id"
-            value={formData.categoria_id}
-            className="w-full border p-2 mb-4 text-primary-gray-800 rounded-md  font-semibold"
-            onChange={handleChange}
+            value={formDataExpenses.categoria_id}
+            className="w-full border p-2 mb-4 text-primary-gray-800 rounded-md font-semibold"
+            onChange={handleChangeExpenses}
           >
-            <option className="bg-primary-gray-700 border rounded-md " value="">
-              Selecione uma opção
-            </option>
+            <option value="">Selecione uma opção</option>
             {categorias.map((categoria) => (
-              <option
-                className="bg-primary-gray-700 font-medium"
-                key={categoria.id}
-                value={categoria.id}
-              >
+              <option key={categoria.id} value={categoria.id}>
                 {categoria.nome}
               </option>
             ))}
+            {/* <option value="outros">Outros</option>{" "} */}
           </select>
-          {formData.categoria_id === "18" ? (
+          {formDataExpenses.categoria_id === "outros" ? (
             <Button variant="primary" type="submit" className="w-full">
               {editingExpense ? "Atualizar Despesa" : "Salvar Despesa"}
             </Button>
@@ -117,21 +122,21 @@ export default function RevenueForm() {
               {editingExpense ? "Atualizar Despesa" : "Salvar Despesa"}
             </Button>
           )}
-          {formData.categoria_id === "18" && (
+          {formDataExpenses.categoria_id === "18" && (
             <div className="mb-4">
               <label
                 htmlFor="newCategorie"
-                className="block text-sm font-medium text-gray-700"
+                className="block text-sm font-medium text-white"
               >
                 Nova Categoria:
               </label>
               <input
                 type="text"
                 name="newCategorie"
-                value={formData.newCategorie}
-                onChange={handleChange}
+                value={formDataExpenses.newCategorie}
+                onChange={handleChangeExpenses}
                 required
-                className="mt-1 block w-full border p-2"
+                className="mt-1 block w-full border p-2 text-black"
                 placeholder="Digite o nome da nova categoria"
               />
               <div className="flex justify-between">
@@ -163,7 +168,7 @@ export default function RevenueForm() {
 
                     return (
                       <li key={expense.id} style={{ marginBottom: "16px" }}>
-                        <button onClick={() => startEditing(expense)}>
+                        <button onClick={() => startEditingExpenses(expense)}>
                           Editar
                         </button>
                         <button onClick={() => handleDeleteExpense(expense.id)}>
