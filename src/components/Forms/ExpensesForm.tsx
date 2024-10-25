@@ -1,17 +1,15 @@
-import { formatCurrency, formatDate } from "../../utils/FormattedValues";
 import { useDataInformation } from "../../context/DataContext/DataContext";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { AuthContext } from "../../context/AuthContext/AuthContext";
-import DoughnutChartComponent from "../ExpensePierChat";
+import DoughnutChartComponent from "../MockDataPierAndLineChart/ExpensePierChat";
 import Button from "../Commons/Button";
+import EditExpensesModal from "../Modal/Expenses/EditExpenses";
 export default function ExpensesForm() {
   const {
     expenses,
     handleChangeExpenses,
-    handleDeleteExpense,
     handleAddExpense,
     handleEditExpense,
-    startEditingExpenses,
     formDataExpenses,
     editingExpense,
     handleGetExpense,
@@ -21,6 +19,9 @@ export default function ExpensesForm() {
   } = useDataInformation();
   const userContext = AuthContext();
   const user = userContext?.user;
+  const [isListExpenseModalOpen, setIsListExpenseOModalpen] = useState(false);
+  const handleOpenListModalExpense = () => setIsListExpenseOModalpen(true);
+
   useEffect(() => {
     handleGetExpense(String(user?.id));
   }, [user]);
@@ -59,7 +60,10 @@ export default function ExpensesForm() {
           }}
         >
           <div className="mb-4 text-white">
-            <label htmlFor="value" className="block text-sm font-medium ">
+            <label
+              htmlFor="value"
+              className="block text-normal font-semibold text-primary-gray-600"
+            >
               Valor:
             </label>
             <input
@@ -73,7 +77,10 @@ export default function ExpensesForm() {
             />
           </div>
           <div className="mb-4">
-            <label htmlFor="description" className="block text-sm font-medium ">
+            <label
+              htmlFor="description"
+              className="block text-normal font-semibold text-primary-gray-600"
+            >
               Descrição:
             </label>
             <textarea
@@ -86,7 +93,10 @@ export default function ExpensesForm() {
             />
           </div>
           <div className="mb-4">
-            <label htmlFor="receipt_date" className="block text-sm font-medium">
+            <label
+              htmlFor="receipt_date"
+              className="block text-normal font-semibold text-primary-gray-600"
+            >
               Data de Recebimento:
             </label>
             <input
@@ -111,22 +121,21 @@ export default function ExpensesForm() {
                 {categoria.nome}
               </option>
             ))}
-            {/* <option value="outros">Outros</option>{" "} */}
           </select>
           {formDataExpenses.categoria_id === "outros" ? (
             <Button variant="primary" type="submit" className="w-full">
-              {editingExpense ? "Atualizar Despesa" : "Salvar Despesa"}
+              Adicionar Despesa{" "}
             </Button>
           ) : (
             <Button variant="primary" type="submit" className="w-full">
-              {editingExpense ? "Atualizar Despesa" : "Salvar Despesa"}
+              Adicionar Despesa{" "}
             </Button>
           )}
           {formDataExpenses.categoria_id === "18" && (
-            <div className="mb-4">
+            <div className="my-2 flex flex-col gap-2">
               <label
                 htmlFor="newCategorie"
-                className="block text-sm font-medium text-white"
+                className="block text-normal font-semibold text-primary-gray-600"
               >
                 Nova Categoria:
               </label>
@@ -136,64 +145,28 @@ export default function ExpensesForm() {
                 value={formDataExpenses.newCategorie}
                 onChange={handleChangeExpenses}
                 required
-                className="mt-1 block w-full border p-2 text-black"
+                className="mt-1 block w-full border p-2 text-black rounded-md "
                 placeholder="Digite o nome da nova categoria"
               />
-              <div className="flex justify-between">
-                <button
-                  type="submit"
-                  className="bg-red-500 text-white py-2 px-4 rounded"
-                >
-                  Criar nova categoria e salvar despesa
-                </button>
-                {editingExpense && <button> Cancelar </button>}
-              </div>
+              <Button variant="secondary" type="submit" className="w-full">
+                Criar nova categoria e salvar despesa
+              </Button>
             </div>
           )}
+          <Button
+            variant="secondary"
+            className="ml-auto mt-2"
+            onClick={handleOpenListModalExpense}
+            type="button"
+          >
+            {" "}
+            Gerenciar despesas
+          </Button>
         </form>
-        <div>
-          <h2 className="text-xl font-bold mb-4">Suas Despesas</h2>
-          {expenses.length === 0 ? (
-            <p>Nenhuma despesa encontrada.</p>
-          ) : (
-            <ul>
-              {expenses.length === 0 ? (
-                <p>Nenhuma despesa encontrada.</p>
-              ) : (
-                <ul>
-                  {expenses.map((expense) => {
-                    const categoria = categorias.find(
-                      (c) => c.id === Number(expense.categoria_id)
-                    );
-
-                    return (
-                      <li key={expense.id} style={{ marginBottom: "16px" }}>
-                        <button onClick={() => startEditingExpenses(expense)}>
-                          Editar
-                        </button>
-                        <button onClick={() => handleDeleteExpense(expense.id)}>
-                          Apagar
-                        </button>
-
-                        <div>
-                          <strong>Valor:</strong>{" "}
-                          {formatCurrency(expense.valor ?? 0)} <br />
-                          <strong>Descrição:</strong>
-                          {expense.descricao || "Descrição indisponível"} <br />
-                          <strong>Data de pagamento:</strong>
-                          {formatDate(expense.data_pagamento)} <br />
-                          <strong>Categoria:</strong>
-                          {categoria?.nome || "Categoria não encontrada"}
-                        </div>
-                      </li>
-                    );
-                  })}
-                </ul>
-              )}
-            </ul>
-          )}
-        </div>
       </div>
+      {isListExpenseModalOpen && (
+        <EditExpensesModal onClose={() => setIsListExpenseOModalpen(false)} />
+      )}
     </main>
   );
 }

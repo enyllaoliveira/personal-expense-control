@@ -1,11 +1,11 @@
-import ExpenseLineChart from "../../components/ExpenseLineChart";
+import ExpenseLineChart from "../../components/MockDataPierAndLineChart/ExpenseLineChart";
 import { doughnutDataToExpense } from "../../components/Forms/ExpensePierChatMock";
 import {
   stackedBarData,
   stackedOptions,
-} from "../../components/CreditCardControl";
-import RevenueLineChart from "../../components/RevenueLineChart";
-import { doughnutDataToRevenue } from "../../components/RevenuePierChat";
+} from "../../components/MockDataPierAndLineChart/CreditCardControl";
+import RevenueLineChart from "../../components/MockDataPierAndLineChart/RevenueLineChart";
+import { doughnutDataToRevenue } from "../../components/MockDataPierAndLineChart/RevenuePierChat";
 import RootLayout from "../../layout";
 import { Bar, Doughnut } from "react-chartjs-2";
 

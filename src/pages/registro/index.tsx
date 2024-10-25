@@ -18,7 +18,7 @@ export default function Registro() {
   } = userContext;
 
   return (
-    <div className="flex w-full h-screen items-center justify-center flex-col mx-auto text-white gap-4">
+    <div className="flex w-full h-screen items-center justify-center flex-col mx-auto text-primary-gray-600 gap-4">
       <div className="gap-1 flex flex-col">
         <h1 className="text-lg font-extrabold"> Área de registro</h1>
         <h2> Digite os dados abaixo para se cadastrar</h2>
@@ -35,7 +35,7 @@ export default function Registro() {
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="border rounded-md px-2 h-8 border-gray-400 text-gray-400 w-full"
+            className="border rounded-md px-2 h-10 border-gray-400 w-full text-primary-gray-800"
           />
         </label>
         <label className="flex flex-col items-start gap-1">
@@ -45,7 +45,7 @@ export default function Registro() {
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="border rounded-md px-2 h-8 border-gray-400 text-gray-400 w-full"
+            className="border rounded-md px-2 h-10 border-gray-400 w-full text-primary-gray-800"
           />
         </label>
 
@@ -57,7 +57,7 @@ export default function Registro() {
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="border rounded-md px-2 h-8 border-gray-400 text-gray-400 w-full"
+            className="border rounded-md px-2 h-10 border-gray-400 w-full text-primary-800"
           />
         </label>
         <Button variant="primary" type="submit">

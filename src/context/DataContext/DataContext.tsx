@@ -5,7 +5,10 @@ import {
   useEffect,
   ReactNode,
   ChangeEvent,
+  Dispatch,
+  SetStateAction,
 } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { useApi } from "../../hooks/useApi";
 import { AuthContext } from "../AuthContext/AuthContext";
@@ -19,14 +22,30 @@ import "react-toastify/dist/ReactToastify.css";
 interface DataProviderProps {
   children: ReactNode;
 }
+
+interface IncomeUpdate {
+  amount?: string;
+  description?: string;
+  date?: string;
+}
+
+interface ExpenseUpdateProps {
+  valor?: string;
+  descricao?: string;
+  data_pagamento?: string;
+  categoria_id?: string;
+}
+
 interface FormValues {
-  userId: string | number | undefined;
+  id: string;
+  userId: number | undefined;
   value: string;
   description: string;
   receipt_date: string;
 }
 interface formValueToExpenses {
-  userId: string | number | undefined;
+  id: string;
+  userId: number | undefined;
   value: string;
   description: string;
   payment_data: string;
@@ -77,6 +96,20 @@ const DataContext = createContext<{
     error: (message: string) => void;
     info: (message: string) => void;
   };
+  setFormData: Dispatch<SetStateAction<FormValues>>;
+  setFormDataExpenses: Dispatch<SetStateAction<formValueToExpenses>>;
+  isEditingIncome: boolean;
+  setIsEditingIncome: Dispatch<SetStateAction<boolean>>;
+  isDeleteIncome: boolean;
+  setIsDeleteIncome: Dispatch<SetStateAction<boolean>>;
+  isDeleteExpense: boolean;
+  setIsDeleteExpense: Dispatch<SetStateAction<boolean>>;
+  isEditingExpense: boolean;
+  setIsEditingExpense: Dispatch<SetStateAction<boolean>>;
+  selectedIncome: Income | null;
+  setSelectedIncome: Dispatch<SetStateAction<Income | null>>;
+  selectedExpense: Expense | null;
+  setSelectedExpense: Dispatch<SetStateAction<Expense | null>>;
 } | null>(null);
 
 export function DataProvider({ children }: DataProviderProps) {
@@ -88,7 +121,18 @@ export function DataProvider({ children }: DataProviderProps) {
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [editingExpense, setEditingExpense] = useState<Expense | null>(null);
   const [categorias, setCategorias] = useState<Categoria[]>([]);
+  const [isEditingIncome, setIsEditingIncome] = useState(false);
+  const [isEditingExpense, setIsEditingExpense] = useState(false);
+  const [selectedIncome, setSelectedIncome] = useState<Income | null>(null);
+  const [isDeleteIncome, setIsDeleteIncome] = useState(false);
+
+  const [selectedExpense, setSelectedExpense] = useState<Expense | null>(null);
+  const [isDeleteExpense, setIsDeleteExpense] = useState(false);
+
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
+    id: "",
     userId: user?.id,
     value: "",
     description: "",
@@ -96,6 +140,7 @@ export function DataProvider({ children }: DataProviderProps) {
   });
   const [formDataExpenses, setFormDataExpenses] = useState({
     userId: user?.id,
+    id: "",
     value: "",
     description: "",
     payment_data: formatDate(new Date()),
@@ -107,13 +152,15 @@ export function DataProvider({ children }: DataProviderProps) {
     error: (message: string) => toast.error(message),
     info: (message: string) => toast.info(message),
   };
-  const isFormValid = () => {
-    return (
-      formData.value.trim() !== "" &&
-      formData.description.trim() !== "" &&
-      formData.receipt_date.trim() !== ""
-    );
-  };
+
+  useEffect(() => {
+    if (user) {
+      localStorage.setItem("user", JSON.stringify(user));
+    } else {
+      localStorage.removeItem("user");
+      navigate("/login");
+    }
+  }, [user]);
 
   const fetchCategories = async () => {
     if (!user?.id) {
@@ -157,13 +204,10 @@ export function DataProvider({ children }: DataProviderProps) {
         autoClose: 2000,
       });
 
-      console.log("Nova categoria criada:", novaCategoria);
-      // depois do teste, remover
-
       await fetchCategories();
 
-      setFormDataExpenses((prev) => ({
-        ...prev,
+      setFormDataExpenses((expenses) => ({
+        ...expenses,
         newCategorie: "",
       }));
     } catch (error) {
@@ -181,7 +225,6 @@ export function DataProvider({ children }: DataProviderProps) {
         setExpenses(despesas);
       } else if (response?.status === 404) {
         toast.error("Nenhuma despesa encontrada.", { autoClose: 2000 });
-        // console.warn("Nenhuma despesa encontrada.");
         setExpenses([]);
       }
     } catch (error) {
@@ -190,6 +233,10 @@ export function DataProvider({ children }: DataProviderProps) {
     }
   };
 
+  useEffect(() => {
+    handleGetExpense();
+    handleGetIncomes();
+  }, [user]);
   useEffect(() => {
     if (user?.id) {
       setFormDataExpenses((formDataExpenses) => ({
@@ -247,9 +294,6 @@ export function DataProvider({ children }: DataProviderProps) {
         await fetchCategories();
       }
 
-      console.log("Enviando despesa com categoria ID:", finalCategoriaId);
-      // depois dos testes, remover
-
       const response = await api.createExpense({
         usuario_id: String(user?.id),
         valor: formDataExpenses.value,
@@ -259,10 +303,12 @@ export function DataProvider({ children }: DataProviderProps) {
       });
 
       if (response?.status === 201) {
-        toast.success("Despesa criada.", { autoClose: 2000 });
-        console.log("Despesa criada com sucesso:", response.data);
+        toast.success(`Despesa ${response?.data?.descricao} criada.`, {
+          autoClose: 2000,
+        });
         setExpenses((expenses) => [...expenses, response.data]);
         setFormDataExpenses({
+          id: "",
           userId: user?.id,
           value: "",
           description: "",
@@ -278,29 +324,40 @@ export function DataProvider({ children }: DataProviderProps) {
 
   const handleEditExpense = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!editingExpense) return;
 
-    if (!isFormValidToExpense()) {
-      console.error("Todos os campos são obrigatórios");
-      return;
+    const updatedFields: ExpenseUpdateProps = {};
+
+    if (formDataExpenses.value !== undefined && formDataExpenses.value !== "") {
+      updatedFields.valor = formDataExpenses.value.toString();
     }
+    if (formDataExpenses.description) {
+      updatedFields.descricao = formDataExpenses.description.toString();
+    }
+    if (formDataExpenses.payment_data) {
+      updatedFields.data_pagamento = formDataExpenses.payment_data;
+    }
+    if (formDataExpenses.categoria_id) {
+      updatedFields.categoria_id = formDataExpenses.categoria_id;
+    }
+
     try {
-      const response = await api.editExpenses(editingExpense.id.toString(), {
-        valor: formDataExpenses.value,
-        descricao: formDataExpenses.description,
-        data_pagamento: formDataExpenses.payment_data,
-        categoria_id: formDataExpenses.categoria_id,
-        atualizado_em: new Date().toISOString(),
-      });
+      if (!editingExpense) {
+        return;
+      }
+
+      const response = await api.editExpenses(
+        editingExpense.id.toString(),
+        updatedFields
+      );
 
       if (response?.status === 200) {
         console.log("Despesa editada");
         toast.success("Despesa editada.", { autoClose: 2000 });
-
         await handleGetExpense();
+        setIsEditingExpense(false);
       }
     } catch (error) {
-      console.error("Error ao editar despesa", error);
+      console.error(error);
     }
   };
 
@@ -310,7 +367,7 @@ export function DataProvider({ children }: DataProviderProps) {
       if (response?.status === 200) {
         console.log("Despesa excluída com sucesso");
         toast.success("Despesa excluída.", { autoClose: 2000 });
-
+        setIsDeleteExpense(false);
         await handleGetExpense();
       }
     } catch (error) {
@@ -384,6 +441,7 @@ export function DataProvider({ children }: DataProviderProps) {
         });
         console.log("Receita adicionada com sucesso");
         setFormData({
+          id: "",
           userId: formData.userId,
           value: "",
           description: "",
@@ -413,10 +471,14 @@ export function DataProvider({ children }: DataProviderProps) {
         setIncomes([]);
       }
     } catch (error) {
-      toast.error("Erro ao carregar receita. Tente novamente mais tarde.", {
-        autoClose: 2000,
-      });
-
+      if (user) {
+        localStorage.setItem("user", JSON.stringify(user));
+        toast.error("Erro ao carregar receita. Tente novamente mais tarde.", {
+          autoClose: 2000,
+        });
+      } else {
+        throw error;
+      }
       console.error("Erro ao carregar receitas:", error);
     }
   };
@@ -434,10 +496,11 @@ export function DataProvider({ children }: DataProviderProps) {
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
   const handleChangeExpenses = (
     e: React.ChangeEvent<
@@ -452,7 +515,13 @@ export function DataProvider({ children }: DataProviderProps) {
     try {
       const response = await api.deleteIncome(id);
       if (response?.status === 200) {
+        setIncomes((prevIncomes) =>
+          prevIncomes.filter((incomes) => String(incomes.id) !== id)
+        );
+
         toast.success("Receita excluída.", { autoClose: 2000 });
+        setIsDeleteIncome(false);
+
         console.log("Receita excluída com sucesso");
         await handleGetIncomes();
       }
@@ -470,6 +539,7 @@ export function DataProvider({ children }: DataProviderProps) {
       : "";
 
     setFormData({
+      id: String(income.id),
       userId: user?.id,
       value: income.amount.toString(),
       description: income.description,
@@ -478,57 +548,37 @@ export function DataProvider({ children }: DataProviderProps) {
   };
 
   const startEditingExpenses = (expense: Expense) => {
-    const formattedDate = expense.data_pagamento
-      ? new Date(expense.data_pagamento).toISOString().split("T")[0]
-      : "";
-
     setEditingExpense(expense);
-    setFormDataExpenses({
-      userId: user?.id,
-      value: expense.valor ?? "",
-      description: expense.descricao ?? "",
-      payment_data: formattedDate,
-      categoria_id: expense.categoria_id?.toString() ?? "",
-      newCategorie: "",
-    });
   };
 
-  const handleUpdate = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!editingIncome) return;
 
-    if (!isFormValid()) {
-      toast.error("Todos os campos são obrigatórios.", { autoClose: 2000 });
-      console.error("Todos os campos são obrigatórios");
-      return;
-    }
+    const updatedFields: IncomeUpdate = {};
+
+    if (formData.value) updatedFields.amount = formData.value.toString();
+    if (formData.description) updatedFields.description = formData.description;
+    if (formData.receipt_date) updatedFields.date = formData.receipt_date;
 
     try {
-      const response = await api.editIncome(editingIncome.id.toString(), {
-        amount: formData.value,
-        description: formData.description,
-        receipt_date: formData.receipt_date,
-      });
+      const response = await api.editIncome(
+        formData.id.toString(),
+        updatedFields
+      );
 
       if (response?.status === 200) {
-        toast.success("Receita editada.", { autoClose: 2000 });
-        console.log("Receita editada com sucesso");
-        setEditingIncome(null);
-        await handleGetIncomes();
-        setEditingIncome(null);
-        setFormData({
-          userId: user?.id,
-          value: "",
-          description: "",
-          receipt_date: "",
+        toast.success(`Receita editada.`, {
+          autoClose: 2000,
         });
+        console.log("Receita atualizada com sucesso.", response);
+        await handleGetIncomes();
+        setIsEditingIncome(false);
       }
-    } catch (err) {
-      toast.error("Erro ao atualizar receita.", { autoClose: 2000 });
-      console.log("Erro ao atualizar os dados", err);
-      throw err;
+    } catch (error) {
+      console.error(error);
     }
   };
+
   const formatIncomesForChart = (incomes: Income[]): DoughnutChartData => {
     const groupedIncomes: { [key: string]: number } = {};
 
@@ -595,6 +645,20 @@ export function DataProvider({ children }: DataProviderProps) {
         handleAddCategory,
         formatIncomesForChartToExpense,
         fetchCategories,
+        setFormData,
+        setFormDataExpenses,
+        setIsEditingIncome,
+        isEditingIncome,
+        isEditingExpense,
+        setIsEditingExpense,
+        selectedIncome,
+        setSelectedIncome,
+        isDeleteIncome,
+        setIsDeleteIncome,
+        selectedExpense,
+        setSelectedExpense,
+        isDeleteExpense,
+        setIsDeleteExpense,
       }}
     >
       {children}

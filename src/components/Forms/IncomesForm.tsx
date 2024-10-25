@@ -1,24 +1,25 @@
-import { formatCurrency, formatDate } from "../../utils/FormattedValues";
 import { useDataInformation } from "../../context/DataContext/DataContext";
-import DoughnutChartComponent from "../ExpensePierChat";
+import DoughnutChartComponent from "../MockDataPierAndLineChart/ExpensePierChat";
 import { AuthContext } from "../../context/AuthContext/AuthContext";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Button from "../Commons/Button";
+import EditIncomeModal from "../Modal/Incomes/EditIncomes/index";
+
 export default function IncomeForm() {
   const {
     incomes,
     handleChange,
-    handleDelete,
     handleSubmit,
-    handleUpdate,
-    startEditing,
     formData,
     formatIncomesForChart,
-    editingIncome,
     handleGetIncomes,
   } = useDataInformation();
   const userContext = AuthContext();
   const user = userContext?.user;
+  const [isListIncomeModalOpen, setIsListIncomeOModalpen] = useState(false);
+
+  const handleOpenListModalIncome = () => setIsListIncomeOModalpen(true);
+
   useEffect(() => {
     if (user?.id) handleGetIncomes(user?.id);
   }, [user]);
@@ -36,16 +37,13 @@ export default function IncomeForm() {
       )}
 
       <div className="w-1/3 ml-auto sm:w-full ">
-        <h2 className="text-xl font-bold mb-4">
-          {editingIncome ? "Editar Receita" : "Adicionar Receita"}
-        </h2>
-        <form
-          id="income-form"
-          className="text-start"
-          onSubmit={editingIncome ? handleUpdate : handleSubmit}
-        >
-          <div className="mb-4 text-white">
-            <label htmlFor="value" className="block text-sm font-medium ">
+        <h2 className="text-xl font-bold mb-4">Adicionar Receita</h2>
+        <form id="income-form" className="text-start" onSubmit={handleSubmit}>
+          <div className="mb-4 text-primary-gray-600">
+            <label
+              htmlFor="value"
+              className="block text-normal font-semibold text-primary-gray-600"
+            >
               Valor:
             </label>
             <input
@@ -60,7 +58,10 @@ export default function IncomeForm() {
           </div>
 
           <div className="mb-4">
-            <label htmlFor="description" className="block text-sm font-medium">
+            <label
+              htmlFor="description"
+              className="block text-normal font-semibold text-primary-gray-600"
+            >
               Descrição:
             </label>
             <textarea
@@ -74,7 +75,10 @@ export default function IncomeForm() {
           </div>
 
           <div className="mb-4">
-            <label htmlFor="receipt_date" className="block text-sm font-medium">
+            <label
+              htmlFor="receipt_date"
+              className="block text-normal font-semibold text-primary-gray-600"
+            >
               Data de Recebimento:
             </label>
             <input
@@ -86,44 +90,24 @@ export default function IncomeForm() {
               className="mt-1 block w-full border rounded p-2 text-black"
             />
           </div>
-          <div className="flex justify-between mx-auto gap-4">
-            <Button variant="primary" type="submit" className="w-full">
-              {editingIncome ? "Atualizar Receita" : "Salvar Receita"}
-            </Button>
-            {editingIncome && (
-              <Button variant="secondary" className="w-full">
-                {" "}
-                Cancelar{" "}
-              </Button>
-            )}
-          </div>
-        </form>
+          <Button variant="primary" type="submit" className="w-full">
+            Adicionar Receita
+          </Button>
 
-        <div>
-          <h2 className="text-xl font-bold mb-4">Suas Receitas</h2>
-          {incomes.length === 0 ? (
-            <p>Nenhuma receita adicionada.</p>
-          ) : (
-            <ul>
-              {incomes.map((income) => (
-                <div key={income.id}>
-                  <button onClick={() => startEditing(income)}>Editar</button>
-                  <button onClick={() => handleDelete(String(income.id))}>
-                    Apagar
-                  </button>
-                  <li>
-                    <strong>Valor:</strong> {formatCurrency(income.amount)}{" "}
-                    <br />
-                    <strong>Descrição:</strong> {income.description} <br />
-                    <strong>Data de Recebimento:</strong>{" "}
-                    {formatDate(income.created_at)} <br />
-                  </li>
-                </div>
-              ))}
-            </ul>
-          )}
-        </div>
+          <Button
+            variant="secondary"
+            className="ml-auto mt-2"
+            onClick={handleOpenListModalIncome}
+            type="button"
+          >
+            {" "}
+            Gerenciar receitas
+          </Button>
+        </form>
       </div>
+      {isListIncomeModalOpen && (
+        <EditIncomeModal onClose={() => setIsListIncomeOModalpen(false)} />
+      )}
     </main>
   );
 }

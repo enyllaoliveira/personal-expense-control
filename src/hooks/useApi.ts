@@ -100,7 +100,7 @@ export class useApi {
       );
       return response;
     } catch (error) {
-      console.error("Erro ao editar lançamento:", error);
+      console.error(error);
       throw error;
     }
   }

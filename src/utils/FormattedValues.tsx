@@ -8,18 +8,24 @@ export const formatCurrency = (value: string | number): string => {
     currency: "BRL",
   });
 };
-
-export const formatDate = (date?: string | Date): string => {
-  if (!date) return "Data indisponível";
+export const formatDate = (
+  date?: string | Date,
+  iso: boolean = false
+): string => {
+  if (!date) return "";
 
   const parsedDate = new Date(date);
   if (isNaN(parsedDate.getTime())) {
-    return "Data inválida";
+    return "";
   }
-  const options: Intl.DateTimeFormatOptions = {
+
+  if (iso) {
+    return parsedDate.toISOString().split("T")[0];
+  }
+
+  return parsedDate.toLocaleDateString("pt-BR", {
     day: "2-digit",
     month: "2-digit",
     year: "numeric",
-  };
-  return parsedDate.toLocaleDateString("pt-BR", options);
+  });
 };

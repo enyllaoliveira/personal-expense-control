@@ -3,6 +3,6 @@ export default interface Income {
   userId: string;
   amount: string;
   description: string;
-  receipt_date: string;
+  date: string;
   created_at: string;
 }

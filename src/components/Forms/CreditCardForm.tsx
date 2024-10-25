@@ -1,5 +1,8 @@
 import { Bar } from "react-chartjs-2";
-import { stackedBarData, stackedOptions } from "../CreditCardControl";
+import {
+  stackedBarData,
+  stackedOptions,
+} from "../MockDataPierAndLineChart/CreditCardControl";
 import { useState } from "react";
 export default function CreditCardForm() {
   const [selectedOption, setSelectedOption] = useState("");

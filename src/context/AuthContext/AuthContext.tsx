@@ -65,6 +65,7 @@ export function UserProvider({ children }: UserProviderProps) {
       localStorage.setItem("user", JSON.stringify(user));
     } else {
       localStorage.removeItem("user");
+      navigate("/login");
     }
   }, [user]);
 
