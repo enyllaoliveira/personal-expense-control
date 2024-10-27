@@ -118,14 +118,19 @@ export class useApi {
     }
   }
 
-  public async createExpense(expensesData: {
-    valor: string;
-    descricao: string;
-    data_pagamento: string;
-    usuario_id: string;
-    categoria_id: string | number;
-    novaCategoria?: string;
-  }) {
+  public async createExpense(
+    expensesData: {
+      valor: string;
+      descricao: string;
+      data_pagamento: string;
+      usuario_id: string;
+      categoria_id: string | number;
+      novaCategoria?: string;
+      tipo_pagamento?: string;
+      numero_parcelas?: number;
+      isRecurrent?: boolean;
+    }[]
+  ) {
     try {
       const response = await api.post(
         `${import.meta.env.VITE_API_URL}/despesas`,

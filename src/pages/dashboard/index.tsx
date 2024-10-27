@@ -1,5 +1,5 @@
 import ExpenseLineChart from "../../components/MockDataPierAndLineChart/ExpenseLineChart";
-import { doughnutDataToExpense } from "../../components/Forms/ExpensePierChatMock";
+// import DoughnutChartComponent from "../../components/MockDataPierAndLineChart/ExpensePierChat";
 import {
   stackedBarData,
   stackedOptions,
@@ -19,12 +19,12 @@ export default function Dashboard() {
               {" "}
               <ExpenseLineChart />
             </div>
-            <div
+            {/* <div
               className="w-full sm:w-full md:w-1/2 justify-center items-center flex"
               style={{ position: "relative", height: "400px", width: "100%" }}
             >
               <Doughnut data={doughnutDataToExpense} />
-            </div>
+            </div> */}
           </div>
           <div className="flex sm:flex-col items-center">
             <div className="w-full sm:w-full md:w-1/2 justify-center items-center flex">

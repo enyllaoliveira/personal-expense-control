@@ -1,12 +1,15 @@
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
 import { DoughnutChartData } from "../../interfaces/doughnutChartData";
+
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-export default function DoughnutChartComponent({
-  data,
-}: {
+interface DoughnutChartProps {
   data: DoughnutChartData;
-}) {
-  return <Doughnut data={data} />;
 }
+
+const DoughnutChartComponent: React.FC<DoughnutChartProps> = ({ data }) => {
+  return <Doughnut data={data} />;
+};
+
+export default DoughnutChartComponent;

@@ -41,6 +41,9 @@ export default function EditExpensesModal({
       payment_data: "",
       categoria_id: "",
       newCategorie: "",
+      tipo_pagamento: "",
+      numero_parcelas: 1,
+      isRecurrent: false,
     });
     onClose();
   };
@@ -63,6 +66,9 @@ export default function EditExpensesModal({
       payment_data: formattedDate,
       categoria_id: String(expense.categoria_id || ""),
       newCategorie: "",
+      tipo_pagamento: expense.tipo_pagamento || "",
+      numero_parcelas: expense.numero_parcelas || 1,
+      isRecurrent: expense.isRecurrent || false,
     });
 
     startEditingExpenses(expense);

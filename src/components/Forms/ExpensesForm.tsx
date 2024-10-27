@@ -24,20 +24,21 @@ export default function ExpensesForm() {
 
   useEffect(() => {
     handleGetExpense(String(user?.id));
-  }, [user]);
-  useEffect(() => {
-    console.log("Categorias atualizadas", categorias);
-  }, [categorias]);
+  }, [user, categorias]);
 
   useEffect(() => {
     fetchCategories();
   }, []);
+
+  const despesasComuns = expenses.filter(
+    (despesa) => despesa.tipo_pagamento === "comum"
+  );
   return (
     <main className="flex gap-4 sm:flex-col px-4">
-      {expenses.length > 0 ? (
+      {despesasComuns.length > 0 ? (
         <div className="w-[700px] sm:px-4 sm:w-full">
           <DoughnutChartComponent
-            data={formatIncomesForChartToExpense(expenses)}
+            data={formatIncomesForChartToExpense(despesasComuns)}
           />
         </div>
       ) : (
@@ -55,7 +56,7 @@ export default function ExpensesForm() {
             if (editingExpense) {
               handleEditExpense(e);
             } else {
-              handleAddExpense();
+              handleAddExpense(formDataExpenses);
             }
           }}
         >

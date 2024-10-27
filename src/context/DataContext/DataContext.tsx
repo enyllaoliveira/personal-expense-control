@@ -51,6 +51,9 @@ interface formValueToExpenses {
   payment_data: string;
   categoria_id: string;
   newCategorie: string;
+  tipo_pagamento: string;
+  numero_parcelas: number;
+  isRecurrent: boolean;
 }
 interface Categoria {
   id: number;
@@ -80,7 +83,7 @@ const DataContext = createContext<{
     >
   ) => void;
   startEditingExpenses: (expense: Expense) => void;
-  handleAddExpense: (categoria_id?: string) => Promise<void>;
+  handleAddExpense: (expenseData: formValueToExpenses) => Promise<void>;
   handleEditExpense: (e: React.FormEvent<HTMLFormElement>) => void;
   handleDeleteExpense: (id: string) => void;
   editingExpense: Expense | null;
@@ -146,6 +149,9 @@ export function DataProvider({ children }: DataProviderProps) {
     payment_data: formatDate(new Date()),
     categoria_id: "",
     newCategorie: "",
+    tipo_pagamento: "comum",
+    numero_parcelas: 1,
+    isRecurrent: false,
   });
   const notify = {
     success: (message: string) => toast.success(message),
@@ -266,25 +272,56 @@ export function DataProvider({ children }: DataProviderProps) {
     );
   };
 
-  const handleAddExpense = async (categoria_id?: string) => {
+  const handleAddExpense = async (expenseData: formValueToExpenses) => {
     if (!isFormValidToExpense()) {
       console.error("Todos os campos são obrigatórios.");
       return;
     }
 
+    const {
+      value,
+      description,
+      payment_data,
+      categoria_id,
+      tipo_pagamento,
+      newCategorie,
+      numero_parcelas,
+      isRecurrent,
+    } = expenseData;
+
+    if (
+      !value ||
+      isNaN(parseFloat(value)) ||
+      !description.trim() ||
+      !payment_data ||
+      !categoria_id
+    ) {
+      toast.error("Todos os campos são obrigatórios.", { autoClose: 2000 });
+      return;
+    }
+
     try {
-      let finalCategoriaId = categoria_id || formDataExpenses.categoria_id;
+      let finalCategoriaId = categoria_id;
+
       if (!user?.id) {
-        console.error("ID do usuário não encontrado.");
+        toast.error("ID do usuário não encontrado.", { autoClose: 2000 });
         return;
       }
-      if (formDataExpenses.newCategorie.trim()) {
-        toast.info("Criando nova categoria...", {
+
+      const categoriaExiste = categorias.find(
+        (categoria) => String(categoria.id) === categoria_id
+      );
+
+      if (!categoriaExiste && !newCategorie.trim()) {
+        toast.error("Categoria inválida. Escolha uma categoria válida.", {
           autoClose: 2000,
         });
-        console.log("Criando nova categoria...");
+        return;
+      }
+
+      if (newCategorie.trim()) {
         const categoriaResponse = await api.createCategory({
-          nome: formDataExpenses.newCategorie,
+          nome: newCategorie,
           tipo: "despesa",
           descricao_extra: false,
           id: user.id,
@@ -294,19 +331,55 @@ export function DataProvider({ children }: DataProviderProps) {
         await fetchCategories();
       }
 
-      const response = await api.createExpense({
-        usuario_id: String(user?.id),
-        valor: formDataExpenses.value,
-        descricao: formDataExpenses.description,
-        data_pagamento: formDataExpenses.payment_data,
-        categoria_id: finalCategoriaId,
-      });
+      const despesas = [];
+      const dataInicial = new Date(payment_data);
+
+      if (numero_parcelas && numero_parcelas > 1) {
+        for (let i = 0; i < numero_parcelas; i++) {
+          const dataParcela = new Date(dataInicial);
+          dataParcela.setMonth(dataParcela.getMonth() + i);
+
+          despesas.push({
+            usuario_id: String(user.id),
+            valor: (parseFloat(value) / numero_parcelas).toFixed(2),
+            descricao: `${description} - Parcela ${i + 1}/${numero_parcelas}`,
+            data_pagamento: dataParcela.toISOString().split("T")[0],
+            categoria_id: finalCategoriaId,
+            tipo_pagamento,
+          });
+        }
+      } else if (isRecurrent) {
+        for (let i = 0; i < 12; i++) {
+          const dataRecorrente = new Date(dataInicial);
+          dataRecorrente.setMonth(dataRecorrente.getMonth() + i);
+
+          despesas.push({
+            usuario_id: String(user.id),
+            valor: value,
+            descricao: `${description} - Mês ${i + 1}`,
+            data_pagamento: dataRecorrente.toISOString().split("T")[0],
+            categoria_id: finalCategoriaId,
+            tipo_pagamento,
+          });
+        }
+      } else {
+        despesas.push({
+          usuario_id: String(user.id),
+          valor: value,
+          descricao: description,
+          data_pagamento: payment_data,
+          categoria_id: finalCategoriaId,
+          tipo_pagamento,
+        });
+      }
+
+      console.log("Dados para API:", despesas);
+      const response = await api.createExpense(despesas);
 
       if (response?.status === 201) {
-        toast.success(`Despesa ${response?.data?.descricao} criada.`, {
-          autoClose: 2000,
-        });
-        setExpenses((expenses) => [...expenses, response.data]);
+        setExpenses((prevExpenses) => [...prevExpenses, ...response.data]);
+        toast.success("Despesa(s) criada(s) com sucesso.", { autoClose: 2000 });
+
         setFormDataExpenses({
           id: "",
           userId: user?.id,
@@ -315,13 +388,16 @@ export function DataProvider({ children }: DataProviderProps) {
           payment_data: formatDate(new Date()),
           categoria_id: "",
           newCategorie: "",
+          tipo_pagamento: "comum",
+          numero_parcelas: 1,
+          isRecurrent: false,
         });
       }
     } catch (error) {
-      console.error("Erro ao adicionar despesa:", error);
+      toast.error("Erro ao adicionar despesa.", { autoClose: 2000 });
+      console.error("Erro:", error);
     }
   };
-
   const handleEditExpense = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -508,7 +584,10 @@ export function DataProvider({ children }: DataProviderProps) {
     >
   ) => {
     const { name, value } = e.target;
-    setFormDataExpenses((expenses) => ({ ...expenses, [name]: value }));
+    setFormDataExpenses((expenses) => ({
+      ...expenses,
+      [name]: name === "numero_parcelas" ? parseInt(value) : value,
+    }));
   };
 
   const handleDelete = async (id: string) => {

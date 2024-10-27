@@ -8,4 +8,7 @@ export interface Expense {
   criado_em?: string;
   atualizado_em?: string;
   nova_categoria?: string;
+  tipo_pagamento?: string | undefined;
+  numero_parcelas?: number | undefined;
+  isRecurrent?: boolean | undefined;
 }
