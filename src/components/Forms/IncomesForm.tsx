@@ -7,10 +7,11 @@ import EditIncomeModal from "../Modal/Incomes/EditIncomes/index";
 
 export default function IncomeForm() {
   const {
+    setFormDataIncome,
     incomes,
-    handleChange,
-    handleSubmit,
-    formData,
+    handleChangeIncome,
+    handleAddIncome,
+    formDataIncome,
     formatIncomesForChart,
     handleGetIncomes,
   } = useDataInformation();
@@ -38,7 +39,11 @@ export default function IncomeForm() {
 
       <div className="w-1/3 ml-auto sm:w-full ">
         <h2 className="text-xl font-bold mb-4">Adicionar Receita</h2>
-        <form id="income-form" className="text-start" onSubmit={handleSubmit}>
+        <form
+          id="income-form"
+          className="text-start mb-6"
+          onSubmit={handleAddIncome}
+        >
           <div className="mb-4 text-primary-gray-600">
             <label
               htmlFor="value"
@@ -48,9 +53,9 @@ export default function IncomeForm() {
             </label>
             <input
               type="number"
-              name="value"
-              value={formData.value}
-              onChange={handleChange}
+              name="amount"
+              value={formDataIncome.amount}
+              onChange={handleChangeIncome}
               required
               className="mt-1 block w-full border rounded-md p-2 text-black"
               placeholder="Insira o valor"
@@ -66,8 +71,8 @@ export default function IncomeForm() {
             </label>
             <textarea
               name="description"
-              value={formData.description}
-              onChange={handleChange}
+              value={formDataIncome.description}
+              onChange={handleChangeIncome}
               required
               className="mt-1 block w-full border rounded p-2 text-black"
               placeholder="Descrição da receita"
@@ -84,11 +89,28 @@ export default function IncomeForm() {
             <input
               type="date"
               name="receipt_date"
-              value={formData.receipt_date || ""}
-              onChange={handleChange}
+              value={formDataIncome.receipt_date || ""}
+              onChange={handleChangeIncome}
               required
               className="mt-1 block w-full border rounded p-2 text-black"
             />
+          </div>
+          <div className="mb-4">
+            <label className="flex gap-2 h-8 text-start items-center sm:justify-start whitespace-nowrap">
+              Receita Recorrente?
+              <input
+                type="checkbox"
+                name="isRecurrent"
+                className="text-black my-auto size-4 sm:size-3"
+                checked={formDataIncome.isRecurrent}
+                onChange={(e) =>
+                  setFormDataIncome((income) => ({
+                    ...income,
+                    isRecurrent: e.target.checked,
+                  }))
+                }
+              />
+            </label>
           </div>
           <Button variant="primary" type="submit" className="w-full">
             Adicionar Receita
@@ -96,7 +118,7 @@ export default function IncomeForm() {
 
           <Button
             variant="secondary"
-            className="ml-auto mt-2"
+            className="ml-auto mt-2 sm:mt-4"
             onClick={handleOpenListModalIncome}
             type="button"
           >
@@ -105,6 +127,7 @@ export default function IncomeForm() {
           </Button>
         </form>
       </div>
+
       {isListIncomeModalOpen && (
         <EditIncomeModal onClose={() => setIsListIncomeOModalpen(false)} />
       )}

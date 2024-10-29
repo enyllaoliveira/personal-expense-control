@@ -5,4 +5,5 @@ export default interface Income {
   description: string;
   date: string;
   created_at: string;
+  isRecurrent?: boolean | undefined;
 }

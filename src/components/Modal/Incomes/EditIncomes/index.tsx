@@ -9,10 +9,10 @@ import Button from "../../../Commons/Button";
 export default function EdiIncomesModal({ onClose }: { onClose: () => void }) {
   const {
     incomes,
-    handleUpdate,
-    formData,
-    handleChange,
-    setFormData,
+    handleUpdateIncome,
+    formDataIncome,
+    handleChangeIncome,
+    setFormDataIncome,
     isEditingIncome,
     setIsEditingIncome,
     selectedIncome,
@@ -27,12 +27,13 @@ export default function EdiIncomesModal({ onClose }: { onClose: () => void }) {
   };
 
   const handleCloseModal = () => {
-    setFormData({
+    setFormDataIncome({
       id: "",
       userId: undefined,
-      value: "",
+      amount: "",
       description: "",
       receipt_date: "",
+      isRecurrent: false,
     });
     onClose();
   };
@@ -42,15 +43,16 @@ export default function EdiIncomesModal({ onClose }: { onClose: () => void }) {
 
     const formattedDate = new Date(incomeDate).toISOString().split("T")[0];
 
-    setFormData({
+    setFormDataIncome({
       id: String(income.id),
       userId:
         typeof income.userId === "string"
           ? parseInt(income.userId)
           : income.userId,
-      value: income.amount.toString(),
+      amount: income.amount.toString(),
       description: income.description,
       receipt_date: formattedDate,
+      isRecurrent: income.isRecurrent || false,
     });
 
     setIsEditingIncome(true);
@@ -163,7 +165,7 @@ export default function EdiIncomesModal({ onClose }: { onClose: () => void }) {
               <form
                 id="income-form"
                 className="text-start w-1/2"
-                onSubmit={handleUpdate}
+                onSubmit={handleUpdateIncome}
               >
                 <div className="mb-4 text-primary-gray-900">
                   <label
@@ -174,9 +176,9 @@ export default function EdiIncomesModal({ onClose }: { onClose: () => void }) {
                   </label>
                   <input
                     type="number"
-                    name="value"
-                    value={formData.value || ""}
-                    onChange={handleChange}
+                    name="amount"
+                    value={formDataIncome.amount || ""}
+                    onChange={handleChangeIncome}
                     required
                     className="mt-1 block w-full border rounded-md p-2 text-primary-gray-900"
                     placeholder="Insira o valor"
@@ -192,8 +194,8 @@ export default function EdiIncomesModal({ onClose }: { onClose: () => void }) {
                   </label>
                   <textarea
                     name="description"
-                    value={formData.description || ""}
-                    onChange={handleChange}
+                    value={formDataIncome.description || ""}
+                    onChange={handleChangeIncome}
                     required
                     className="mt-1 block w-full border rounded p-2 text-primary-gray-900"
                     placeholder="Descrição da receita"
@@ -210,8 +212,8 @@ export default function EdiIncomesModal({ onClose }: { onClose: () => void }) {
                   <input
                     type="date"
                     name="receipt_date"
-                    value={formData.receipt_date || ""}
-                    onChange={handleChange}
+                    value={formDataIncome.receipt_date || ""}
+                    onChange={handleChangeIncome}
                     required
                     className="mt-1 block w-full border rounded p-2 text-primary-gray-900"
                   />

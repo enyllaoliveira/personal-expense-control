@@ -9,13 +9,11 @@ import {
   SetStateAction,
 } from "react";
 import { useNavigate } from "react-router-dom";
-
 import { useApi } from "../../hooks/useApi";
 import { AuthContext } from "../AuthContext/AuthContext";
 import Income from "../../interfaces/income";
 import { DoughnutChartData } from "../../interfaces/doughnutChartData";
-import { Expense } from "../../interfaces";
-
+import { Expense } from "../../interfaces/expense";
 import { formatDate } from "../../utils/FormattedValues";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -30,129 +28,132 @@ interface IncomeUpdate {
 }
 
 interface ExpenseUpdateProps {
-  valor?: string;
-  descricao?: string;
-  data_pagamento?: string;
-  categoria_id?: string;
+  amount?: string;
+  description?: string;
+  payment_type?: string;
+  category_id?: string;
 }
 
 interface FormValues {
   id: string;
   userId: number | undefined;
-  value: string;
+  amount: string;
   description: string;
   receipt_date: string;
-}
-interface formValueToExpenses {
-  id: string;
-  userId: number | undefined;
-  value: string;
-  description: string;
-  payment_data: string;
-  categoria_id: string;
-  newCategorie: string;
-  tipo_pagamento: string;
-  numero_parcelas: number;
   isRecurrent: boolean;
 }
-interface Categoria {
+interface FormValueToExpenses {
+  id: string;
+  userId: number | undefined;
+  amount: string;
+  description: string;
+  payment_date: string;
+  category_id: string;
+  newCategorie: string;
+  payment_type: string;
+  installment_count: number;
+  is_recurrent: boolean;
+}
+interface Categories {
   id: number;
-  nome: string;
-  tipo: string;
-  descricao_extra?: boolean;
+  name: string;
+  type: string;
+  extra_description?: boolean;
+  userId: number;
 }
 
 const DataContext = createContext<{
-  handleSubmit: (e: React.FormEvent) => void;
-  handleChange: (
+  handleAddIncome: (e: React.FormEvent) => void;
+  handleGetIncomes: (user: string | number) => void;
+  handleChangeIncome: (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => void;
-
-  handleDelete: (id: string) => void;
-  startEditing: (income: Income) => void;
-  handleUpdate: (e: React.FormEvent<HTMLFormElement>) => void;
-  incomes: Income[];
+  handleDeleteIncome: (id: string) => void;
+  startEditingIncome: (income: Income) => void;
+  handleUpdateIncome: (e: React.FormEvent<HTMLFormElement>) => void;
   formatIncomesForChart: (incomes: Income[]) => DoughnutChartData;
-  formData: FormValues;
-  editingIncome: Income | null;
-  handleGetIncomes: (user: string | number) => void;
-  expenses: Expense[];
+  setFormDataIncome: Dispatch<SetStateAction<FormValues>>;
+  setIsEditingIncome: Dispatch<SetStateAction<boolean>>;
+  setIsDeleteIncome: Dispatch<SetStateAction<boolean>>;
+  setSelectedIncome: Dispatch<SetStateAction<Income | null>>;
+  handleGetExpense: (user: string | number) => void;
+  handleAddCategory: (e: React.FormEvent) => void;
+  handleAddExpense: (expenseData: FormValueToExpenses) => Promise<void>;
   handleChangeExpenses: (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >
   ) => void;
   startEditingExpenses: (expense: Expense) => void;
-  handleAddExpense: (expenseData: formValueToExpenses) => Promise<void>;
   handleEditExpense: (e: React.FormEvent<HTMLFormElement>) => void;
   handleDeleteExpense: (id: string) => void;
-  editingExpense: Expense | null;
-  formDataExpenses: formValueToExpenses;
-
-  handleGetExpense: (user: string | number) => void;
   formatIncomesForChartToExpense: (expense: Expense[]) => DoughnutChartData;
+  setFormDataExpenses: Dispatch<SetStateAction<FormValueToExpenses>>;
+  setIsDeleteExpense: Dispatch<SetStateAction<boolean>>;
+  setIsEditingExpense: Dispatch<SetStateAction<boolean>>;
+  setSelectedExpense: Dispatch<SetStateAction<Expense | null>>;
+  groupExpensesByDescription: (expenses: Expense[]) => Expense[];
+  groupExpensesByDescriptionToGraphics: (expenses: Expense[]) => Expense[];
   fetchCategories: () => void;
-  categorias: Categoria[];
-  handleAddCategory: (e: React.FormEvent) => void;
+  incomes: Income[];
+  formDataIncome: FormValues;
+  editingIncome: Income | null;
+  isEditingIncome: boolean;
+  isDeleteIncome: boolean;
+  selectedIncome: Income | null;
+  expenses: Expense[];
+  editingExpense: Expense | null;
+  formDataExpenses: FormValueToExpenses;
+  isDeleteExpense: boolean;
+  isEditingExpense: boolean;
+  selectedExpense: Expense | null;
+  categories: Categories[];
   notify: {
     success: (message: string) => void;
     error: (message: string) => void;
     info: (message: string) => void;
   };
-  setFormData: Dispatch<SetStateAction<FormValues>>;
-  setFormDataExpenses: Dispatch<SetStateAction<formValueToExpenses>>;
-  isEditingIncome: boolean;
-  setIsEditingIncome: Dispatch<SetStateAction<boolean>>;
-  isDeleteIncome: boolean;
-  setIsDeleteIncome: Dispatch<SetStateAction<boolean>>;
-  isDeleteExpense: boolean;
-  setIsDeleteExpense: Dispatch<SetStateAction<boolean>>;
-  isEditingExpense: boolean;
-  setIsEditingExpense: Dispatch<SetStateAction<boolean>>;
-  selectedIncome: Income | null;
-  setSelectedIncome: Dispatch<SetStateAction<Income | null>>;
-  selectedExpense: Expense | null;
-  setSelectedExpense: Dispatch<SetStateAction<Expense | null>>;
 } | null>(null);
 
 export function DataProvider({ children }: DataProviderProps) {
+  const navigate = useNavigate();
   const api = new useApi();
   const userContext = AuthContext();
   const user = userContext?.user;
   const [incomes, setIncomes] = useState<Income[]>([]);
   const [editingIncome, setEditingIncome] = useState<Income | null>(null);
-  const [expenses, setExpenses] = useState<Expense[]>([]);
-  const [editingExpense, setEditingExpense] = useState<Expense | null>(null);
-  const [categorias, setCategorias] = useState<Categoria[]>([]);
   const [isEditingIncome, setIsEditingIncome] = useState(false);
-  const [isEditingExpense, setIsEditingExpense] = useState(false);
   const [selectedIncome, setSelectedIncome] = useState<Income | null>(null);
   const [isDeleteIncome, setIsDeleteIncome] = useState(false);
-
+  const [expenses, setExpenses] = useState<Expense[]>([]);
+  const [editingExpense, setEditingExpense] = useState<Expense | null>(null);
+  const [isEditingExpense, setIsEditingExpense] = useState(false);
   const [selectedExpense, setSelectedExpense] = useState<Expense | null>(null);
   const [isDeleteExpense, setIsDeleteExpense] = useState(false);
+  const [categories, setCategories] = useState<Categories[]>([]);
 
-  const navigate = useNavigate();
-
-  const [formData, setFormData] = useState({
+  const [formDataIncome, setFormDataIncome] = useState({
     id: "",
     userId: user?.id,
-    value: "",
+    amount: "",
     description: "",
     receipt_date: formatDate(new Date()),
+    isRecurrent: false,
   });
+
   const [formDataExpenses, setFormDataExpenses] = useState({
     userId: user?.id,
     id: "",
-    value: "",
+    amount: "",
     description: "",
-    payment_data: formatDate(new Date()),
-    categoria_id: "",
+    payment_date: formatDate(new Date()),
+    category_id: "",
     newCategorie: "",
-    tipo_pagamento: "comum",
-    numero_parcelas: 1,
-    isRecurrent: false,
+    payment_type: "comum",
+    installment_count: 1,
+    is_recurrent: false,
   });
+
   const notify = {
     success: (message: string) => toast.success(message),
     error: (message: string) => toast.error(message),
@@ -164,71 +165,37 @@ export function DataProvider({ children }: DataProviderProps) {
       localStorage.setItem("user", JSON.stringify(user));
     } else {
       localStorage.removeItem("user");
-      navigate("/login");
+      navigate("/");
     }
   }, [user]);
 
-  const fetchCategories = async () => {
-    if (!user?.id) {
-      console.error("ID do usuário não encontrado.");
-      return;
-    }
-    try {
-      const response = await api.getCategoriesByID(user?.id);
-      const categoriasData: Categoria[] = response?.data || [];
-      setCategorias(categoriasData);
-    } catch (error) {
-      console.error("Erro ao carregar categorias:", error);
-      setCategorias([]);
-    }
-  };
-
   useEffect(() => {
-    fetchCategories();
-  }, []);
-
-  const handleAddCategory = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!formDataExpenses.newCategorie.trim()) {
-      console.error("O nome da nova categoria é obrigatório.");
-      return;
-    }
-    if (!user?.id) {
-      console.error("ID do usuário não encontrado.");
-      return;
-    }
-
-    try {
-      const novaCategoria = await api.createCategory({
-        nome: formDataExpenses.newCategorie,
-        tipo: "despesa",
-        descricao_extra: false,
-        id: user?.id,
-      });
-      toast.success(`Categoria de despesa ${novaCategoria} criada.`, {
-        autoClose: 2000,
-      });
-
-      await fetchCategories();
-
-      setFormDataExpenses((expenses) => ({
-        ...expenses,
-        newCategorie: "",
+    if (user?.id) {
+      setFormDataIncome((incomes) => ({
+        ...incomes,
+        userId: user.id,
       }));
-    } catch (error) {
-      toast.error("Erro ao criar categoria.", { autoClose: 2000 });
-
-      console.error("Erro ao criar categoria:", error);
+      setFormDataExpenses((formDataExpenses) => ({
+        ...formDataExpenses,
+        userId: user.id,
+      }));
+      handleGetExpense();
+      handleGetIncomes();
+      handleGetExpense();
+      fetchCategories();
+    } else {
+      setExpenses([]);
+      setIncomes([]);
     }
-  };
+    console.log("testeee", user);
+  }, [user]);
 
   const handleGetExpense = async () => {
     try {
       const response = await api.getExpensesById(String(user?.id));
       if (response?.status === 200) {
-        const despesas = response.data || [];
-        setExpenses(despesas);
+        const allExpenses = response.data || [];
+        setExpenses(allExpenses);
       } else if (response?.status === 404) {
         toast.error("Nenhuma despesa encontrada.", { autoClose: 2000 });
         setExpenses([]);
@@ -239,159 +206,102 @@ export function DataProvider({ children }: DataProviderProps) {
     }
   };
 
-  useEffect(() => {
-    handleGetExpense();
-    handleGetIncomes();
-  }, [user]);
-  useEffect(() => {
-    if (user?.id) {
-      setFormDataExpenses((formDataExpenses) => ({
-        ...formDataExpenses,
-        userId: user.id,
-      }));
-      handleGetExpense();
-    }
-  }, [user]);
-  useEffect(() => {
-    if (user?.id) {
-      setFormDataExpenses((prev) => ({ ...prev, userId: user.id }));
-      handleGetIncomes();
-      handleGetExpense();
-    } else {
-      setExpenses([]);
-      setIncomes([]);
-    }
-  }, [user]);
-
   const isFormValidToExpense = () => {
     return (
-      formDataExpenses.value.trim() !== "" &&
+      formDataExpenses.amount.trim() !== "" &&
       formDataExpenses.description.trim() !== "" &&
-      formDataExpenses.payment_data.trim() !== "" &&
-      formDataExpenses.categoria_id.trim() !== ""
+      formDataExpenses.payment_date.trim() !== "" &&
+      formDataExpenses.category_id.trim() !== ""
     );
   };
 
-  const handleAddExpense = async (expenseData: formValueToExpenses) => {
+  const handleAddExpense = async (expenseData: FormValueToExpenses) => {
     if (!isFormValidToExpense()) {
       console.error("Todos os campos são obrigatórios.");
       return;
     }
 
     const {
-      value,
+      amount,
       description,
-      payment_data,
-      categoria_id,
-      tipo_pagamento,
-      newCategorie,
-      numero_parcelas,
-      isRecurrent,
+      payment_date,
+      category_id,
+      payment_type,
+      installment_count,
+      is_recurrent,
     } = expenseData;
 
-    if (
-      !value ||
-      isNaN(parseFloat(value)) ||
-      !description.trim() ||
-      !payment_data ||
-      !categoria_id
-    ) {
-      toast.error("Todos os campos são obrigatórios.", { autoClose: 2000 });
+    if (is_recurrent && installment_count > 1) {
+      toast.error(
+        "Uma despesa não pode ser parcelada e recorrente ao mesmo tempo.",
+        {
+          autoClose: 3000,
+        }
+      );
       return;
     }
 
     try {
-      let finalCategoriaId = categoria_id;
-
+      const finalCategoryId = category_id;
       if (!user?.id) {
         toast.error("ID do usuário não encontrado.", { autoClose: 2000 });
         return;
       }
 
-      const categoriaExiste = categorias.find(
-        (categoria) => String(categoria.id) === categoria_id
-      );
+      const expenses = [];
+      const initialDate = new Date(payment_date);
 
-      if (!categoriaExiste && !newCategorie.trim()) {
-        toast.error("Categoria inválida. Escolha uma categoria válida.", {
-          autoClose: 2000,
-        });
-        return;
-      }
+      if (installment_count && installment_count > 1) {
+        for (let i = 0; i < installment_count; i++) {
+          const dateInstallment = new Date(initialDate);
+          dateInstallment.setMonth(dateInstallment.getMonth() + i);
 
-      if (newCategorie.trim()) {
-        const categoriaResponse = await api.createCategory({
-          nome: newCategorie,
-          tipo: "despesa",
-          descricao_extra: false,
-          id: user.id,
-        });
+          expenses.push({
+            description: description,
+            amount: (parseFloat(amount) / installment_count).toFixed(2),
+            payment_date: dateInstallment.toISOString().split("T")[0],
+            category_id: finalCategoryId,
 
-        finalCategoriaId = String(categoriaResponse.id);
-        await fetchCategories();
-      }
-
-      const despesas = [];
-      const dataInicial = new Date(payment_data);
-
-      if (numero_parcelas && numero_parcelas > 1) {
-        for (let i = 0; i < numero_parcelas; i++) {
-          const dataParcela = new Date(dataInicial);
-          dataParcela.setMonth(dataParcela.getMonth() + i);
-
-          despesas.push({
-            usuario_id: String(user.id),
-            valor: (parseFloat(value) / numero_parcelas).toFixed(2),
-            descricao: `${description} - Parcela ${i + 1}/${numero_parcelas}`,
-            data_pagamento: dataParcela.toISOString().split("T")[0],
-            categoria_id: finalCategoriaId,
-            tipo_pagamento,
+            user_id: String(user.id),
+            payment_type: payment_type || "comum",
+            installment_count: installment_count,
+            current_installment: i + 1,
           });
         }
-      } else if (isRecurrent) {
+      } else if (is_recurrent) {
         for (let i = 0; i < 12; i++) {
-          const dataRecorrente = new Date(dataInicial);
-          dataRecorrente.setMonth(dataRecorrente.getMonth() + i);
+          const recurringDate = new Date(initialDate);
+          recurringDate.setMonth(recurringDate.getMonth() + i);
 
-          despesas.push({
-            usuario_id: String(user.id),
-            valor: value,
-            descricao: `${description} - Mês ${i + 1}`,
-            data_pagamento: dataRecorrente.toISOString().split("T")[0],
-            categoria_id: finalCategoriaId,
-            tipo_pagamento,
+          expenses.push({
+            user_id: String(user.id),
+            amount: amount,
+            description: description,
+            payment_date: recurringDate.toISOString().split("T")[0],
+            category_id: finalCategoryId,
+            payment_type: payment_type || "comum",
+            installment_count: 12,
+            current_installment: i + 1,
           });
         }
       } else {
-        despesas.push({
-          usuario_id: String(user.id),
-          valor: value,
-          descricao: description,
-          data_pagamento: payment_data,
-          categoria_id: finalCategoriaId,
-          tipo_pagamento,
+        expenses.push({
+          user_id: String(user.id),
+          amount: amount,
+          description: description,
+          payment_date: payment_date,
+          category_id: finalCategoryId,
+          payment_type: payment_type || "comum",
+          installment_count: 1,
+          current_installment: 1,
         });
       }
-
-      console.log("Dados para API:", despesas);
-      const response = await api.createExpense(despesas);
+      const response = await api.createExpense(expenses);
 
       if (response?.status === 201) {
         setExpenses((prevExpenses) => [...prevExpenses, ...response.data]);
-        toast.success("Despesa(s) criada(s) com sucesso.", { autoClose: 2000 });
-
-        setFormDataExpenses({
-          id: "",
-          userId: user?.id,
-          value: "",
-          description: "",
-          payment_data: formatDate(new Date()),
-          categoria_id: "",
-          newCategorie: "",
-          tipo_pagamento: "comum",
-          numero_parcelas: 1,
-          isRecurrent: false,
-        });
+        toast.success("Despesa criada com sucesso.", { autoClose: 2000 });
+        console.log("receitas", response);
       }
     } catch (error) {
       toast.error("Erro ao adicionar despesa.", { autoClose: 2000 });
@@ -403,17 +313,20 @@ export function DataProvider({ children }: DataProviderProps) {
 
     const updatedFields: ExpenseUpdateProps = {};
 
-    if (formDataExpenses.value !== undefined && formDataExpenses.value !== "") {
-      updatedFields.valor = formDataExpenses.value.toString();
+    if (
+      formDataExpenses.amount !== undefined &&
+      formDataExpenses.amount !== ""
+    ) {
+      updatedFields.amount = formDataExpenses.amount.toString();
     }
     if (formDataExpenses.description) {
-      updatedFields.descricao = formDataExpenses.description.toString();
+      updatedFields.description = formDataExpenses.description.toString();
     }
-    if (formDataExpenses.payment_data) {
-      updatedFields.data_pagamento = formDataExpenses.payment_data;
+    if (formDataExpenses.payment_date) {
+      updatedFields.payment_type = formDataExpenses.payment_date;
     }
-    if (formDataExpenses.categoria_id) {
-      updatedFields.categoria_id = formDataExpenses.categoria_id;
+    if (formDataExpenses.category_id) {
+      updatedFields.category_id = formDataExpenses.category_id;
     }
 
     try {
@@ -427,7 +340,6 @@ export function DataProvider({ children }: DataProviderProps) {
       );
 
       if (response?.status === 200) {
-        console.log("Despesa editada");
         toast.success("Despesa editada.", { autoClose: 2000 });
         await handleGetExpense();
         setIsEditingExpense(false);
@@ -451,21 +363,83 @@ export function DataProvider({ children }: DataProviderProps) {
     }
   };
 
+  const groupExpensesByDescription = (expenses: Expense[]): Expense[] => {
+    const groupedExpenses = new Map<string, Expense>();
+
+    expenses.forEach((expense) => {
+      const key = expense.description.split(" - Parcela")[0];
+
+      if (!groupedExpenses.has(key)) {
+        groupedExpenses.set(key, { ...expense });
+      }
+    });
+
+    return Array.from(groupedExpenses.values());
+  };
+
+  const groupExpensesByDescriptionToGraphics = (expenses: Expense[]) => {
+    const groupedExpenses = new Map<string, Expense>();
+
+    expenses.forEach((expense) => {
+      const baseDescription = (expense.description || "")
+        .split(" - Parcela")[0]
+        .trim();
+
+      if (groupedExpenses.has(baseDescription)) {
+        const existingExpense = groupedExpenses.get(baseDescription);
+
+        if (existingExpense) {
+          const existingAmount = parseFloat(existingExpense.amount || "0");
+          const currentValue = parseFloat(expense.amount || "0");
+
+          groupedExpenses.set(baseDescription, {
+            ...existingExpense,
+            amount: (existingAmount + currentValue).toFixed(2),
+          });
+        }
+      } else {
+        groupedExpenses.set(baseDescription, {
+          ...expense,
+          description: baseDescription,
+        });
+      }
+    });
+
+    return Array.from(groupedExpenses.values());
+  };
+
+  const handleChangeExpenses = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >
+  ) => {
+    const { name, value } = e.target;
+    setFormDataExpenses((expenses) => ({
+      ...expenses,
+      [name]: name === "numero_parcelas" ? parseInt(value) : value,
+    }));
+  };
+
+  const startEditingExpenses = (expense: Expense) => {
+    setEditingExpense(expense);
+  };
+
   const formatIncomesForChartToExpense = (
     expenses: Expense[]
   ): DoughnutChartData => {
     const groupedExpenses: { [key: string]: number } = {};
 
     expenses.forEach((expense) => {
-      const { valor, descricao } = expense;
-      const value = typeof valor === "string" ? parseFloat(valor) : valor ?? 0;
+      const { amount, description } = expense;
+      const value =
+        typeof amount === "string" ? parseFloat(amount) : amount ?? 0;
 
-      const descricaoValida = descricao ?? "Descrição Indisponível";
+      const validDescription = description ?? "Descrição Indisponível";
 
-      if (groupedExpenses[descricaoValida]) {
-        groupedExpenses[descricaoValida] += value;
+      if (groupedExpenses[validDescription]) {
+        groupedExpenses[validDescription] += value;
       } else {
-        groupedExpenses[descricaoValida] = value;
+        groupedExpenses[validDescription] = value;
       }
     });
 
@@ -495,33 +469,35 @@ export function DataProvider({ children }: DataProviderProps) {
     };
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleAddIncome = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!formData.userId) {
+    if (!formDataIncome.userId) {
       console.error("ID do usuário é obrigatório.");
       return;
     }
 
     try {
       const response = await api.createIncome({
-        userId: String(formData.userId),
-        amount: formData.value,
-        description: formData.description,
-        receipt_date: formData.receipt_date,
+        userId: String(formDataIncome.userId),
+        amount: formDataIncome.amount,
+        description: formDataIncome.description,
+        receipt_date: formDataIncome.receipt_date,
+        isRecurrent: formDataIncome.isRecurrent,
       });
 
       if (response?.status === 201) {
-        toast.success(`Receita ${formData.description} criada.`, {
+        toast.success(`Receita ${formDataIncome.description} criada.`, {
           autoClose: 2000,
         });
         console.log("Receita adicionada com sucesso");
-        setFormData({
+        setFormDataIncome({
           id: "",
-          userId: formData.userId,
-          value: "",
+          userId: formDataIncome.userId,
+          amount: "",
           description: "",
           receipt_date: "",
+          isRecurrent: false,
         });
         await handleGetIncomes();
       }
@@ -559,38 +535,17 @@ export function DataProvider({ children }: DataProviderProps) {
     }
   };
 
-  useEffect(() => {
-    if (user?.id) {
-      setFormData((incomes) => ({
-        ...incomes,
-        userId: user.id,
-      }));
-    }
-    console.log("testeee", user);
-  }, [user]);
-
-  const handleChange = (
+  const handleChangeIncome = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-  const handleChangeExpenses = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-    >
-  ) => {
-    const { name, value } = e.target;
-    setFormDataExpenses((expenses) => ({
-      ...expenses,
-      [name]: name === "numero_parcelas" ? parseInt(value) : value,
+    const { name, value, type, checked } = e.target as HTMLInputElement;
+    setFormDataIncome((income) => ({
+      ...income,
+      [name]: type === "checkbox" ? checked : value,
     }));
   };
 
-  const handleDelete = async (id: string) => {
+  const handleDeleteIncome = async (id: string) => {
     try {
       const response = await api.deleteIncome(id);
       if (response?.status === 200) {
@@ -610,38 +565,38 @@ export function DataProvider({ children }: DataProviderProps) {
     }
   };
 
-  const startEditing = (income: Income) => {
+  const startEditingIncome = (income: Income) => {
     setEditingIncome(income);
 
     const formattedDate = income.created_at
       ? new Date(income.created_at).toISOString().split("T")[0]
       : "";
 
-    setFormData({
+    setFormDataIncome({
       id: String(income.id),
       userId: user?.id,
-      value: income.amount.toString(),
+      amount: income.amount.toString(),
       description: income.description,
       receipt_date: formattedDate,
+      isRecurrent: income.isRecurrent || false,
     });
   };
 
-  const startEditingExpenses = (expense: Expense) => {
-    setEditingExpense(expense);
-  };
-
-  const handleUpdate = async (e: React.FormEvent) => {
+  const handleUpdateIncome = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const updatedFields: IncomeUpdate = {};
 
-    if (formData.value) updatedFields.amount = formData.value.toString();
-    if (formData.description) updatedFields.description = formData.description;
-    if (formData.receipt_date) updatedFields.date = formData.receipt_date;
+    if (formDataIncome.amount)
+      updatedFields.amount = formDataIncome.amount.toString();
+    if (formDataIncome.description)
+      updatedFields.description = formDataIncome.description;
+    if (formDataIncome.receipt_date)
+      updatedFields.date = formDataIncome.receipt_date;
 
     try {
       const response = await api.editIncome(
-        formData.id.toString(),
+        formDataIncome.id.toString(),
         updatedFields
       );
 
@@ -697,47 +652,101 @@ export function DataProvider({ children }: DataProviderProps) {
       ],
     };
   };
+
+  const fetchCategories = async () => {
+    if (!user?.id) {
+      console.error("ID do usuário não encontrado.");
+      return;
+    }
+    try {
+      const response = await api.getCategories();
+      const categoriesData: Categories[] = response?.data || [];
+      setCategories(categoriesData);
+    } catch (error) {
+      console.error("Erro ao carregar categorias:", error);
+      setCategories([]);
+    }
+  };
+
+  const handleAddCategory = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!formDataExpenses.newCategorie.trim()) {
+      console.error("O nome da nova categoria é obrigatório.");
+      return;
+    }
+    if (!user?.id) {
+      console.error("ID do usuário não encontrado.");
+      return;
+    }
+
+    try {
+      const newCategory = await api.createCategory({
+        name: formDataExpenses.newCategorie,
+        type: "despesa",
+        extra_description: false,
+        id: user?.id,
+      });
+      toast.success(`Categoria de despesa ${newCategory} criada.`, {
+        autoClose: 2000,
+      });
+
+      await fetchCategories();
+
+      setFormDataExpenses((expenses) => ({
+        ...expenses,
+        newCategorie: "",
+      }));
+    } catch (error) {
+      toast.error("Erro ao criar categoria.", { autoClose: 2000 });
+
+      console.error("Erro ao criar categoria:", error);
+    }
+  };
+
   return (
     <DataContext.Provider
       value={{
-        handleChange,
-        handleSubmit,
-        handleDelete,
-        startEditing,
-        handleUpdate,
+        handleChangeIncome,
+        handleAddIncome,
+        handleDeleteIncome,
+        startEditingIncome,
+        handleUpdateIncome,
         handleGetIncomes,
-        incomes,
         formatIncomesForChart,
-        formData,
-        editingIncome,
-        notify,
-        formDataExpenses,
-        expenses,
         handleChangeExpenses,
         startEditingExpenses,
         handleAddExpense,
         handleEditExpense,
         handleDeleteExpense,
-        editingExpense,
         handleGetExpense,
-        categorias,
         handleAddCategory,
         formatIncomesForChartToExpense,
         fetchCategories,
-        setFormData,
+        setFormDataIncome,
         setFormDataExpenses,
         setIsEditingIncome,
+        setIsEditingExpense,
+        setSelectedIncome,
+        setIsDeleteIncome,
+        setSelectedExpense,
+        setIsDeleteExpense,
+        groupExpensesByDescription,
+        groupExpensesByDescriptionToGraphics,
+        incomes,
+        formDataIncome,
+        editingIncome,
+        notify,
+        formDataExpenses,
+        expenses,
+        editingExpense,
+        categories,
         isEditingIncome,
         isEditingExpense,
-        setIsEditingExpense,
         selectedIncome,
-        setSelectedIncome,
         isDeleteIncome,
-        setIsDeleteIncome,
         selectedExpense,
-        setSelectedExpense,
         isDeleteExpense,
-        setIsDeleteExpense,
       }}
     >
       {children}

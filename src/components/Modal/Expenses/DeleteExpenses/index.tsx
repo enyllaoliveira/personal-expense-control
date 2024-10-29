@@ -2,7 +2,7 @@
 import Button from "../../../Commons/Button";
 import Modal from "../..";
 import { useDataInformation } from "../../../../context/DataContext/DataContext";
-import { Expense } from "../../../../interfaces";
+import { Expense } from "../../../../interfaces/expense";
 
 export default function DeleteExpensesModal({
   isOpen,
@@ -14,8 +14,8 @@ export default function DeleteExpensesModal({
   expense: Expense;
 }) {
   const { handleDeleteExpense } = useDataInformation();
-  const descriptionAction = expense?.descricao
-    ? `A despesa <strong>${expense.descricao} </strong> será excluída de todos os dashboards e não poderá ser utilizada.`
+  const descriptionAction = expense?.description
+    ? `A despesa <strong>${expense.description} </strong> será excluída de todos os dashboards e não poderá ser utilizada.`
     : "A despesa será excluída de todos os dashboards e não poderá ser utilizada.";
   return (
     <Modal

@@ -3,31 +3,32 @@ import { formatDate } from "../../utils/FormattedValues";
 import { useDataInformation } from "../../context/DataContext/DataContext";
 import Button from "../Commons/Button";
 import DoughnutChartComponent from "./ExpensePierChatMock";
+import EditCrediCardExpensesModal from "../Modal/Expenses/EditCreditCardExpenses";
 
-const CartaoCreditoForm = () => {
+const CreditForm = () => {
   const {
     handleAddExpense,
-    categorias,
+    categories,
     expenses,
     formatIncomesForChartToExpense,
+    groupExpensesByDescriptionToGraphics,
   } = useDataInformation();
+  const [isListExpenseModalOpen, setIsListExpenseOModalpen] = useState(false);
+
+  const handleOpenListModalExpense = () => setIsListExpenseOModalpen(true);
 
   const [formDataExpenses, setFormDataExpenses] = useState({
     id: "",
     userId: undefined,
-    value: "",
+    amount: "",
     description: "",
-    payment_data: formatDate(new Date()),
-    categoria_id: "",
+    payment_date: formatDate(new Date()),
+    category_id: "",
     newCategorie: "",
-    tipo_pagamento: "cartao_credito",
-    numero_parcelas: 1,
-    isRecurrent: false,
+    payment_type: "cartao_credito",
+    installment_count: 1,
+    is_recurrent: false,
   });
-
-  const despesasCartao = expenses.filter(
-    (despesa) => despesa.tipo_pagamento === "cartao_credito"
-  );
 
   const handleChangeExpenses = (
     e: React.ChangeEvent<
@@ -41,9 +42,13 @@ const CartaoCreditoForm = () => {
     }));
   };
 
+  const expensesCard = groupExpensesByDescriptionToGraphics(
+    expenses.filter((expense) => expense.payment_type === "cartao_credito")
+  );
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!formDataExpenses.categoria_id) {
+    if (!formDataExpenses.category_id) {
       console.error("Selecione uma categoria válida.");
       return;
     }
@@ -51,127 +56,149 @@ const CartaoCreditoForm = () => {
   };
 
   return (
-    <main className="flex gap-4 sm:flex-col px-4">
+    <main className="flex gap-4 sm:flex-col px-4 my-8 overflow-y-visible">
       <div className="w-[700px] sm:px-4 sm:w-full">
-        {despesasCartao.length > 0 ? (
+        {expensesCard.length > 0 ? (
           <DoughnutChartComponent
-            data={formatIncomesForChartToExpense(despesasCartao)}
+            data={formatIncomesForChartToExpense(expensesCard)}
           />
         ) : (
           <p>Nenhuma despesa disponível para exibir no gráfico.</p>
         )}
       </div>
+      <div className="w-1/3 ml-auto sm:w-full ">
+        <h2 className="text-xl font-bold mb-4">Adicionar Despesa</h2>
 
-      <form
-        onSubmit={handleSubmit}
-        className="text-start ml-auto"
-        id="expense-credit-card-form"
-      >
-        <div className="mb-4 text-white">
-          <label
-            htmlFor="value"
-            className="block text-normal font-semibold text-primary-gray-600"
-          >
-            Valor:
-          </label>
-          <input
-            type="number"
-            name="value"
-            value={formDataExpenses.value}
-            onChange={handleChangeExpenses}
-            required
-            className="mt-1 block w-full border rounded-md p-2 text-black"
-            placeholder="Insira o valor"
-          />
-        </div>
-
-        <div className="mb-4 text-white">
-          <label
-            htmlFor="description"
-            className="block text-normal font-semibold text-primary-gray-600"
-          >
-            Descrição:
-          </label>
-          <input
-            type="text"
-            name="description"
-            value={formDataExpenses.description}
-            onChange={handleChangeExpenses}
-            required
-            className="mt-1 block w-full border rounded-md p-2 text-black"
-            placeholder="Descrição da despesa"
-          />
-        </div>
-
-        <div className="mb-4">
-          <label
-            htmlFor="payment_data"
-            className="block text-normal font-semibold text-primary-gray-600"
-          >
-            Data de pagamento:
-          </label>
-          <input
-            type="date"
-            name="payment_data"
-            value={formDataExpenses.payment_data}
-            onChange={handleChangeExpenses}
-            required
-            className="mt-1 block w-full border rounded-md p-2 text-black"
-          />
-        </div>
-
-        <label>Categoria:</label>
-        <select
-          name="categoria_id"
-          value={formDataExpenses.categoria_id}
-          className="w-full border p-2 mb-4 text-primary-gray-800 rounded-md font-semibold"
-          onChange={handleChangeExpenses}
+        <form
+          onSubmit={handleSubmit}
+          className="text-start mb-6"
+          id="expense-credit-card-form"
         >
-          <option value="">Selecione uma opção</option>
-          {categorias.map((categoria) => (
-            <option key={categoria.id} value={categoria.id}>
-              {categoria.nome}
-            </option>
-          ))}
-        </select>
-
-        <div className="mb-4">
-          <label>Número de Parcelas:</label>
-          <input
-            type="number"
-            name="numero_parcelas"
-            value={formDataExpenses.numero_parcelas}
-            min={1}
-            onChange={handleChangeExpenses}
-            required
-            className="text-black"
-          />
-        </div>
-
-        <div className="mb-4">
-          <label>
+          <div className="mb-4 text-white">
+            <label
+              htmlFor="amount"
+              className="block text-normal font-semibold text-primary-gray-600"
+            >
+              Valor:
+            </label>
             <input
-              type="checkbox"
-              name="isRecurrent"
-              checked={formDataExpenses.isRecurrent}
-              className="text-black"
-              onChange={(e) =>
-                setFormDataExpenses((prev) => ({
-                  ...prev,
-                  isRecurrent: e.target.checked,
-                }))
-              }
+              type="number"
+              name="amount"
+              value={formDataExpenses.amount}
+              onChange={handleChangeExpenses}
+              required
+              className="mt-1 block w-full border rounded-md p-2 text-black"
+              placeholder="Insira o valor"
             />
-            Despesa recorrente?
-          </label>
-        </div>
+          </div>
 
-        <Button variant="primary" type="submit" className="w-full">
-          Salvar Despesa do Cartão
-        </Button>
-      </form>
+          <div className="mb-4 text-white">
+            <label
+              htmlFor="description"
+              className="block text-normal font-semibold text-primary-gray-600"
+            >
+              Descrição:
+            </label>
+            <input
+              type="text"
+              name="description"
+              value={formDataExpenses.description}
+              onChange={handleChangeExpenses}
+              required
+              className="mt-1 block w-full border rounded-md p-2 text-black"
+              placeholder="Descrição da despesa"
+            />
+          </div>
+
+          <div className="mb-4">
+            <label
+              htmlFor="payment_date"
+              className="block text-normal font-semibold text-primary-gray-600"
+            >
+              Data de Pagamento:
+            </label>
+            <input
+              type="date"
+              name="payment_date"
+              value={formDataExpenses.payment_date}
+              onChange={handleChangeExpenses}
+              required
+              className="mt-1 block w-full border rounded-md p-2 text-black"
+            />
+          </div>
+
+          <label>Categoria:</label>
+          <select
+            name="category_id"
+            value={formDataExpenses.category_id}
+            className="w-full border p-2 mb-4 text-primary-gray-800 rounded-md font-semibold"
+            onChange={handleChangeExpenses}
+          >
+            <option value="">Selecione uma opção</option>
+            {categories
+              .filter((category) => category.type === "cartao")
+              .map((category) => (
+                <option key={category.id} value={category.id}>
+                  {category.name}
+                </option>
+              ))}
+          </select>
+          <div className="flex sm:flex-col justify-between mx-auto">
+            <div className="flex gap-4 sm:gap-1 mb-4 h-8 sm:h-6">
+              <label className="flex text-start justify-center items-center whitespace-nowrap">
+                Número de Parcelas:
+              </label>
+              <input
+                type="number"
+                name="installment_count"
+                value={formDataExpenses.installment_count}
+                min={1}
+                onChange={handleChangeExpenses}
+                required
+                className="text-black rounded-md w-16 sm:w-12 pl-2"
+              />
+            </div>
+
+            <div className="mb-4 ">
+              <label className="flex gap-2 h-8 text-start justify-center items-center sm:justify-start whitespace-nowrap">
+                Despesa recorrente?
+                <input
+                  type="checkbox"
+                  name="is_recurrent"
+                  checked={formDataExpenses.is_recurrent}
+                  className="text-black my-auto size-4 sm:size-3"
+                  onChange={(e) =>
+                    setFormDataExpenses((expense) => ({
+                      ...expense,
+                      is_recurrent: e.target.checked,
+                    }))
+                  }
+                />
+              </label>
+            </div>
+          </div>
+
+          <Button variant="primary" type="submit" className="w-full">
+            Adicionar Despesa do Cartão
+          </Button>
+          <Button
+            variant="secondary"
+            className="ml-auto mt-2 sm:mt-4"
+            onClick={handleOpenListModalExpense}
+            type="button"
+          >
+            {" "}
+            Gerenciar despesas
+          </Button>
+        </form>
+      </div>
+      {isListExpenseModalOpen && (
+        <EditCrediCardExpensesModal
+          onClose={() => setIsListExpenseOModalpen(false)}
+        />
+      )}
     </main>
   );
 };
 
-export default CartaoCreditoForm;
+export default CreditForm;

@@ -1,7 +1,7 @@
 import api from "../services/api";
 import Income from "../interfaces/income";
 import { AxiosResponse } from "axios";
-import { Expense } from "../interfaces";
+import { Expense } from "../interfaces/expense";
 export class useApi {
   public async register(userData: {
     name: string;
@@ -46,7 +46,7 @@ export class useApi {
   public async getIncomesById(userId: string | number) {
     try {
       const response = await api.get(
-        `${import.meta.env.VITE_API_URL}/receitas?userId=${userId}`,
+        `${import.meta.env.VITE_API_URL}/incomes?userId=${userId}`,
         { withCredentials: true }
       );
       return response;
@@ -61,10 +61,11 @@ export class useApi {
     amount: string;
     description: string;
     receipt_date: string;
+    isRecurrent: boolean;
   }) {
     try {
       const response = await api.post(
-        `${import.meta.env.VITE_API_URL}/receitas`,
+        `${import.meta.env.VITE_API_URL}/incomes`,
         incomesData,
         { withCredentials: true }
       );
@@ -81,7 +82,7 @@ export class useApi {
   ): Promise<AxiosResponse<unknown>> {
     try {
       const response = await api.put(
-        `${import.meta.env.VITE_API_URL}/receitas/${id}`,
+        `${import.meta.env.VITE_API_URL}/incomes/${id}`,
         updateData,
         { withCredentials: true }
       );
@@ -95,7 +96,7 @@ export class useApi {
   public async deleteIncome(id: string) {
     try {
       const response = await api.delete(
-        `${import.meta.env.VITE_API_URL}/receitas/${id}`,
+        `${import.meta.env.VITE_API_URL}/incomes/${id}`,
         { withCredentials: true }
       );
       return response;
@@ -108,7 +109,7 @@ export class useApi {
   public async getExpensesById(id: string | number) {
     try {
       const response = await api.get(
-        `${import.meta.env.VITE_API_URL}/despesas?userId=${id}`,
+        `${import.meta.env.VITE_API_URL}/expenses?userId=${id}`,
         { withCredentials: true }
       );
       return response;
@@ -120,20 +121,20 @@ export class useApi {
 
   public async createExpense(
     expensesData: {
-      valor: string;
-      descricao: string;
-      data_pagamento: string;
-      usuario_id: string;
-      categoria_id: string | number;
-      novaCategoria?: string;
-      tipo_pagamento?: string;
-      numero_parcelas?: number;
-      isRecurrent?: boolean;
+      amount: string;
+      description: string;
+      payment_date: string;
+      user_id: string;
+      category_id: string | number;
+      newCategory?: string;
+      payment_type?: string;
+      installment_count?: number;
+      is_recurrent?: boolean;
     }[]
   ) {
     try {
       const response = await api.post(
-        `${import.meta.env.VITE_API_URL}/despesas`,
+        `${import.meta.env.VITE_API_URL}/expenses`,
         expensesData,
         { withCredentials: true }
       );
@@ -147,7 +148,7 @@ export class useApi {
   public async editExpenses(id: string, updateData: Partial<Expense>) {
     try {
       const response = await api.put(
-        `${import.meta.env.VITE_API_URL}/despesas/${id}`,
+        `${import.meta.env.VITE_API_URL}/expenses/${id}`,
         updateData,
         { withCredentials: true }
       );
@@ -161,7 +162,7 @@ export class useApi {
   public async deleteExpenses(id: string) {
     try {
       const response = await api.delete(
-        `${import.meta.env.VITE_API_URL}/despesas/${id}`,
+        `${import.meta.env.VITE_API_URL}/expenses/${id}`,
         { withCredentials: true }
       );
       return response;
@@ -171,10 +172,10 @@ export class useApi {
     }
   }
 
-  public async getCategoriesByID(userId: string | number) {
+  public async getCategories() {
     try {
       const response = await api.get(
-        `${import.meta.env.VITE_API_URL}/categorias?userId=${userId}`,
+        `${import.meta.env.VITE_API_URL}/categories`,
         { withCredentials: true }
       );
       return response;
@@ -184,30 +185,15 @@ export class useApi {
     }
   }
 
-  public async getCategories(): Promise<
-    { id: number; nome: string; tipo: string }[]
-  > {
-    try {
-      const response = await api.get(
-        `${import.meta.env.VITE_API_URL}/categorias`,
-        { withCredentials: true }
-      );
-      return response.data;
-    } catch (error) {
-      console.error("Erro ao buscar categorias:", error);
-      throw error;
-    }
-  }
-
   public async createCategory(categoriesData: {
-    nome: string;
-    tipo: string;
-    descricao_extra: boolean;
+    name: string;
+    type: string;
+    extra_description: boolean;
     id: string | number;
   }) {
     try {
       const response = await api.post(
-        `${import.meta.env.VITE_API_URL}/categorias`,
+        `${import.meta.env.VITE_API_URL}/categories`,
         categoriesData,
         { withCredentials: true }
       );
@@ -219,13 +205,13 @@ export class useApi {
 
   public async editCategories(categoriesData: {
     id: string;
-    nome: string;
-    tipo: string;
-    descricao_extra: boolean;
+    name: string;
+    type: string;
+    extra_description: boolean;
   }) {
     try {
       const response = await api.put(
-        `${import.meta.env.VITE_API_URL}/categorias/${categoriesData.id}`,
+        `${import.meta.env.VITE_API_URL}/categories/${categoriesData.id}`,
         categoriesData,
         { withCredentials: true }
       );
@@ -239,7 +225,7 @@ export class useApi {
   public async deleteCategories(id: string) {
     try {
       const response = await api.delete(
-        `${import.meta.env.VITE_API_URL}/categorias/${id}`,
+        `${import.meta.env.VITE_API_URL}/categories/${id}`,
         { withCredentials: true }
       );
       return response;

@@ -6,7 +6,7 @@ import DeleteExpensesModal from "../DeleteExpenses";
 import { Expense } from "../../../../interfaces/expense";
 import Button from "../../../Commons/Button";
 
-export default function EditExpensesModal({
+export default function EditCrediCardExpensesModal({
   onClose,
 }: {
   onClose: () => void;
@@ -50,7 +50,7 @@ export default function EditExpensesModal({
   };
 
   const handleOpenEditExpenseModal = (expense: Expense) => {
-    const expenseDate = expense.payment_date || new Date().toISOString();
+    const expenseDate = expense.payment_type || new Date().toISOString();
 
     const formattedDate = !isNaN(new Date(expenseDate).getTime())
       ? new Date(expenseDate).toISOString().split("T")[0]
@@ -95,14 +95,15 @@ export default function EditExpensesModal({
             <p>Nenhuma despesa encontrada.</p>
           ) : (
             <ul className=" border-black mx-auto">
-              {expenses.filter((expense) => expense.payment_type === "comum")
-                .length === 0 ? (
+              {expenses.filter(
+                (expense) => expense.payment_type === "cartao_credito"
+              ).length === 0 ? (
                 <p>Nenhuma despesa encontrada.</p>
               ) : (
                 <ul>
                   {groupExpensesByDescription(
                     expenses.filter(
-                      (expense) => expense.payment_type === "comum"
+                      (expense) => expense.payment_type === "cartao_credito"
                     )
                   ).map((expense) => {
                     return (

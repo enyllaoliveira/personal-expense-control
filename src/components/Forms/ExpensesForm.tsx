@@ -13,9 +13,11 @@ export default function ExpensesForm() {
     formDataExpenses,
     editingExpense,
     handleGetExpense,
-    categorias,
+    categories,
     formatIncomesForChartToExpense,
     fetchCategories,
+    setFormDataExpenses,
+    groupExpensesByDescriptionToGraphics,
   } = useDataInformation();
   const userContext = AuthContext();
   const user = userContext?.user;
@@ -24,32 +26,30 @@ export default function ExpensesForm() {
 
   useEffect(() => {
     handleGetExpense(String(user?.id));
-  }, [user, categorias]);
+  }, [user, categories]);
 
   useEffect(() => {
     fetchCategories();
   }, []);
 
-  const despesasComuns = expenses.filter(
-    (despesa) => despesa.tipo_pagamento === "comum"
+  const commonExpenses = groupExpensesByDescriptionToGraphics(
+    expenses.filter((expense) => expense.payment_type === "comum")
   );
   return (
     <main className="flex gap-4 sm:flex-col px-4">
-      {despesasComuns.length > 0 ? (
+      {commonExpenses.length > 0 ? (
         <div className="w-[700px] sm:px-4 sm:w-full">
           <DoughnutChartComponent
-            data={formatIncomesForChartToExpense(despesasComuns)}
+            data={formatIncomesForChartToExpense(commonExpenses)}
           />
         </div>
       ) : (
         <p>Nenhuma despesa disponível para exibir no gráfico.</p>
       )}
       <div className="w-1/3 ml-auto sm:w-full ">
-        <h2 className="text-xl font-bold mb-4">
-          {editingExpense ? "Editar Despesa" : "Adicionar Despesa"}
-        </h2>
+        <h2 className="text-xl font-bold mb-4">Adicionar Despesa</h2>
         <form
-          className="text-start "
+          className="text-start mb-6"
           id="expense-form"
           onSubmit={(e) => {
             e.preventDefault();
@@ -62,15 +62,15 @@ export default function ExpensesForm() {
         >
           <div className="mb-4 text-white">
             <label
-              htmlFor="value"
+              htmlFor="amount"
               className="block text-normal font-semibold text-primary-gray-600"
             >
               Valor:
             </label>
             <input
               type="number"
-              name="value"
-              value={formDataExpenses.value}
+              name="amount"
+              value={formDataExpenses.amount}
               onChange={handleChangeExpenses}
               required
               className="mt-1 block w-full border rounded-md p-2 text-black"
@@ -98,12 +98,12 @@ export default function ExpensesForm() {
               htmlFor="receipt_date"
               className="block text-normal font-semibold text-primary-gray-600"
             >
-              Data de Recebimento:
+              Data de Pagamento:
             </label>
             <input
               type="date"
-              name="payment_data"
-              value={formDataExpenses.payment_data}
+              name="payment_date"
+              value={formDataExpenses.payment_date}
               onChange={handleChangeExpenses}
               required
               className="mt-1 block w-full border rounded-md p-2 text-black"
@@ -111,28 +111,22 @@ export default function ExpensesForm() {
           </div>
 
           <select
-            name="categoria_id"
-            value={formDataExpenses.categoria_id}
+            name="category_id"
+            value={formDataExpenses.category_id}
             className="w-full border p-2 mb-4 text-primary-gray-800 rounded-md font-semibold"
             onChange={handleChangeExpenses}
           >
             <option value="">Selecione uma opção</option>
-            {categorias.map((categoria) => (
-              <option key={categoria.id} value={categoria.id}>
-                {categoria.nome}
-              </option>
-            ))}
+            {categories
+              .filter((category) => category.type === "despesa")
+              .map((category) => (
+                <option key={category.id} value={category.id}>
+                  {category.name}
+                </option>
+              ))}
           </select>
-          {formDataExpenses.categoria_id === "outros" ? (
-            <Button variant="primary" type="submit" className="w-full">
-              Adicionar Despesa{" "}
-            </Button>
-          ) : (
-            <Button variant="primary" type="submit" className="w-full">
-              Adicionar Despesa{" "}
-            </Button>
-          )}
-          {formDataExpenses.categoria_id === "18" && (
+
+          {formDataExpenses.category_id === "18" && (
             <div className="my-2 flex flex-col gap-2">
               <label
                 htmlFor="newCategorie"
@@ -154,9 +148,52 @@ export default function ExpensesForm() {
               </Button>
             </div>
           )}
+          <div className="flex sm:flex-col justify-between mx-auto">
+            <div className="flex gap-4 sm:gap-1 mb-4 h-8 sm:h-6">
+              <label className="flex text-start justify-center items-center whitespace-nowrap">
+                Número de Parcelas:
+              </label>
+              <input
+                type="number"
+                name="installment_count"
+                value={formDataExpenses.installment_count}
+                min={1}
+                onChange={handleChangeExpenses}
+                required
+                className="text-black rounded-md w-16 sm:w-12 pl-2"
+              />
+            </div>
+
+            <div className="mb-4">
+              <label className="flex gap-2 h-8 text-start justify-center items-center sm:justify-start whitespace-nowrap">
+                Despesa recorrente?
+                <input
+                  type="checkbox"
+                  name="is_recurrent"
+                  checked={formDataExpenses.is_recurrent}
+                  className="text-black my-auto size-4 sm:size-3"
+                  onChange={(e) =>
+                    setFormDataExpenses((prev) => ({
+                      ...prev,
+                      is_recurrent: e.target.checked,
+                    }))
+                  }
+                />
+              </label>
+            </div>
+          </div>
+          {formDataExpenses.category_id === "outros" ? (
+            <Button variant="primary" type="submit" className="w-full">
+              Adicionar Despessa{" "}
+            </Button>
+          ) : (
+            <Button variant="primary" type="submit" className="w-full">
+              Adicionar Despesa{" "}
+            </Button>
+          )}
           <Button
             variant="secondary"
-            className="ml-auto mt-2"
+            className="ml-auto mt-2 sm:mt-4"
             onClick={handleOpenListModalExpense}
             type="button"
           >
