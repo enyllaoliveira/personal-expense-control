@@ -144,15 +144,16 @@ export default function IncomeForm() {
             <Button variant="primary" type="submit" className="w-full">
               Adicionar Receita
             </Button>
-
-            <Button
-              variant="secondary"
-              className="ml-auto mt-2 sm:mt-4"
-              onClick={handleOpenListModalIncome}
-              type="button"
-            >
-              Gerenciar receitas
-            </Button>
+            {incomes.length > 0 && (
+              <Button
+                variant="secondary"
+                className="ml-auto mt-2 sm:mt-4"
+                onClick={handleOpenListModalIncome}
+                type="button"
+              >
+                Gerenciar receitas
+              </Button>
+            )}
           </form>
         </div>
 

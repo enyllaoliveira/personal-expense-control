@@ -78,7 +78,9 @@ export default function ExpensesForm() {
             />
           </div>
         ) : (
-          <p>Nenhuma despesa disponível para exibir no gráfico.</p>
+          <p className="text-center mx-auto my-auto">
+            Adicione uma receita para criar seu gráfico.
+          </p>
         )}
         <div className="w-1/3 ml-auto sm:w-full ">
           <h2 className="text-xl font-bold mb-4">Adicionar Despesa</h2>
@@ -214,15 +216,17 @@ export default function ExpensesForm() {
                 Adicionar Despesa{" "}
               </Button>
             )}
-            <Button
-              variant="secondary"
-              className="ml-auto mt-2 sm:mt-4"
-              onClick={handleOpenListModalExpense}
-              type="button"
-            >
-              {" "}
-              Gerenciar despesas
-            </Button>
+            {commonExpenses.length > 0 && (
+              <Button
+                variant="secondary"
+                className="ml-auto mt-2 sm:mt-4"
+                onClick={handleOpenListModalExpense}
+                type="button"
+              >
+                {" "}
+                Gerenciar despesas
+              </Button>
+            )}
           </form>
         </div>
         {isListExpenseModalOpen && (

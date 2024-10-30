@@ -83,13 +83,15 @@ const CreditForm = () => {
   return (
     <main className="flex flex-col gap-4 sm:flex-col px-4 my-8 overflow-y-visible">
       <div className="flex">
-        <div className="w-[700px] sm:px-4 sm:w-full">
+        <div className="w-[700px] sm:px-4 sm:w-full my-auto">
           {expensesCard.length > 0 ? (
             <DoughnutChartComponent
               data={formatIncomesForChartToExpense(expensesCard)}
             />
           ) : (
-            <p>Nenhuma despesa disponível para exibir no gráfico.</p>
+            <p className="text-center mx-auto ">
+              Adicione uma despesa para criar seu gráfico.
+            </p>
           )}
         </div>
         <div className="w-1/3 ml-auto sm:w-full ">
@@ -207,15 +209,17 @@ const CreditForm = () => {
             <Button variant="primary" type="submit" className="w-full">
               Adicionar Despesa do Cartão
             </Button>
-            <Button
-              variant="secondary"
-              className="ml-auto mt-2 sm:mt-4"
-              onClick={handleOpenListModalExpense}
-              type="button"
-            >
-              {" "}
-              Gerenciar despesas
-            </Button>
+            {expensesCard.length > 0 && (
+              <Button
+                variant="secondary"
+                className="ml-auto mt-2 sm:mt-4"
+                onClick={handleOpenListModalExpense}
+                type="button"
+              >
+                {" "}
+                Gerenciar despesas
+              </Button>
+            )}
           </form>
         </div>
       </div>
