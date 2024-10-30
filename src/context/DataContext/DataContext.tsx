@@ -17,6 +17,8 @@ import { Expense } from "../../interfaces/expense";
 import { formatDate } from "../../utils/FormattedValues";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Transaction } from "../../interfaces/transaction";
+
 interface DataProviderProps {
   children: ReactNode;
 }
@@ -25,6 +27,7 @@ interface IncomeUpdate {
   amount?: string;
   description?: string;
   date?: string;
+  isRecurrent?: boolean;
 }
 
 interface ExpenseUpdateProps {
@@ -32,11 +35,13 @@ interface ExpenseUpdateProps {
   description?: string;
   payment_type?: string;
   category_id?: string;
+  is_recurrent?: boolean;
+  installment_count?: number;
 }
 
 interface FormValues {
   id: string;
-  userId: number | undefined;
+  userId: number;
   amount: string;
   description: string;
   receipt_date: string;
@@ -63,7 +68,7 @@ interface Categories {
 }
 
 const DataContext = createContext<{
-  handleAddIncome: (e: React.FormEvent) => void;
+  handleAddIncome: (incomeData: FormValues) => Promise<void>;
   handleGetIncomes: (user: string | number) => void;
   handleChangeIncome: (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -95,6 +100,8 @@ const DataContext = createContext<{
   groupExpensesByDescription: (expenses: Expense[]) => Expense[];
   groupExpensesByDescriptionToGraphics: (expenses: Expense[]) => Expense[];
   fetchCategories: () => void;
+  addTransaction: (transaction: Transaction) => void;
+  filterTransactions: (type: "income" | "expense" | "credit") => Transaction[];
   incomes: Income[];
   formDataIncome: FormValues;
   editingIncome: Income | null;
@@ -108,6 +115,7 @@ const DataContext = createContext<{
   isEditingExpense: boolean;
   selectedExpense: Expense | null;
   categories: Categories[];
+  transactions: Transaction[];
   notify: {
     success: (message: string) => void;
     error: (message: string) => void;
@@ -131,10 +139,18 @@ export function DataProvider({ children }: DataProviderProps) {
   const [selectedExpense, setSelectedExpense] = useState<Expense | null>(null);
   const [isDeleteExpense, setIsDeleteExpense] = useState(false);
   const [categories, setCategories] = useState<Categories[]>([]);
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
 
-  const [formDataIncome, setFormDataIncome] = useState({
+  const addTransaction = (transaction: Transaction) => {
+    setTransactions((prev) => [...prev, transaction]);
+  };
+
+  const filterTransactions = (type: "income" | "expense" | "credit") =>
+    transactions.filter((transaction) => transaction.type === type);
+
+  const [formDataIncome, setFormDataIncome] = useState<FormValues>({
     id: "",
-    userId: user?.id,
+    userId: user?.id || 0,
     amount: "",
     description: "",
     receipt_date: formatDate(new Date()),
@@ -187,7 +203,6 @@ export function DataProvider({ children }: DataProviderProps) {
       setExpenses([]);
       setIncomes([]);
     }
-    console.log("testeee", user);
   }, [user]);
 
   const handleGetExpense = async () => {
@@ -244,10 +259,10 @@ export function DataProvider({ children }: DataProviderProps) {
     try {
       const finalCategoryId = category_id;
       if (!user?.id) {
-        toast.error("ID do usuário não encontrado.", { autoClose: 2000 });
+        toast.error("Usuário não autenticado.");
+        navigate("/login"); // Redirecionar para o login
         return;
       }
-
       const expenses = [];
       const initialDate = new Date(payment_date);
 
@@ -301,17 +316,24 @@ export function DataProvider({ children }: DataProviderProps) {
       if (response?.status === 201) {
         setExpenses((prevExpenses) => [...prevExpenses, ...response.data]);
         toast.success("Despesa criada com sucesso.", { autoClose: 2000 });
-        console.log("receitas", response);
       }
     } catch (error) {
       toast.error("Erro ao adicionar despesa.", { autoClose: 2000 });
       console.error("Erro:", error);
     }
   };
+
   const handleEditExpense = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const updatedFields: ExpenseUpdateProps = {};
+
+    if (formDataExpenses.is_recurrent && formDataExpenses.installment_count) {
+      toast.error(
+        "A despesa não pode ser recorrente e parcelada ao mesmo tempo."
+      );
+      return;
+    }
 
     if (
       formDataExpenses.amount !== undefined &&
@@ -327,6 +349,13 @@ export function DataProvider({ children }: DataProviderProps) {
     }
     if (formDataExpenses.category_id) {
       updatedFields.category_id = formDataExpenses.category_id;
+    }
+    if (formDataExpenses.is_recurrent !== undefined) {
+      updatedFields.is_recurrent = formDataExpenses.is_recurrent;
+    }
+
+    if (formDataExpenses.installment_count !== undefined) {
+      updatedFields.installment_count = formDataExpenses.installment_count;
     }
 
     try {
@@ -353,7 +382,6 @@ export function DataProvider({ children }: DataProviderProps) {
     try {
       const response = await api.deleteExpenses(id);
       if (response?.status === 200) {
-        console.log("Despesa excluída com sucesso");
         toast.success("Despesa excluída.", { autoClose: 2000 });
         setIsDeleteExpense(false);
         await handleGetExpense();
@@ -469,44 +497,36 @@ export function DataProvider({ children }: DataProviderProps) {
     };
   };
 
-  const handleAddIncome = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!formDataIncome.userId) {
-      console.error("ID do usuário é obrigatório.");
-      return;
-    }
-
+  const handleAddIncome = async (incomeData: FormValues) => {
     try {
       const response = await api.createIncome({
-        userId: String(formDataIncome.userId),
-        amount: formDataIncome.amount,
-        description: formDataIncome.description,
-        receipt_date: formDataIncome.receipt_date,
-        isRecurrent: formDataIncome.isRecurrent,
+        userId: String(incomeData.userId),
+        amount: incomeData.amount,
+        description: incomeData.description,
+        receipt_date: incomeData.receipt_date,
+        isRecurrent: incomeData.isRecurrent,
       });
 
       if (response?.status === 201) {
-        toast.success(`Receita ${formDataIncome.description} criada.`, {
+        toast.success(`Receita ${incomeData.description} criada.`, {
           autoClose: 2000,
         });
-        console.log("Receita adicionada com sucesso");
-        setFormDataIncome({
-          id: "",
-          userId: formDataIncome.userId,
+
+        setFormDataIncome((prev) => ({
+          ...prev,
           amount: "",
           description: "",
           receipt_date: "",
           isRecurrent: false,
-        });
+        }));
+
         await handleGetIncomes();
       }
     } catch (error) {
       toast.error("Erro ao adicionar receita. Tente novamente mais tarde.", {
         autoClose: 2000,
       });
-      console.error("Error ao enviar receita:", error);
-      throw error;
+      console.error("Erro ao enviar receita:", error);
     }
   };
 
@@ -515,7 +535,6 @@ export function DataProvider({ children }: DataProviderProps) {
       const response = await api.getIncomesById(String(user?.id));
       if (response?.status === 200) {
         const receitas = response.data || [];
-        console.log("Receitas carregadas:", receitas);
         setIncomes(receitas);
       } else if (response?.status === 404) {
         toast.error("Nenhuma receita encontrada.", { autoClose: 2000 });
@@ -555,13 +574,11 @@ export function DataProvider({ children }: DataProviderProps) {
 
         toast.success("Receita excluída.", { autoClose: 2000 });
         setIsDeleteIncome(false);
-
-        console.log("Receita excluída com sucesso");
         await handleGetIncomes();
       }
     } catch (error) {
       toast.error("Erro ao excluir receita.", { autoClose: 2000 });
-      console.error("Error ao excluir receita:", error);
+      throw error;
     }
   };
 
@@ -574,7 +591,7 @@ export function DataProvider({ children }: DataProviderProps) {
 
     setFormDataIncome({
       id: String(income.id),
-      userId: user?.id,
+      userId: user?.id || 0, // Garantir valor numérico
       amount: income.amount.toString(),
       description: income.description,
       receipt_date: formattedDate,
@@ -593,6 +610,8 @@ export function DataProvider({ children }: DataProviderProps) {
       updatedFields.description = formDataIncome.description;
     if (formDataIncome.receipt_date)
       updatedFields.date = formDataIncome.receipt_date;
+    if (formDataIncome.isRecurrent !== undefined)
+      updatedFields.isRecurrent = formDataIncome.isRecurrent;
 
     try {
       const response = await api.editIncome(
@@ -604,12 +623,11 @@ export function DataProvider({ children }: DataProviderProps) {
         toast.success(`Receita editada.`, {
           autoClose: 2000,
         });
-        console.log("Receita atualizada com sucesso.", response);
         await handleGetIncomes();
         setIsEditingIncome(false);
       }
     } catch (error) {
-      console.error(error);
+      console.error("Erro ao editar receita:", error);
     }
   };
 
@@ -655,7 +673,8 @@ export function DataProvider({ children }: DataProviderProps) {
 
   const fetchCategories = async () => {
     if (!user?.id) {
-      console.error("ID do usuário não encontrado.");
+      toast.error("Usuário não autenticado.");
+      navigate("/login"); // Redirecionar para o login
       return;
     }
     try {
@@ -676,7 +695,8 @@ export function DataProvider({ children }: DataProviderProps) {
       return;
     }
     if (!user?.id) {
-      console.error("ID do usuário não encontrado.");
+      toast.error("Usuário não autenticado.");
+      navigate("/login"); // Redirecionar para o login
       return;
     }
 
@@ -733,6 +753,9 @@ export function DataProvider({ children }: DataProviderProps) {
         setIsDeleteExpense,
         groupExpensesByDescription,
         groupExpensesByDescriptionToGraphics,
+        addTransaction,
+        filterTransactions,
+        transactions,
         incomes,
         formDataIncome,
         editingIncome,

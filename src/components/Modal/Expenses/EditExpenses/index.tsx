@@ -253,7 +253,40 @@ export default function EditExpensesModal({
                       </option>
                     ))}
                 </select>
+                <div className="flex sm:flex-col justify-between mx-auto">
+                  <div className="flex gap-4 sm:gap-1 mb-4 h-8 sm:h-6">
+                    <label className="flex text-start justify-center items-center whitespace-nowrap">
+                      Número de Parcelas:
+                    </label>
+                    <input
+                      type="number"
+                      name="installment_count"
+                      value={formDataExpenses.installment_count}
+                      min={1}
+                      onChange={handleChangeExpenses}
+                      required
+                      className="text-black rounded-md w-16 sm:w-12 pl-2"
+                    />
+                  </div>
 
+                  <div className="mb-4">
+                    <label className="flex gap-2 h-8 text-start justify-center items-center sm:justify-start whitespace-nowrap">
+                      Despesa recorrente?
+                      <input
+                        type="checkbox"
+                        name="is_recurrent"
+                        checked={formDataExpenses.is_recurrent}
+                        className="text-black my-auto size-4 sm:size-3"
+                        onChange={(e) =>
+                          setFormDataExpenses((prev) => ({
+                            ...prev,
+                            is_recurrent: e.target.checked,
+                          }))
+                        }
+                      />
+                    </label>
+                  </div>
+                </div>
                 {formDataExpenses.category_id === "18" && (
                   <div className="mb-4">
                     <label

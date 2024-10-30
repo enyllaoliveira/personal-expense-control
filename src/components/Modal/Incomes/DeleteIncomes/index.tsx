@@ -13,7 +13,7 @@ export default function DeleteIncomesModal({
   onClose: () => void;
   income: Income;
 }) {
-  const { handleDelete } = useDataInformation();
+  const { handleDeleteIncome } = useDataInformation();
   const descriptionAction = income?.description
     ? `A receita <strong>${income.description} </strong> será excluída de todos os dashboards e não poderá ser utilizada.`
     : "A receita será excluída de todos os dashboards e não poderá ser utilizada.";
@@ -32,7 +32,7 @@ export default function DeleteIncomesModal({
           Cancelar{" "}
         </Button>
         <Button
-          onClick={() => handleDelete(String(income.id))}
+          onClick={() => handleDeleteIncome(String(income.id))}
           variant="primary"
           className="bg-primary-700 w-[290px]"
         >

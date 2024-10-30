@@ -79,7 +79,6 @@ export function UserProvider({ children }: UserProviderProps) {
     try {
       const response = await api.register(userData);
       if (response?.status === 201) {
-        console.log("Usuário registrado:", response);
         notify.success(
           "Usuário registrado. Faça seu login para acessar o painel!"
         );
@@ -87,10 +86,9 @@ export function UserProvider({ children }: UserProviderProps) {
       }
     } catch (err) {
       if (axios.isAxiosError(err)) {
-        // analisar melhor essa tratativa de erro
         console.error("Erro de Axios:", err.response?.data || err.message);
       } else {
-        console.error("Erro desconhecido:", err);
+        throw err;
       }
     }
   };

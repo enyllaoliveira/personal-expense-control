@@ -7,7 +7,6 @@ interface IRenderHTML {
 }
 
 export default function RenderHTML({ rawHTML, className, tag }: IRenderHTML) {
-  console.log("raw", rawHTML);
   return createElement(tag, {
     dangerouslySetInnerHTML: { __html: rawHTML },
     className,

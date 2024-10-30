@@ -27,14 +27,14 @@ export default function EdiIncomesModal({ onClose }: { onClose: () => void }) {
   };
 
   const handleCloseModal = () => {
-    setFormDataIncome({
+    setFormDataIncome((income) => ({
+      ...income,
       id: "",
-      userId: undefined,
       amount: "",
       description: "",
       receipt_date: "",
       isRecurrent: false,
-    });
+    }));
     onClose();
   };
 
@@ -217,6 +217,23 @@ export default function EdiIncomesModal({ onClose }: { onClose: () => void }) {
                     required
                     className="mt-1 block w-full border rounded p-2 text-primary-gray-900"
                   />
+                </div>
+                <div className="mb-4">
+                  <label className="flex gap-2 h-8 text-start items-center sm:justify-start whitespace-nowrap">
+                    Receita Recorrente?
+                    <input
+                      type="checkbox"
+                      name="isRecurrent"
+                      className="text-black my-auto size-4 sm:size-3"
+                      checked={formDataIncome.isRecurrent}
+                      onChange={(e) =>
+                        setFormDataIncome((income) => ({
+                          ...income,
+                          isRecurrent: e.target.checked,
+                        }))
+                      }
+                    />
+                  </label>
                 </div>
                 <div className="flex  justify-between gap-4">
                   <Button variant="primary" type="submit" className="w-full">
