@@ -60,15 +60,6 @@ export function UserProvider({ children }: UserProviderProps) {
     }
   }, []);
 
-  useEffect(() => {
-    if (user) {
-      localStorage.setItem("user", JSON.stringify(user));
-    } else {
-      localStorage.removeItem("user");
-      navigate("/login");
-    }
-  }, [user]);
-
   const handleRegister = async (e: FormEvent) => {
     e.preventDefault();
     const userData = {
@@ -97,8 +88,11 @@ export function UserProvider({ children }: UserProviderProps) {
     const userData = { email, password };
     try {
       const response = await api.login(userData);
-      if (response?.status === 200) {
-        setUser(response.data.user);
+      if (response?.status === 200 && response.data.token) {
+        const { user, token } = response.data;
+        setUser(user);
+        localStorage.setItem("user", JSON.stringify(user));
+        localStorage.setItem("token", token);
         navigate("/meu-painel");
       }
     } catch (error) {
@@ -111,24 +105,16 @@ export function UserProvider({ children }: UserProviderProps) {
 
   const logout = async () => {
     try {
-      const response = await api.logout();
-
-      if (response.status === 200) {
-        localStorage.removeItem("userId");
-        setUser(null);
-        navigate("/login");
-      }
+      await api.logout();
+      localStorage.removeItem("user");
+      localStorage.removeItem("token");
+      setUser(null);
+      navigate("/login");
     } catch (error) {
-      if (error instanceof Error) {
-        toast.error("Erro ao deslogar. Tente novamente mais tarde.", {
-          autoClose: 2000,
-        });
-      } else {
-        toast.error("Erro ao deslogar. Tente novamente mais tarde.", {
-          autoClose: 2000,
-        });
-        throw error;
-      }
+      toast.error("Erro ao deslogar. Tente novamente mais tarde.", {
+        autoClose: 2000,
+      });
+      throw error;
     }
   };
 

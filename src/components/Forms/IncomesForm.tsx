@@ -4,8 +4,8 @@ import { AuthContext } from "../../context/AuthContext/AuthContext";
 import { useEffect, useState } from "react";
 import Button from "../Commons/Button";
 import EditIncomeModal from "../Modal/Incomes/EditIncomes/index";
-import LineChart from "../Graphics/LineChart";
 import { Transaction } from "../../interfaces/transaction";
+// import ChartComponent from "../Graphics/LineChart";
 
 export default function IncomeForm() {
   const {
@@ -17,7 +17,7 @@ export default function IncomeForm() {
     formatIncomesForChart,
     handleGetIncomes,
     addTransaction,
-    filterTransactions,
+    // filterTransactions,
   } = useDataInformation();
 
   const userContext = AuthContext();
@@ -162,10 +162,11 @@ export default function IncomeForm() {
         )}
       </div>
 
-      <LineChart
+      {/* <ChartComponent
         transactions={filterTransactions("income")}
         title="Receitas mensais"
-      />
+        type="bar"
+      /> */}
     </main>
   );
 }

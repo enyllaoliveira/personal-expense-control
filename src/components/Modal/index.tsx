@@ -87,7 +87,7 @@ export default function Modal({
     if (!isOpen) document.body.style.overflowY = "auto";
 
     if (isOpen) {
-      document.body.style.overflowY = "hidden";
+      document.body.style.overflowY = "auto";
       window.scrollTo(0, 0);
     }
   }, [isOpen]);

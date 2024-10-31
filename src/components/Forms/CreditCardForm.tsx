@@ -4,8 +4,8 @@ import { useDataInformation } from "../../context/DataContext/DataContext";
 import Button from "../Commons/Button";
 import DoughnutChartComponent from "../Graphics/PierChart";
 import EditCrediCardExpensesModal from "../Modal/Expenses/EditCreditCardExpenses";
-import LineChart from "../Graphics/LineChart";
 import { Transaction } from "../../interfaces/transaction";
+// import ChartComponent from "../Graphics/LineChart";
 
 const CreditForm = () => {
   const {
@@ -15,25 +15,14 @@ const CreditForm = () => {
     formatIncomesForChartToExpense,
     groupExpensesByDescriptionToGraphics,
     addTransaction,
-    filterTransactions,
+    // filterTransactions,
+    formDataExpenses,
+    setFormDataExpenses,
   } = useDataInformation();
 
   const [isListExpenseModalOpen, setIsListExpenseModalOpen] = useState(false);
 
   const handleOpenListModalExpense = () => setIsListExpenseModalOpen(true);
-
-  const [formDataExpenses, setFormDataExpenses] = useState({
-    id: "",
-    userId: undefined,
-    amount: "",
-    description: "",
-    payment_date: formatDate(new Date()),
-    category_id: "",
-    newCategorie: "",
-    payment_type: "cartao_credito",
-    installment_count: 1,
-    is_recurrent: false,
-  });
 
   const handleChangeExpenses = (
     e: React.ChangeEvent<
@@ -43,7 +32,7 @@ const CreditForm = () => {
     const { name, value } = e.target;
     setFormDataExpenses((expense) => ({
       ...expense,
-      [name]: value,
+      [name]: name === "installment_count" ? parseInt(value) : value,
     }));
   };
 
@@ -53,6 +42,11 @@ const CreditForm = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    setFormDataExpenses((expense) => ({
+      ...expense,
+      payment_type: "cartao_credito",
+    }));
     if (!formDataExpenses.category_id) {
       console.error("Selecione uma categoria válida.");
       return;
@@ -80,6 +74,7 @@ const CreditForm = () => {
       is_recurrent: false,
     });
   };
+
   return (
     <main className="flex flex-col gap-4 sm:flex-col px-4 my-8 overflow-y-visible">
       <div className="flex">
@@ -161,6 +156,7 @@ const CreditForm = () => {
               value={formDataExpenses.category_id}
               className="w-full border p-2 mb-4 text-primary-gray-800 rounded-md font-semibold"
               onChange={handleChangeExpenses}
+              required
             >
               <option value="">Selecione uma opção</option>
               {categories
@@ -223,10 +219,11 @@ const CreditForm = () => {
           </form>
         </div>
       </div>
-      <LineChart
+      {/* <ChartComponent
         transactions={filterTransactions("credit")}
         title="Gastos mensais com cartão de crédito"
-      />
+        type="bar"
+      /> */}
       {isListExpenseModalOpen && (
         <EditCrediCardExpensesModal
           onClose={() => setIsListExpenseModalOpen(false)}

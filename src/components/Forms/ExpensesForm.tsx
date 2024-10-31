@@ -4,8 +4,8 @@ import { AuthContext } from "../../context/AuthContext/AuthContext";
 import DoughnutChartComponent from "../MockDataPierAndLineChart/ExpensePierChat";
 import Button from "../Commons/Button";
 import EditExpensesModal from "../Modal/Expenses/EditExpenses";
-import LineChart from "../Graphics/LineChart";
 import { Transaction } from "../../interfaces/transaction";
+// import BarChart from "../Graphics/BarChart";
 
 export default function ExpensesForm() {
   const {
@@ -22,7 +22,7 @@ export default function ExpensesForm() {
     setFormDataExpenses,
     groupExpensesByDescriptionToGraphics,
     addTransaction,
-    filterTransactions,
+    // filterTransactions,
   } = useDataInformation();
 
   const userContext = AuthContext();
@@ -233,10 +233,10 @@ export default function ExpensesForm() {
           <EditExpensesModal onClose={() => setIsListExpenseModalOpen(false)} />
         )}
       </div>
-      <LineChart
+      {/* <BarChart
         transactions={filterTransactions("expense")}
-        title="Gastos mensais com cartão de crédito"
-      />
+        title="Gastos mensais"
+      /> */}
     </main>
   );
 }

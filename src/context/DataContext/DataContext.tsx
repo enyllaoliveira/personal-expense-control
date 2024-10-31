@@ -178,26 +178,8 @@ export function DataProvider({ children }: DataProviderProps) {
 
   useEffect(() => {
     if (user) {
-      localStorage.setItem("user", JSON.stringify(user));
-    } else {
-      localStorage.removeItem("user");
-      navigate("/");
-    }
-  }, [user]);
-
-  useEffect(() => {
-    if (user?.id) {
-      setFormDataIncome((incomes) => ({
-        ...incomes,
-        userId: user.id,
-      }));
-      setFormDataExpenses((formDataExpenses) => ({
-        ...formDataExpenses,
-        userId: user.id,
-      }));
       handleGetExpense();
       handleGetIncomes();
-      handleGetExpense();
       fetchCategories();
     } else {
       setExpenses([]);
@@ -260,7 +242,7 @@ export function DataProvider({ children }: DataProviderProps) {
       const finalCategoryId = category_id;
       if (!user?.id) {
         toast.error("Usuário não autenticado.");
-        navigate("/login"); // Redirecionar para o login
+        navigate("/login");
         return;
       }
       const expenses = [];
@@ -444,7 +426,7 @@ export function DataProvider({ children }: DataProviderProps) {
     const { name, value } = e.target;
     setFormDataExpenses((expenses) => ({
       ...expenses,
-      [name]: name === "numero_parcelas" ? parseInt(value) : value,
+      [name]: name === "installment_count" ? parseInt(value) : value,
     }));
   };
 
@@ -674,7 +656,7 @@ export function DataProvider({ children }: DataProviderProps) {
   const fetchCategories = async () => {
     if (!user?.id) {
       toast.error("Usuário não autenticado.");
-      navigate("/login"); // Redirecionar para o login
+      navigate("/login");
       return;
     }
     try {
@@ -696,7 +678,7 @@ export function DataProvider({ children }: DataProviderProps) {
     }
     if (!user?.id) {
       toast.error("Usuário não autenticado.");
-      navigate("/login"); // Redirecionar para o login
+      navigate("/login");
       return;
     }
 
