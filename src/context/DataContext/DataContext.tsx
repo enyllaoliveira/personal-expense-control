@@ -178,7 +178,9 @@ export function DataProvider({ children }: DataProviderProps) {
         setExpenses([]);
       }
     } catch (error) {
-      console.error("Error ao carregar despesas:", error);
+      toast.error("Error ao carregar despesa. Tente novamente.", {
+        autoClose: 2000,
+      });
       throw error;
     }
   };
@@ -194,7 +196,7 @@ export function DataProvider({ children }: DataProviderProps) {
 
   const handleAddExpense = async (expenseData: Expense) => {
     if (!isFormValidToExpense()) {
-      console.error("Todos os campos são obrigatórios.");
+      toast.warning("Todos os campos são obrigatórios.", { autoClose: 2000 });
       return;
     }
 
@@ -281,7 +283,7 @@ export function DataProvider({ children }: DataProviderProps) {
       }
     } catch (error) {
       toast.error("Erro ao adicionar despesa.", { autoClose: 2000 });
-      console.error("Erro:", error);
+      throw error;
     }
   };
 
@@ -336,7 +338,8 @@ export function DataProvider({ children }: DataProviderProps) {
         setIsEditingExpense(false);
       }
     } catch (error) {
-      console.error(error);
+      toast.error("Erro ao editar despesa.", { autoClose: 2000 });
+      throw error;
     }
   };
 
@@ -349,7 +352,8 @@ export function DataProvider({ children }: DataProviderProps) {
         await handleGetExpense();
       }
     } catch (error) {
-      console.error("Error ao excluir despesa", error);
+      toast.error("Despesa excluída.. Tente novamente.", { autoClose: 2000 });
+      throw error;
     }
   };
 
@@ -497,7 +501,7 @@ export function DataProvider({ children }: DataProviderProps) {
       toast.error("Erro ao adicionar receita. Tente novamente mais tarde.", {
         autoClose: 2000,
       });
-      console.error("Erro ao enviar receita:", error);
+      throw error;
     }
   };
 
@@ -509,7 +513,6 @@ export function DataProvider({ children }: DataProviderProps) {
         setIncomes(receitas);
       } else if (response?.status === 404) {
         toast.error("Nenhuma receita encontrada.", { autoClose: 2000 });
-        console.error("Nenhuma receita encontrada.");
         setIncomes([]);
       }
     } catch (error) {
@@ -521,7 +524,6 @@ export function DataProvider({ children }: DataProviderProps) {
       } else {
         throw error;
       }
-      console.error("Erro ao carregar receitas:", error);
     }
   };
 
@@ -598,7 +600,10 @@ export function DataProvider({ children }: DataProviderProps) {
         setIsEditingIncome(false);
       }
     } catch (error) {
-      console.error("Erro ao editar receita:", error);
+      toast.error("Erro ao editar receita. Tente novamente mais tarde.", {
+        autoClose: 2000,
+      });
+      throw error;
     }
   };
 
@@ -657,7 +662,8 @@ export function DataProvider({ children }: DataProviderProps) {
       const categoriesData: Categories[] = response?.data || [];
       setCategories(categoriesData);
     } catch (error) {
-      console.error("Erro ao carregar categorias:", error);
+      toast.error("Erro ao carregar categorias.", { autoClose: 2000 });
+      throw error;
       setCategories([]);
     }
   };

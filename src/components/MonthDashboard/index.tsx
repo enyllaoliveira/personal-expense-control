@@ -4,6 +4,7 @@ import { useApi } from "../../hooks/useApi";
 import Income from "../../interfaces/income";
 import { Expense } from "../../interfaces/expense";
 import { TransactionFilter } from "../../interfaces/transactionFilterYear";
+import { toast } from "react-toastify";
 
 export default function Dashboard() {
   const api = new useApi();
@@ -31,10 +32,8 @@ export default function Dashboard() {
   const searchForMonthlyData = async () => {
     try {
       const response = await api.getMonthData(isSelectedMonth, selectedYear);
-      console.log("Resposta completa da API:", response);
-
       if (!response) {
-        console.error("Erro: `response` está indefinido.");
+        console.error("resposta indefinida.");
         return;
       }
 
@@ -69,7 +68,10 @@ export default function Dashboard() {
 
       setCharData([...incomeTransactions, ...expenseTransactions]);
     } catch (error) {
-      console.error("Erro ao buscar dados mensais:", error);
+      toast.error("Erro ao buscar dados mensais. Tente novamente.", {
+        autoClose: 2000,
+      });
+      throw error;
     }
   };
 

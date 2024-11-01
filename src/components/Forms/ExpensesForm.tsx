@@ -5,6 +5,7 @@ import DoughnutChartComponent from "../MockDataPierAndLineChart/ExpenseAndIncome
 import Button from "../Commons/Button";
 import EditExpensesModal from "../Modal/Expenses/EditExpenses";
 import { Transaction } from "../../interfaces/transaction";
+import { toast } from "react-toastify";
 // import BarChart from "../Graphics/BarChart";
 
 export default function ExpensesForm() {
@@ -49,7 +50,9 @@ export default function ExpensesForm() {
     e.preventDefault();
 
     if (!formDataExpenses.category_id) {
-      console.error("Selecione uma categoria válida.");
+      toast.error("Selecione uma categoria válida.", {
+        autoClose: 2000,
+      });
       return;
     }
 

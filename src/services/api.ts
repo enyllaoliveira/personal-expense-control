@@ -24,7 +24,7 @@ api.interceptors.response.use(
 
         return api(originalRequest);
       } catch (err) {
-        console.error("Falha ao renovar o token", err);
+        console.error(err);
         window.location.href = "/login";
       }
     }

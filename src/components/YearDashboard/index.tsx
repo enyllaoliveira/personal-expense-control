@@ -45,10 +45,6 @@ export default function YearDashboard() {
         );
 
         setDadosGrafico([...incomeTransactions, ...expenseTransactions]);
-      } else {
-        console.error(
-          "Erro: Estrutura de dados inesperada na resposta da API."
-        );
       }
     } catch (error) {
       console.error(error);

@@ -5,6 +5,7 @@ import Button from "../Commons/Button";
 import DoughnutChartComponent from "../Graphics/PierChart";
 import EditCrediCardExpensesModal from "../Modal/Expenses/EditCreditCardExpenses";
 import { Transaction } from "../../interfaces/transaction";
+import { toast } from "react-toastify";
 // import ChartComponent from "../Graphics/LineChart";
 
 const CreditForm = () => {
@@ -48,7 +49,9 @@ const CreditForm = () => {
       payment_type: "cartao_credito",
     }));
     if (!formDataExpenses.category_id) {
-      console.error("Selecione uma categoria válida.");
+      toast.error("Selecione uma categoria válida.", {
+        autoClose: 2000,
+      });
       return;
     }
 

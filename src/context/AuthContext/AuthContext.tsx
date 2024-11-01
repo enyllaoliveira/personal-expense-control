@@ -6,7 +6,6 @@ import {
   ReactNode,
   useEffect,
 } from "react";
-import axios from "axios";
 
 import { useNavigate } from "react-router-dom";
 import { useApi } from "../../hooks/useApi";
@@ -67,20 +66,12 @@ export function UserProvider({ children }: UserProviderProps) {
       email: email,
       password: password,
     };
-    try {
-      const response = await api.register(userData);
-      if (response?.status === 201) {
-        notify.success(
-          "Usuário registrado. Faça seu login para acessar o painel!"
-        );
-        navigate("/login");
-      }
-    } catch (err) {
-      if (axios.isAxiosError(err)) {
-        console.error("Erro de Axios:", err.response?.data || err.message);
-      } else {
-        throw err;
-      }
+    const response = await api.register(userData);
+    if (response?.status === 201) {
+      notify.success(
+        "Usuário registrado. Faça seu login para acessar o painel!"
+      );
+      navigate("/login");
     }
   };
   const handleLogin = async (e: FormEvent) => {
