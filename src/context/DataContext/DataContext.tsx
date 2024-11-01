@@ -178,10 +178,13 @@ export function DataProvider({ children }: DataProviderProps) {
         setExpenses([]);
       }
     } catch (error) {
-      toast.error("Error ao carregar despesa. Tente novamente.", {
-        autoClose: 2000,
-      });
-      throw error;
+      if (!user) {
+        toast.error("Error ao carregar despesa. Tente novamente.", {
+          autoClose: 2000,
+        });
+      } else {
+        throw error;
+      }
     }
   };
 
@@ -662,8 +665,12 @@ export function DataProvider({ children }: DataProviderProps) {
       const categoriesData: Categories[] = response?.data || [];
       setCategories(categoriesData);
     } catch (error) {
-      toast.error("Erro ao carregar categorias.", { autoClose: 2000 });
-      throw error;
+      if (!user) {
+        localStorage.setItem("user", JSON.stringify(user));
+        toast.error("Erro ao carregar categorias.", { autoClose: 2000 });
+      } else {
+        throw error;
+      }
       setCategories([]);
     }
   };
