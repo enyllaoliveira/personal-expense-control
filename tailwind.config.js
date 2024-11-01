@@ -17,14 +17,10 @@ export default {
     },
     extend: {
       colors: {
-        "primary-orange-100": "#E5591C",
-        // COR DA FONTE, DA BORDA (LARANJA)
+        "primary-orange-100": "rgba(75, 192, 192, 0.6)",
         "primary-gray-900": "#201F1B",
-        //BG
         "primary-gray-800": "#3F3C37",
-        // COR DO BG DOS MODAIS
         "primary-gray-700": "#CCC6BA",
-        // COR DO BG DOS MODAIS
         "primary-gray-600": "#F4F3EE",
       },
     },

@@ -5,6 +5,7 @@ import { useDataInformation } from "../../../../context/DataContext/DataContext"
 import DeleteIncomesModal from "../DeleteIncomes";
 import Income from "../../../../interfaces/income";
 import Button from "../../../Commons/Button";
+import { useEffect, useRef } from "react";
 
 export default function EdiIncomesModal({ onClose }: { onClose: () => void }) {
   const {
@@ -20,6 +21,22 @@ export default function EdiIncomesModal({ onClose }: { onClose: () => void }) {
     isDeleteIncome,
     setIsDeleteIncome,
   } = useDataInformation();
+
+  const modalRef = useRef<HTMLDivElement>(null);
+
+  const handleClickOutside = (event: MouseEvent) => {
+    if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+      setIsEditingIncome(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const handleOpenDeleteModal = (income: Income) => {
     setSelectedIncome(income);
@@ -41,7 +58,9 @@ export default function EdiIncomesModal({ onClose }: { onClose: () => void }) {
   const handleOpenEditModal = (income: Income) => {
     const incomeDate = income.date || income.created_at;
 
-    const formattedDate = new Date(incomeDate).toISOString().split("T")[0];
+    const formattedDate = new Date(incomeDate ?? new Date())
+      .toISOString()
+      .split("T")[0];
 
     setFormDataIncome({
       id: String(income.id),
@@ -70,7 +89,7 @@ export default function EdiIncomesModal({ onClose }: { onClose: () => void }) {
           : "w-[400px]"
       }
     >
-      <div className="mt-4">
+      <div className="mt-4" ref={modalRef}>
         <h2 className="text-xl font-bold mb-4 text-black">Suas Receitas</h2>
         <div className="flex sm:flex-col justify-between text-primary-gray-900">
           <ul className="flex flex-col gap-2 mx-auto">
@@ -82,18 +101,18 @@ export default function EdiIncomesModal({ onClose }: { onClose: () => void }) {
                 <div className="flex justify-between gap-4">
                   <li className="text-primary-gray-800">
                     <div className="flex text-start">
-                      <p className="w-32">Valor:</p>{" "}
+                      <p className="w-32 sm:w-28">Valor:</p>{" "}
                       {formatCurrency(income.amount)}{" "}
                     </div>
                     <div className="flex text-start">
-                      <p className="w-32">Descrição:</p>
-                      <p className="text-start truncate w-32">
+                      <p className="w-32 sm:w-28">Descrição:</p>
+                      <p className="text-start truncate w-32 sm:w-28">
                         {" "}
                         {income.description}
                       </p>
                     </div>
                     <div className="flex text-start">
-                      <p className="w-32">Recebimento:</p>{" "}
+                      <p className="w-32 sm:w-28">Recebimento:</p>{" "}
                       {formatDate(income.created_at)}{" "}
                     </div>
                   </li>
@@ -161,7 +180,7 @@ export default function EdiIncomesModal({ onClose }: { onClose: () => void }) {
               <div className="h-auto w-px bg-gray-400 mx-4 self-stretch" />
               <form
                 id="income-form"
-                className="text-start w-1/2"
+                className="text-start w-1/2 sm:w-full"
                 onSubmit={handleUpdateIncome}
               >
                 <div className="mb-4 text-primary-gray-900">
@@ -205,15 +224,15 @@ export default function EdiIncomesModal({ onClose }: { onClose: () => void }) {
                     className="block text-normal font-semibold text-primary-gray-900"
                   >
                     Data de Recebimento:
+                    <input
+                      type="date"
+                      name="receipt_date"
+                      value={formDataIncome.receipt_date || ""}
+                      onChange={handleChangeIncome}
+                      required
+                      className="mt-1 block w-full border rounded p-2 text-primary-gray-900"
+                    />
                   </label>
-                  <input
-                    type="date"
-                    name="receipt_date"
-                    value={formDataIncome.receipt_date || ""}
-                    onChange={handleChangeIncome}
-                    required
-                    className="mt-1 block w-full border rounded p-2 text-primary-gray-900"
-                  />
                 </div>
                 <div className="mb-4">
                   <label className="flex gap-2 h-8 text-start items-center sm:justify-start whitespace-nowrap">

@@ -109,7 +109,7 @@ export function UserProvider({ children }: UserProviderProps) {
       localStorage.removeItem("user");
       localStorage.removeItem("token");
       setUser(null);
-      navigate("/login");
+      navigate("/");
     } catch (error) {
       toast.error("Erro ao deslogar. Tente novamente mais tarde.", {
         autoClose: 2000,

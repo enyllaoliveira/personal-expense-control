@@ -4,13 +4,16 @@ import IncomeForm from "../../components/Forms/IncomesForm";
 import CreditCardForm from "../../components/Forms/CreditCardForm";
 import Button from "../../components/Commons/Button";
 import { AuthContext } from "../../context/AuthContext/AuthContext";
+import Dashboard from "../../components/YearDashboard";
 
 export default function MeuPainel() {
   const userContext = AuthContext();
 
-  const [activeTab, setActiveTab] = useState("receitas");
+  const [activeTab, setActiveTab] = useState("dashboard");
   const renderContent = () => {
     switch (activeTab) {
+      case "dashboard":
+        return <Dashboard />;
       case "receitas":
         return <IncomeForm />;
       case "despesas":

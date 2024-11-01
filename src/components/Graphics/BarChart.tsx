@@ -1,100 +1,73 @@
-import { Bar } from "react-chartjs-2";
-import {
-  Chart as ChartJS,
-  BarElement,
-  CategoryScale,
-  LinearScale,
-  Tooltip,
-  Legend,
-  Title,
-  ChartData,
-  ChartOptions,
-} from "chart.js";
 import { useEffect, useState } from "react";
-
-ChartJS.register(
-  BarElement,
-  CategoryScale,
-  LinearScale,
-  Tooltip,
-  Legend,
-  Title
-);
-
-interface Transaction {
-  amount: number;
-  date: string;
-}
+import { Bar } from "react-chartjs-2";
+import { ChartData, ChartOptions } from "chart.js";
+import { TransactionFilter } from "../../interfaces/transactionFilterYear";
 
 interface BarChartProps {
-  transactions: Transaction[];
+  transactions: TransactionFilter[];
   title: string;
-  color?: string;
+  colorIncomes?: string;
+  colorExpenses?: string;
   titleColor?: string;
   textColor?: string;
 }
 
-type ChartDataType = ChartData<"bar", number[], string>;
-
-const groupByMonth = (transactions: Transaction[]) => {
-  const monthlyTotals: { [key: string]: number } = {
-    Jan: 0,
-    Feb: 0,
-    Mar: 0,
-    Apr: 0,
-    May: 0,
-    Jun: 0,
-    Jul: 0,
-    Aug: 0,
-    Sep: 0,
-    Oct: 0,
-    Nov: 0,
-    Dec: 0,
-  };
-
-  transactions.forEach((transaction) => {
-    const date = new Date(transaction.date);
-    const month = date.toLocaleString("default", { month: "short" });
-    monthlyTotals[month] += transaction.amount;
-  });
-
-  return {
-    months: Object.keys(monthlyTotals),
-    totals: Object.values(monthlyTotals),
-  };
-};
-
 const BarChart = ({
   transactions,
   title,
-  color = "#ffffff",
-  titleColor = "#ffffff",
-  textColor = "#000000",
+  colorIncomes = "rgba(75, 192, 192, 0.6)",
+  colorExpenses = "rgba(255, 99, 132, 0.6)",
+  titleColor = "#333",
+  textColor = "#666",
 }: BarChartProps) => {
-  const [chartData, setChartData] = useState<ChartDataType | null>(null);
+  const [chartData, setChartData] = useState<ChartData<"bar"> | null>(null);
 
   useEffect(() => {
-    const { months, totals } = groupByMonth(transactions);
+    const incomeData = Array(12).fill(0);
+    const expenseData = Array(12).fill(0);
+
+    transactions.forEach((transaction) => {
+      const month = new Date(transaction.date).getMonth();
+      if (transaction.type === "Receita") {
+        incomeData[month] += transaction.amount;
+      } else {
+        expenseData[month] += transaction.amount;
+      }
+    });
+
     setChartData({
-      labels: months,
+      labels: [
+        "Jan",
+        "Fev",
+        "Mar",
+        "Abr",
+        "Mai",
+        "Jun",
+        "Jul",
+        "Ago",
+        "Set",
+        "Out",
+        "Nov",
+        "Dez",
+      ],
       datasets: [
         {
-          label: title,
-          data: totals,
-          backgroundColor: `${color}99`,
-          borderColor: color,
+          label: "Receitas",
+          data: incomeData,
+          backgroundColor: colorIncomes,
+          borderColor: colorIncomes,
+          borderWidth: 1,
+        },
+        {
+          label: "Despesas",
+          data: expenseData,
+          backgroundColor: colorExpenses,
+          borderColor: colorExpenses,
           borderWidth: 1,
         },
       ],
     });
-  }, [transactions, title, color]);
-
-  if (!chartData)
-    return (
-      <p className="text-white font-semibold text-center">
-        Carregando gráfico...
-      </p>
-    );
+  }, [transactions]);
 
   const options: ChartOptions<"bar"> = {
     responsive: true,
@@ -103,9 +76,7 @@ const BarChart = ({
         display: true,
         text: title,
         color: titleColor,
-        font: {
-          size: 18,
-        },
+        font: { size: 18 },
       },
       legend: {
         labels: {
@@ -115,7 +86,6 @@ const BarChart = ({
     },
     scales: {
       x: {
-        type: "category",
         ticks: {
           color: textColor,
         },
@@ -128,6 +98,11 @@ const BarChart = ({
       },
     },
   };
+
+  if (!chartData)
+    return (
+      <p className="font-semibold text-center my-auto">Carregando gráfico...</p>
+    );
 
   return <Bar data={chartData} options={options} />;
 };

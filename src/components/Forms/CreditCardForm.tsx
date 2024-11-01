@@ -77,7 +77,7 @@ const CreditForm = () => {
 
   return (
     <main className="flex flex-col gap-4 sm:flex-col px-4 my-8 overflow-y-visible">
-      <div className="flex">
+      <div className="flex sm:flex-col">
         <div className="w-[700px] sm:px-4 sm:w-full my-auto">
           {expensesCard.length > 0 ? (
             <DoughnutChartComponent

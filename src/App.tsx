@@ -1,6 +1,6 @@
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import "./App.css";
-import Dashboard from "./pages/dashboard";
+import DashboardHome from "./pages/home";
 import { Route, Routes } from "react-router-dom";
 import Login from "./pages/login";
 import Registro from "./pages/registro";
@@ -16,7 +16,7 @@ function App() {
       <UserProvider>
         <DataProvider>
           <Routes>
-            <Route path="/" element={<Dashboard />} />
+            <Route path="/" element={<DashboardHome />} />
             <Route path="/registro" element={<Registro />} />
             <Route path="/login" element={<Login />} />
             <Route path="/meu-painel" element={<MeuPainel />} />

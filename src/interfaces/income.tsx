@@ -1,9 +1,10 @@
 export default interface Income {
-  id: number;
-  userId: string;
+  id: string;
+  userId: number | string;
   amount: string;
   description: string;
-  date: string;
-  created_at: string;
-  isRecurrent?: boolean | undefined;
+  receipt_date: string;
+  isRecurrent: boolean;
+  date?: string;
+  created_at?: string;
 }

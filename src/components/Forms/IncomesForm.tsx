@@ -1,5 +1,5 @@
 import { useDataInformation } from "../../context/DataContext/DataContext";
-import DoughnutChartComponent from "../MockDataPierAndLineChart/ExpensePierChat";
+import DoughnutChartComponent from "../MockDataPierAndLineChart/ExpenseAndIncomesPierChat";
 import { AuthContext } from "../../context/AuthContext/AuthContext";
 import { useEffect, useState } from "react";
 import Button from "../Commons/Button";
@@ -55,7 +55,7 @@ export default function IncomeForm() {
   };
   return (
     <main className="flex flex-col gap-4 sm:flex-col px-4 my-8">
-      <div className="flex">
+      <div className="flex sm:flex-col">
         {incomes.length > 0 ? (
           <div className="w-[700px] sm:px-4 sm:w-full">
             <DoughnutChartComponent data={formatIncomesForChart(incomes)} />
@@ -114,15 +114,15 @@ export default function IncomeForm() {
                 className="block text-normal font-semibold text-primary-gray-600"
               >
                 Data de Recebimento:
+                <input
+                  type="date"
+                  name="receipt_date"
+                  value={formDataIncome.receipt_date || ""}
+                  onChange={handleChangeIncome}
+                  required
+                  className="mt-1 block w-full border rounded p-2 text-black"
+                />
               </label>
-              <input
-                type="date"
-                name="receipt_date"
-                value={formDataIncome.receipt_date || ""}
-                onChange={handleChangeIncome}
-                required
-                className="mt-1 block w-full border rounded p-2 text-black"
-              />
             </div>
             <div className="mb-4">
               <label className="flex gap-2 h-8 text-start items-center sm:justify-start whitespace-nowrap">

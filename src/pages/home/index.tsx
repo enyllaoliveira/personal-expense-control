@@ -1,15 +1,15 @@
 import ExpenseLineChart from "../../components/MockDataPierAndLineChart/ExpenseLineChart";
-// import DoughnutChartComponent from "../../components/MockDataPierAndLineChart/ExpensePierChat";
 import {
   stackedBarData,
   stackedOptions,
 } from "../../components/MockDataPierAndLineChart/CreditCardControl";
 import RevenueLineChart from "../../components/MockDataPierAndLineChart/RevenueLineChart";
-import { doughnutDataToRevenue } from "../../components/MockDataPierAndLineChart/RevenuePierChat";
+import { doughnutDataToRevenue } from "../../components/MockDataPierAndLineChart/RevenuePierChart";
 import RootLayout from "../../layout";
 import { Bar, Doughnut } from "react-chartjs-2";
+import { doughnutDataToIncome } from "../../components/MockDataPierAndLineChart/ExpensesPierChart";
 
-export default function Dashboard() {
+export default function DashboardHome() {
   return (
     <RootLayout>
       <div className="flex flex-col overflow-auto mx-auto my-12 sm:my-4">
@@ -19,12 +19,12 @@ export default function Dashboard() {
               {" "}
               <ExpenseLineChart />
             </div>
-            {/* <div
+            <div
               className="w-full sm:w-full md:w-1/2 justify-center items-center flex"
               style={{ position: "relative", height: "400px", width: "100%" }}
             >
-              <Doughnut data={doughnutDataToExpense} />
-            </div> */}
+              <Doughnut data={doughnutDataToRevenue} />
+            </div>
           </div>
           <div className="flex sm:flex-col items-center">
             <div className="w-full sm:w-full md:w-1/2 justify-center items-center flex">
@@ -35,7 +35,7 @@ export default function Dashboard() {
               className="w-full sm:w-full md:w-1/2 justify-center items-center flex"
               style={{ position: "relative", height: "400px", width: "100%" }}
             >
-              <Doughnut data={doughnutDataToRevenue} />
+              <Doughnut data={doughnutDataToIncome} />
             </div>
           </div>
         </div>

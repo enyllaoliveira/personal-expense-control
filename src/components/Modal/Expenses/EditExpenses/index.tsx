@@ -5,6 +5,7 @@ import { useDataInformation } from "../../../../context/DataContext/DataContext"
 import DeleteExpensesModal from "../DeleteExpenses";
 import { Expense } from "../../../../interfaces/expense";
 import Button from "../../../Commons/Button";
+import { useEffect, useRef } from "react";
 
 export default function EditExpensesModal({
   onClose,
@@ -27,6 +28,22 @@ export default function EditExpensesModal({
     setIsDeleteExpense,
     groupExpensesByDescription,
   } = useDataInformation();
+
+  const modalRef = useRef<HTMLDivElement>(null);
+
+  const handleClickOutside = (event: MouseEvent) => {
+    if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+      setIsEditingExpense(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const handleOpenDeleteModal = (expense: Expense) => {
     setSelectedExpense(expense);
@@ -88,7 +105,7 @@ export default function EditExpensesModal({
           : "w-[400px]"
       }
     >
-      <div className="mt-4">
+      <div className="mt-4" ref={modalRef}>
         <h2 className="text-xl font-bold mb-4 text-black">Suas Despesas</h2>
         <div className="flex sm:flex-col justify-between gap-4  text-primary-gray-900">
           {expenses.length === 0 ? (
@@ -113,18 +130,24 @@ export default function EditExpensesModal({
                       >
                         <div className="text-primary-gray-800">
                           <div className="flex">
-                            <p className="text-start flex w-32">Valor:</p>{" "}
+                            <p className="text-start flex w-32 sm:w-28">
+                              Valor:
+                            </p>{" "}
                             {formatCurrency(expense.amount ?? 0)}
                           </div>
                           <div className="flex">
-                            <p className="text-start flex w-32">Descrição:</p>
-                            <p className="text-start truncate w-32">
+                            <p className="text-start flex w-32 sm:w-28">
+                              Descrição:
+                            </p>
+                            <p className="text-start truncate w-32 sm:w-28">
                               {expense.description || "Descrição indisponível"}{" "}
                             </p>
                           </div>
                           <div className="flex">
-                            <p className="text-start flex w-32">Pagamento:</p>
-                            {formatDate(expense.payment_type)}
+                            <p className="text-start flex w-32 sm:w-28">
+                              Pagamento:
+                            </p>
+                            {formatDate(expense.payment_date || new Date())}
                           </div>
                         </div>
                         <div className="flex my-auto gap-3">
@@ -180,7 +203,7 @@ export default function EditExpensesModal({
               <div className="h-auto w-px bg-gray-400 mx-4 self-stretch" />
 
               <form
-                className="text-start w-1/2"
+                className="text-start w-1/2 sm:w-full"
                 id="expense-form"
                 onSubmit={handleEditExpense}
               >

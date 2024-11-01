@@ -1,7 +1,7 @@
 import { useDataInformation } from "../../context/DataContext/DataContext";
 import { useEffect, useState } from "react";
 import { AuthContext } from "../../context/AuthContext/AuthContext";
-import DoughnutChartComponent from "../MockDataPierAndLineChart/ExpensePierChat";
+import DoughnutChartComponent from "../MockDataPierAndLineChart/ExpenseAndIncomesPierChat";
 import Button from "../Commons/Button";
 import EditExpensesModal from "../Modal/Expenses/EditExpenses";
 import { Transaction } from "../../interfaces/transaction";
@@ -55,7 +55,7 @@ export default function ExpensesForm() {
 
     const newTransaction: Transaction = {
       amount: parseFloat(formDataExpenses.amount),
-      date: formDataExpenses.payment_date,
+      date: formDataExpenses.payment_date as string,
       type: "expense",
     };
 
@@ -70,7 +70,7 @@ export default function ExpensesForm() {
 
   return (
     <main className="flex flex-col gap-4 sm:flex-col px-4 my-8">
-      <div className="flex ">
+      <div className="flex sm:flex-col">
         {commonExpenses.length > 0 ? (
           <div className="w-[700px] sm:px-4 sm:w-full">
             <DoughnutChartComponent

@@ -172,6 +172,46 @@ export class useApi {
     }
   }
 
+  public async getYearData(year: number) {
+    try {
+      const response = await api.get(
+        `${import.meta.env.VITE_API_URL}/graphics/year`,
+        {
+          params: { year },
+          withCredentials: true,
+        }
+      );
+      if (response && response.data) {
+        return response.data;
+      } else {
+        throw new Error("Dados ausentes ou no formato incorreto");
+      }
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }
+
+  public async getMonthData(month: number, year: number) {
+    try {
+      const response = await api.get(
+        `${import.meta.env.VITE_API_URL}/graphics/month`,
+        {
+          params: { month, year },
+          withCredentials: true,
+        }
+      );
+      if (response && response.data) {
+        return response.data;
+      } else {
+        throw new Error("Dados ausentes ou no formato incorreto");
+      }
+    } catch (error) {
+      console.error("Erro ao buscar dados mensais:", error);
+      throw error;
+    }
+  }
+
   public async getCategories() {
     try {
       const response = await api.get(

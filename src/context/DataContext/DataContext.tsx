@@ -39,26 +39,6 @@ interface ExpenseUpdateProps {
   installment_count?: number;
 }
 
-interface FormValues {
-  id: string;
-  userId: number;
-  amount: string;
-  description: string;
-  receipt_date: string;
-  isRecurrent: boolean;
-}
-interface FormValueToExpenses {
-  id: string;
-  userId: number | undefined;
-  amount: string;
-  description: string;
-  payment_date: string;
-  category_id: string;
-  newCategorie: string;
-  payment_type: string;
-  installment_count: number;
-  is_recurrent: boolean;
-}
 interface Categories {
   id: number;
   name: string;
@@ -68,7 +48,7 @@ interface Categories {
 }
 
 const DataContext = createContext<{
-  handleAddIncome: (incomeData: FormValues) => Promise<void>;
+  handleAddIncome: (incomeData: Income) => Promise<void>;
   handleGetIncomes: (user: string | number) => void;
   handleChangeIncome: (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -77,13 +57,13 @@ const DataContext = createContext<{
   startEditingIncome: (income: Income) => void;
   handleUpdateIncome: (e: React.FormEvent<HTMLFormElement>) => void;
   formatIncomesForChart: (incomes: Income[]) => DoughnutChartData;
-  setFormDataIncome: Dispatch<SetStateAction<FormValues>>;
+  setFormDataIncome: Dispatch<SetStateAction<Income>>;
   setIsEditingIncome: Dispatch<SetStateAction<boolean>>;
   setIsDeleteIncome: Dispatch<SetStateAction<boolean>>;
   setSelectedIncome: Dispatch<SetStateAction<Income | null>>;
   handleGetExpense: (user: string | number) => void;
   handleAddCategory: (e: React.FormEvent) => void;
-  handleAddExpense: (expenseData: FormValueToExpenses) => Promise<void>;
+  handleAddExpense: (expenseData: Expense) => Promise<void>;
   handleChangeExpenses: (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
@@ -93,7 +73,7 @@ const DataContext = createContext<{
   handleEditExpense: (e: React.FormEvent<HTMLFormElement>) => void;
   handleDeleteExpense: (id: string) => void;
   formatIncomesForChartToExpense: (expense: Expense[]) => DoughnutChartData;
-  setFormDataExpenses: Dispatch<SetStateAction<FormValueToExpenses>>;
+  setFormDataExpenses: Dispatch<SetStateAction<Expense>>;
   setIsDeleteExpense: Dispatch<SetStateAction<boolean>>;
   setIsEditingExpense: Dispatch<SetStateAction<boolean>>;
   setSelectedExpense: Dispatch<SetStateAction<Expense | null>>;
@@ -103,14 +83,14 @@ const DataContext = createContext<{
   addTransaction: (transaction: Transaction) => void;
   filterTransactions: (type: "income" | "expense" | "credit") => Transaction[];
   incomes: Income[];
-  formDataIncome: FormValues;
+  formDataIncome: Income;
   editingIncome: Income | null;
   isEditingIncome: boolean;
   isDeleteIncome: boolean;
   selectedIncome: Income | null;
   expenses: Expense[];
   editingExpense: Expense | null;
-  formDataExpenses: FormValueToExpenses;
+  formDataExpenses: Expense;
   isDeleteExpense: boolean;
   isEditingExpense: boolean;
   selectedExpense: Expense | null;
@@ -148,7 +128,7 @@ export function DataProvider({ children }: DataProviderProps) {
   const filterTransactions = (type: "income" | "expense" | "credit") =>
     transactions.filter((transaction) => transaction.type === type);
 
-  const [formDataIncome, setFormDataIncome] = useState<FormValues>({
+  const [formDataIncome, setFormDataIncome] = useState<Income>({
     id: "",
     userId: user?.id || 0,
     amount: "",
@@ -212,7 +192,7 @@ export function DataProvider({ children }: DataProviderProps) {
     );
   };
 
-  const handleAddExpense = async (expenseData: FormValueToExpenses) => {
+  const handleAddExpense = async (expenseData: Expense) => {
     if (!isFormValidToExpense()) {
       console.error("Todos os campos são obrigatórios.");
       return;
@@ -399,8 +379,10 @@ export function DataProvider({ children }: DataProviderProps) {
         const existingExpense = groupedExpenses.get(baseDescription);
 
         if (existingExpense) {
-          const existingAmount = parseFloat(existingExpense.amount || "0");
-          const currentValue = parseFloat(expense.amount || "0");
+          const existingAmount = parseFloat(
+            String(existingExpense.amount) || "0"
+          );
+          const currentValue = parseFloat(String(expense.amount) || "0");
 
           groupedExpenses.set(baseDescription, {
             ...existingExpense,
@@ -424,12 +406,17 @@ export function DataProvider({ children }: DataProviderProps) {
     >
   ) => {
     const { name, value } = e.target;
+
     setFormDataExpenses((expenses) => ({
       ...expenses,
-      [name]: name === "installment_count" ? parseInt(value) : value,
+      [name]:
+        name === "installment_count"
+          ? parseInt(value)
+          : name === "payment_date"
+          ? new Date(value).toISOString().split("T")[0]
+          : value,
     }));
   };
-
   const startEditingExpenses = (expense: Expense) => {
     setEditingExpense(expense);
   };
@@ -460,18 +447,20 @@ export function DataProvider({ children }: DataProviderProps) {
           label: "Distribuição de Despesas",
           data: Object.values(groupedExpenses),
           backgroundColor: [
-            "rgba(75, 192, 192, 0.2)",
-            "rgba(54, 162, 235, 0.2)",
-            "rgba(255, 206, 86, 0.2)",
-            "rgba(153, 102, 255, 0.2)",
+            "rgba(255, 99, 132, 0.6)",
+            "rgba(255, 120, 140, 0.6)",
+            "rgba(235, 99, 132, 0.6)",
+            "rgba(255, 99, 150, 0.6)",
             "rgba(255, 159, 64, 0.2)",
+            "rgba(255, 80, 150, 0.6)",
           ],
           borderColor: [
-            "rgba(75, 192, 192, 1)",
-            "rgba(54, 162, 235, 1)",
-            "rgba(255, 206, 86, 1)",
-            "rgba(153, 102, 255, 1)",
-            "rgba(255, 159, 64, 1)",
+            "rgba(255, 99, 132, 1)",
+            "rgba(255, 120, 140, 1)",
+            "rgba(255, 80, 120, 1)",
+            "rgba(235, 99, 132, 1)",
+            "rgba(255, 99, 150, 1)",
+            "rgba(255, 80, 150, 1)",
           ],
           borderWidth: 1,
         },
@@ -479,7 +468,7 @@ export function DataProvider({ children }: DataProviderProps) {
     };
   };
 
-  const handleAddIncome = async (incomeData: FormValues) => {
+  const handleAddIncome = async (incomeData: Income) => {
     try {
       const response = await api.createIncome({
         userId: String(incomeData.userId),
@@ -524,7 +513,7 @@ export function DataProvider({ children }: DataProviderProps) {
         setIncomes([]);
       }
     } catch (error) {
-      if (user) {
+      if (!user) {
         localStorage.setItem("user", JSON.stringify(user));
         toast.error("Erro ao carregar receita. Tente novamente mais tarde.", {
           autoClose: 2000,
@@ -634,18 +623,22 @@ export function DataProvider({ children }: DataProviderProps) {
           label: "Distribuição de Receitas",
           data: Object.values(groupedIncomes),
           backgroundColor: [
-            "rgba(75, 192, 192, 0.2)",
-            "rgba(54, 162, 235, 0.2)",
-            "rgba(255, 206, 86, 0.2)",
-            "rgba(153, 102, 255, 0.2)",
-            "rgba(255, 159, 64, 0.2)",
+            "rgba(75, 192, 192, 0.6)",
+            "rgba(95, 192, 192, 0.6)",
+            "rgba(65, 182, 182, 0.6)",
+            "rgba(75, 172, 172, 0.6)",
+            "rgba(75, 192, 182, 0.6)",
+            "rgba(85, 202, 202, 0.6)",
           ],
           borderColor: [
             "rgba(75, 192, 192, 1)",
-            "rgba(54, 162, 235, 1)",
-            "rgba(255, 206, 86, 1)",
-            "rgba(153, 102, 255, 1)",
-            "rgba(255, 159, 64, 1)",
+            "rgba(75, 192, 182, 1)",
+
+            "rgba(65, 182, 182, 1)",
+
+            "rgba(75, 172, 172, 1)",
+            "rgba(95, 192, 192, 1)",
+            "rgba(85, 202, 202, 1)",
           ],
           borderWidth: 1,
         },
