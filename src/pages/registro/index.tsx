@@ -1,7 +1,7 @@
 import { AuthContext } from "../../context/AuthContext/AuthContext";
 import Button from "../../components/Commons/Button";
 import InputComponent from "../../components/Commons/InputComponent";
-import RegisterAndLoginForm from "../../components/Commons/RegiterAndLoginForm";
+import FormComponente from "../../components/Commons/FormComponent";
 export default function Registro() {
   const userContext = AuthContext();
 
@@ -19,7 +19,7 @@ export default function Registro() {
   } = userContext;
 
   return (
-    <RegisterAndLoginForm
+    <FormComponente
       title="Área de registro"
       subtitle="Digite os dados abaixo para se cadastrar"
       onSubmit={handleRegister}
@@ -55,6 +55,6 @@ export default function Registro() {
       <Button variant="primary" type="submit">
         Registrar
       </Button>
-    </RegisterAndLoginForm>
+    </FormComponente>
   );
 }

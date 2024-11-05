@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 import InputComponent from "../Commons/InputComponent";
 import TextArea from "../Commons/TextArea";
 import SelectComponente from "../Commons/SelectComponenet";
+import FormComponente from "../Commons/FormComponent";
 // import BarChart from "../Graphics/BarChart";
 
 export default function ExpensesForm() {
@@ -78,7 +79,7 @@ export default function ExpensesForm() {
     <main className="flex flex-col gap-4 sm:flex-col px-4 my-8">
       <div className="flex sm:flex-col">
         {commonExpenses.length > 0 ? (
-          <div className="w-[700px] sm:px-4 sm:w-full">
+          <div className="w-[700px] sm:px-4 sm:w-full max-h-[600px]">
             <DoughnutChartComponent
               data={formatIncomesForChartToExpense(commonExpenses)}
             />
@@ -88,107 +89,107 @@ export default function ExpensesForm() {
             Adicione uma receita para criar seu gráfico.
           </p>
         )}
-        <div className="w-1/3 ml-auto sm:w-full ">
-          <h2 className="text-xl font-bold mb-4">Adicionar Despesa</h2>
-          <form className="text-start mb-6" onSubmit={handleSubmit}>
+        <FormComponente
+          className="w-1/3 ml-auto sm:w-full h-full"
+          onSubmit={handleSubmit}
+          id="expense-comun-form"
+          title="Adicionar Despesa"
+        >
+          <InputComponent
+            label="Valor"
+            type="number"
+            name="amount"
+            value={formDataExpenses.amount}
+            onChange={handleChangeExpenses}
+            required
+            placeholder="Insira o valor"
+          />
+          <TextArea
+            label="Descrição"
+            name="description"
+            value={formDataExpenses.description}
+            onChange={handleChangeExpenses}
+            required
+            placeholder="Descrição da despesa"
+          />
+          <InputComponent
+            label="Data de Pagamento"
+            type="date"
+            name="payment_date"
+            value={formDataExpenses.payment_date}
+            onChange={handleChangeExpenses}
+            required
+          />
+          <SelectComponente
+            label="Categoria"
+            name="category_id"
+            value={formDataExpenses.category_id}
+            onChange={handleChangeExpenses}
+            options={categories
+              .filter((category) => category.type === "despesa")
+              .map((category) => ({
+                value: category.id,
+                label: category.name,
+              }))}
+          />
+          {formDataExpenses.category_id === "18" && (
             <InputComponent
-              label="Valor"
+              label=" Nova Categoria"
+              type="text"
+              name="newCategorie"
+              value={formDataExpenses.newCategorie}
+              onChange={handleChangeExpenses}
+              required
+              placeholder="Digite o nome da nova categoria"
+            />
+          )}
+          <div className="flex sm:flex-col justify-between gap-12">
+            <InputComponent
+              className="flex whitespace-nowrap h-8 gap-2 items-center sm:gap-1 mb-4 sm:h-6"
+              label="Número de Parcelas"
               type="number"
-              name="amount"
-              value={formDataExpenses.amount}
-              onChange={handleChangeExpenses}
-              required
-              placeholder="Insira o valor"
-            />
-            <TextArea
-              label="Descrição"
-              name="description"
-              value={formDataExpenses.description}
-              onChange={handleChangeExpenses}
-              required
-              placeholder="Descrição da despesa"
-            />
-            <InputComponent
-              label="Data de Pagamento"
-              type="date"
-              name="payment_date"
-              value={formDataExpenses.payment_date}
+              name="installment_count"
+              value={formDataExpenses.installment_count}
+              min={1}
               onChange={handleChangeExpenses}
               required
             />
-            <SelectComponente
-              label="Categoria"
-              name="category_id"
-              value={formDataExpenses.category_id}
-              onChange={handleChangeExpenses}
-              options={categories
-                .filter((category) => category.type === "despesa")
-                .map((category) => ({
-                  value: category.id,
-                  label: category.name,
-                }))}
-            />
-            {formDataExpenses.category_id === "18" && (
-              <div className="my-2 flex flex-col gap-2 text-black">
-                <InputComponent
-                  label=" Nova Categoria"
-                  type="text"
-                  name="newCategorie"
-                  value={formDataExpenses.newCategorie}
-                  onChange={handleChangeExpenses}
-                  required
-                  placeholder="Digite o nome da nova categoria"
-                />
-              </div>
-            )}
-            <div className="flex sm:flex-col justify-between gap-12">
-              <InputComponent
-                className="flex whitespace-nowrap h-8 gap-2 items-center sm:gap-1 mb-4 sm:h-6"
-                label="Número de Parcelas"
-                type="number"
-                name="installment_count"
-                value={formDataExpenses.installment_count}
-                min={1}
-                onChange={handleChangeExpenses}
-                required
-              />
 
-              <InputComponent
-                label="Despesa recorrente?"
-                className="flex whitespace-nowrap h-8 gap-2 items-center"
-                type="checkbox"
-                name="is_recurrent"
-                checked={formDataExpenses.is_recurrent}
-                onChange={(e) =>
-                  setFormDataExpenses((expense) => ({
-                    ...expense,
-                    is_recurrent: e.target.checked,
-                  }))
-                }
-              />
-            </div>
-            {formDataExpenses.category_id === "18" ? (
-              <Button variant="secondary" type="submit" className="w-full">
-                Criar nova categoria e salvar despesa
-              </Button>
-            ) : (
-              <Button variant="primary" type="submit" className="w-full">
-                Adicionar Despesass{" "}
-              </Button>
-            )}
-            {commonExpenses.length > 0 && (
-              <Button
-                variant="secondary"
-                className="ml-auto mt-2 sm:mt-4"
-                onClick={handleOpenListModalExpense}
-                type="button"
-              >
-                {" "}
-                Gerenciar despesas
-              </Button>
-            )}
-          </form>
-        </div>
+            <InputComponent
+              label="Despesa recorrente?"
+              className="flex whitespace-nowrap h-8 gap-2 items-center"
+              type="checkbox"
+              name="is_recurrent"
+              checked={formDataExpenses.is_recurrent}
+              onChange={(e) =>
+                setFormDataExpenses((expense) => ({
+                  ...expense,
+                  is_recurrent: e.target.checked,
+                }))
+              }
+            />
+          </div>
+          {formDataExpenses.category_id === "18" ? (
+            <Button variant="secondary" type="submit" className="w-full">
+              Criar nova categoria e salvar despesa
+            </Button>
+          ) : (
+            <Button variant="primary" type="submit" className="w-full">
+              Adicionar Despesass{" "}
+            </Button>
+          )}
+          {commonExpenses.length > 0 && (
+            <Button
+              variant="secondary"
+              className="ml-auto mt-2 sm:mt-4"
+              onClick={handleOpenListModalExpense}
+              type="button"
+            >
+              {" "}
+              Gerenciar despesas
+            </Button>
+          )}
+        </FormComponente>
         {isListExpenseModalOpen && (
           <EditExpensesModal onClose={() => setIsListExpenseModalOpen(false)} />
         )}

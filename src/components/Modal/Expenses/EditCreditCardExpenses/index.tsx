@@ -9,6 +9,7 @@ import { useEffect, useRef } from "react";
 import InputComponent from "../../../Commons/InputComponent";
 import TextArea from "../../../Commons/TextArea";
 import SelectComponente from "../../../Commons/SelectComponenet";
+import FormComponente from "../../../Commons/FormComponent";
 
 export default function EditCrediCardExpensesModal({
   onClose,
@@ -204,10 +205,10 @@ export default function EditCrediCardExpensesModal({
             <>
               <div className="h-auto w-px bg-gray-400 mx-4 self-stretch" />
 
-              <form
-                className="text-start w-1/2 sm:w-full"
-                id="expense-form"
+              <FormComponente
+                id="expense-edit-form"
                 onSubmit={handleEditExpense}
+                className="w-1/2 ml-auto sm:w-full h-full"
               >
                 <InputComponent
                   label="Valor"
@@ -234,10 +235,6 @@ export default function EditCrediCardExpensesModal({
                   onChange={handleChangeExpenses}
                   required
                 />
-                <p className="block text-normal font-semibold text-primary-gray-900">
-                  {" "}
-                </p>
-
                 <SelectComponente
                   label=" Selecione a categoria"
                   name="category_id"
@@ -315,7 +312,7 @@ export default function EditCrediCardExpensesModal({
                     Cancelar edição
                   </Button>
                 </div>
-              </form>
+              </FormComponente>
             </>
           )}
         </div>

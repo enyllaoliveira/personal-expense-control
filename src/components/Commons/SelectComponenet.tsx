@@ -28,7 +28,7 @@ export default function SelectComponente({
 }: SelectComponentProps) {
   return (
     <>
-      <label htmlFor={name} className="block text-normal font-semibold">
+      <label htmlFor={name} className="block text-start font-semibold">
         {label}
       </label>
       <select

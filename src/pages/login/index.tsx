@@ -1,7 +1,7 @@
 import { AuthContext } from "../../context/AuthContext/AuthContext";
 import Button from "../../components/Commons/Button";
 import InputComponent from "../../components/Commons/InputComponent";
-import RegisterAndLoginForm from "../../components/Commons/RegiterAndLoginForm";
+import FormComponente from "../../components/Commons/FormComponent";
 
 export default function Login() {
   const userContext = AuthContext();
@@ -12,7 +12,7 @@ export default function Login() {
   const { handleLogin, email, password, setEmail, setPassword } = userContext;
 
   return (
-    <RegisterAndLoginForm
+    <FormComponente
       title="Área de login"
       subtitle="Bem-vindo de volta! Preencha os dados para acessar seu painel"
       onSubmit={handleLogin}
@@ -40,6 +40,6 @@ export default function Login() {
       <Button variant="primary" type="submit">
         Acessar
       </Button>
-    </RegisterAndLoginForm>
+    </FormComponente>
   );
 }

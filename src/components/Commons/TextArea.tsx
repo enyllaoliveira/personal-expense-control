@@ -20,7 +20,7 @@ export default function TextArea({
 }: TextAreaComponentProps) {
   return (
     <>
-      <label htmlFor={name} className="block text-normal font-semibold">
+      <label htmlFor={name} className="block text-start font-semibold">
         {label}
       </label>
       <textarea

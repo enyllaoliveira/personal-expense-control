@@ -7,6 +7,7 @@ import EditIncomeModal from "../Modal/Incomes/EditIncomes/index";
 import { Transaction } from "../../interfaces/transaction";
 import InputComponent from "../Commons/InputComponent";
 import TextArea from "../Commons/TextArea";
+import FormComponente from "../Commons/FormComponent";
 // import ChartComponent from "../Graphics/LineChart";
 
 export default function IncomeForm() {
@@ -59,7 +60,7 @@ export default function IncomeForm() {
     <main className="flex flex-col gap-4 sm:flex-col px-4 my-8">
       <div className="flex sm:flex-col">
         {incomes.length > 0 ? (
-          <div className="w-[700px] sm:px-4 sm:w-full">
+          <div className="w-[700px] sm:px-4 sm:w-full max-h-[600px]">
             <DoughnutChartComponent data={formatIncomesForChart(incomes)} />
           </div>
         ) : (
@@ -68,69 +69,67 @@ export default function IncomeForm() {
           </p>
         )}
 
-        <div className="w-1/3 ml-auto sm:w-full ">
-          <h2 className="text-xl font-bold mb-4">Adicionar Receita</h2>
-          <form
-            id="income-form"
-            className="text-start mb-6"
-            onSubmit={handleSubmit}
-          >
-            <InputComponent
-              label=" Valor"
-              type="number"
-              name="amount"
-              value={formDataIncome.amount}
-              onChange={handleChangeIncome}
-              required
-              placeholder="Insira o valor"
-            />
+        <FormComponente
+          title="Adicionar Receita"
+          id="income-form"
+          onSubmit={handleSubmit}
+          className="w-1/3 ml-auto sm:w-full h-full"
+        >
+          <InputComponent
+            label=" Valor"
+            type="number"
+            name="amount"
+            value={formDataIncome.amount}
+            onChange={handleChangeIncome}
+            required
+            placeholder="Insira o valor"
+          />
 
-            <TextArea
-              label="Descrição"
-              name="description"
-              value={formDataIncome.description}
-              onChange={handleChangeIncome}
-              required
-              placeholder="Descrição da receita"
-            />
+          <TextArea
+            label="Descrição"
+            name="description"
+            value={formDataIncome.description}
+            onChange={handleChangeIncome}
+            required
+            placeholder="Descrição da receita"
+          />
 
-            <InputComponent
-              label="Data de Recebimento"
-              type="date"
-              name="receipt_date"
-              value={formDataIncome.receipt_date || ""}
-              onChange={handleChangeIncome}
-              required
-            />
+          <InputComponent
+            label="Data de Recebimento"
+            type="date"
+            name="receipt_date"
+            value={formDataIncome.receipt_date || ""}
+            onChange={handleChangeIncome}
+            required
+          />
 
-            <InputComponent
-              label=" Receita Recorrente?"
-              className="flex whitespace-nowrap w-20 h-8 gap-2 items-center"
-              type="checkbox"
-              name="isRecurrent"
-              checked={formDataIncome.isRecurrent}
-              onChange={(e) =>
-                setFormDataIncome((income) => ({
-                  ...income,
-                  isRecurrent: e.target.checked,
-                }))
-              }
-            />
-            <Button variant="primary" type="submit" className="w-full">
-              Adicionar Receita
+          <InputComponent
+            label=" Receita Recorrente?"
+            className="flex whitespace-nowrap w-20 h-8 gap-2 items-center"
+            type="checkbox"
+            name="isRecurrent"
+            checked={formDataIncome.isRecurrent}
+            onChange={(e) =>
+              setFormDataIncome((income) => ({
+                ...income,
+                isRecurrent: e.target.checked,
+              }))
+            }
+          />
+          <Button variant="primary" type="submit" className="w-full">
+            Adicionar Receita
+          </Button>
+          {incomes.length > 0 && (
+            <Button
+              variant="secondary"
+              className="ml-auto mt-2 sm:mt-4"
+              onClick={handleOpenListModalIncome}
+              type="button"
+            >
+              Gerenciar receitas
             </Button>
-            {incomes.length > 0 && (
-              <Button
-                variant="secondary"
-                className="ml-auto mt-2 sm:mt-4"
-                onClick={handleOpenListModalIncome}
-                type="button"
-              >
-                Gerenciar receitas
-              </Button>
-            )}
-          </form>
-        </div>
+          )}
+        </FormComponente>
 
         {isListIncomeModalOpen && (
           <EditIncomeModal onClose={() => setIsListIncomeModalOpen(false)} />

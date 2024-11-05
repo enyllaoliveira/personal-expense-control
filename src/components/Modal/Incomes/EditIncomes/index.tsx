@@ -8,6 +8,7 @@ import Button from "../../../Commons/Button";
 import { useEffect, useRef } from "react";
 import InputComponent from "../../../Commons/InputComponent";
 import TextArea from "../../../Commons/TextArea";
+import FormComponente from "../../../Commons/FormComponent";
 
 export default function EdiIncomesModal({ onClose }: { onClose: () => void }) {
   const {
@@ -180,28 +181,20 @@ export default function EdiIncomesModal({ onClose }: { onClose: () => void }) {
           {!isDeleteIncome && isEditingIncome && (
             <>
               <div className="h-auto w-px bg-gray-400 mx-4 self-stretch" />
-              <form
-                id="income-form"
-                className="text-start w-1/2 sm:w-full"
+              <FormComponente
+                id="incomes-form"
                 onSubmit={handleUpdateIncome}
+                className="w-1/2 ml-auto sm:w-full h-full"
               >
-                <div className="mb-4 text-primary-gray-900">
-                  <label
-                    htmlFor="value"
-                    className="block text-normal font-semibold text-primary-gray-900"
-                  >
-                    Valor:
-                  </label>
-                  <InputComponent
-                    label="Valor"
-                    type="number"
-                    name="amount"
-                    value={formDataIncome.amount || ""}
-                    onChange={handleChangeIncome}
-                    required
-                    placeholder="Insira o valor"
-                  />
-                </div>
+                <InputComponent
+                  label="Valor"
+                  type="number"
+                  name="amount"
+                  value={formDataIncome.amount || ""}
+                  onChange={handleChangeIncome}
+                  required
+                  placeholder="Insira o valor"
+                />
 
                 <TextArea
                   label="Descrição"
@@ -247,7 +240,7 @@ export default function EdiIncomesModal({ onClose }: { onClose: () => void }) {
                     Cancelar edição
                   </Button>
                 </div>
-              </form>
+              </FormComponente>
             </>
           )}
         </div>

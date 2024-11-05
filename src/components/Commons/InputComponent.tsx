@@ -33,7 +33,7 @@ export default function InputComponent({
   required = false,
   min,
   max,
-  className = "flex flex-col items-start gap-1 mb-4",
+  className = "flex flex-col items-start text-start gap-1 mb-4",
 }: InputComponentProps) {
   return (
     <label className={className}>
