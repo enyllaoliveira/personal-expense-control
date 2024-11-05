@@ -4,6 +4,7 @@ import { useApi } from "../../hooks/useApi";
 import Income from "../../interfaces/income";
 import { Expense } from "../../interfaces/expense";
 import { TransactionFilter } from "../../interfaces/transactionFilterYear";
+import InputComponent from "../Commons/InputComponent";
 
 export default function YearDashboard() {
   const api = new useApi();
@@ -60,17 +61,15 @@ export default function YearDashboard() {
   return (
     <div className="px-4 flex flex-col gap-4 my-12">
       <div className="bg-slate-200 max-w-[500px] mx-auto px-8 py-2 rounded-2xl">
-        <label className="flex gap-4 text-center justify-center h-8 items-center">
-          Selecione o ano:{" "}
-          <input
-            type="number"
-            value={isSelectedYear}
-            onChange={(e) => setIsSelectedYear(parseInt(e.target.value))}
-            min="2000"
-            max={new Date().getFullYear()}
-            className="text-black w-20 px-2 h-8 border border-slate-400 bg-slate-200 rounded-lg"
-          />
-        </label>
+        <InputComponent
+          label="Selecione o ano"
+          type="number"
+          name="year"
+          value={isSelectedYear}
+          onChange={(e) => setIsSelectedYear(parseInt(e.target.value))}
+          min={2000}
+          max={new Date().getFullYear()}
+        />
       </div>
 
       {dadosGrafico.length > 0 ? (

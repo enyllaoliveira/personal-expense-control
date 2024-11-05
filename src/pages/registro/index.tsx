@@ -29,22 +29,28 @@ export default function Registro() {
     >
       <InputComponent
         label="Digite o seu nome"
+        name="name"
         type="text"
         value={name}
         onChange={(e) => setName(e.target.value)}
+        required
       />
       <InputComponent
         label="Digite o seu e-mail"
+        name="email"
         type="email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
+        required
       />
       <InputComponent
         label="Digite a sua senha"
+        name="password"
         type="password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
         placeholder="************"
+        required
       />
       <Button variant="primary" type="submit">
         Registrar

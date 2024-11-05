@@ -5,6 +5,7 @@ import Income from "../../interfaces/income";
 import { Expense } from "../../interfaces/expense";
 import { TransactionFilter } from "../../interfaces/transactionFilterYear";
 import { toast } from "react-toastify";
+import InputComponent from "../Commons/InputComponent";
 
 export default function Dashboard() {
   const api = new useApi();
@@ -98,16 +99,15 @@ export default function Dashboard() {
         </select>
       </label>
 
-      <label>
-        Selecione o ano:
-        <input
-          type="number"
-          value={selectedYear}
-          onChange={(e) => setSelectedYear(parseInt(e.target.value))}
-          min="2000"
-          max={new Date().getFullYear()}
-        />
-      </label>
+      <InputComponent
+        label="Selecione o ano"
+        type="number"
+        name="year"
+        value={selectedYear}
+        onChange={(e) => setSelectedYear(parseInt(e.target.value))}
+        min={2000}
+        max={new Date().getFullYear()}
+      />
 
       {chartData.length > 0 ? (
         <>

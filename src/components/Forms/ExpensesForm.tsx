@@ -6,6 +6,7 @@ import Button from "../Commons/Button";
 import EditExpensesModal from "../Modal/Expenses/EditExpenses";
 import { Transaction } from "../../interfaces/transaction";
 import { toast } from "react-toastify";
+import InputComponent from "../Commons/InputComponent";
 // import BarChart from "../Graphics/BarChart";
 
 export default function ExpensesForm() {
@@ -88,23 +89,15 @@ export default function ExpensesForm() {
         <div className="w-1/3 ml-auto sm:w-full ">
           <h2 className="text-xl font-bold mb-4">Adicionar Despesa</h2>
           <form className="text-start mb-6" onSubmit={handleSubmit}>
-            <div className="mb-4">
-              <label
-                htmlFor="amount"
-                className="block text-normal font-semibold"
-              >
-                Valor:
-              </label>
-              <input
-                type="number"
-                name="amount"
-                value={formDataExpenses.amount}
-                onChange={handleChangeExpenses}
-                required
-                className="mt-1 block w-full border rounded-md p-2 text-black"
-                placeholder="Insira o valor"
-              />
-            </div>
+            <InputComponent
+              label="Valor"
+              type="number"
+              name="amount"
+              value={formDataExpenses.amount}
+              onChange={handleChangeExpenses}
+              required
+              placeholder="Insira o valor"
+            />
             <div className="mb-4">
               <label
                 htmlFor="description"
@@ -121,22 +114,14 @@ export default function ExpensesForm() {
                 placeholder="Descrição da despesa"
               />
             </div>
-            <div className="mb-4">
-              <label
-                htmlFor="receipt_date"
-                className="block text-normal font-semibold"
-              >
-                Data de Pagamento:
-              </label>
-              <input
-                type="date"
-                name="payment_date"
-                value={formDataExpenses.payment_date}
-                onChange={handleChangeExpenses}
-                required
-                className="mt-1 block w-full border rounded-md p-2 text-black"
-              />
-            </div>
+            <InputComponent
+              label="Data de Pagamento"
+              type="date"
+              name="payment_date"
+              value={formDataExpenses.payment_date}
+              onChange={handleChangeExpenses}
+              required
+            />
 
             <select
               name="category_id"
@@ -155,20 +140,14 @@ export default function ExpensesForm() {
             </select>
 
             {formDataExpenses.category_id === "18" && (
-              <div className="my-2 flex flex-col gap-2">
-                <label
-                  htmlFor="newCategorie"
-                  className="block text-normal font-semibold"
-                >
-                  Nova Categoria:
-                </label>
-                <input
+              <div className="my-2 flex flex-col gap-2 text-black">
+                <InputComponent
+                  label=" Nova Categoria"
                   type="text"
                   name="newCategorie"
                   value={formDataExpenses.newCategorie}
                   onChange={handleChangeExpenses}
                   required
-                  className="mt-1 block w-full border p-2 text-black rounded-md "
                   placeholder="Digite o nome da nova categoria"
                 />
                 <Button variant="secondary" type="submit" className="w-full">
@@ -176,39 +155,31 @@ export default function ExpensesForm() {
                 </Button>
               </div>
             )}
-            <div className="flex sm:flex-col justify-between mx-auto">
-              <div className="flex gap-4 sm:gap-1 mb-4 h-8 sm:h-6">
-                <label className="flex text-start justify-center items-center whitespace-nowrap">
-                  Número de Parcelas:
-                </label>
-                <input
-                  type="number"
-                  name="installment_count"
-                  value={formDataExpenses.installment_count}
-                  min={1}
-                  onChange={handleChangeExpenses}
-                  required
-                  className="text-black rounded-md w-16 sm:w-12 pl-2"
-                />
-              </div>
+            <div className="flex sm:flex-col justify-between gap-12">
+              <InputComponent
+                className="flex whitespace-nowrap h-10 gap-2 items-center sm:gap-1 mb-4 sm:h-6"
+                label="Número de Parcelas"
+                type="number"
+                name="installment_count"
+                value={formDataExpenses.installment_count}
+                min={1}
+                onChange={handleChangeExpenses}
+                required
+              />
 
-              <div className="mb-4">
-                <label className="flex gap-2 h-8 text-start justify-center items-center sm:justify-start whitespace-nowrap">
-                  Despesa recorrente?
-                  <input
-                    type="checkbox"
-                    name="is_recurrent"
-                    checked={formDataExpenses.is_recurrent}
-                    className="text-black my-auto size-4 sm:size-3"
-                    onChange={(e) =>
-                      setFormDataExpenses((prev) => ({
-                        ...prev,
-                        is_recurrent: e.target.checked,
-                      }))
-                    }
-                  />
-                </label>
-              </div>
+              <InputComponent
+                label="Despesa recorrente?"
+                className="flex whitespace-nowrap h-10 gap-2 items-center"
+                type="checkbox"
+                name="is_recurrent"
+                checked={formDataExpenses.is_recurrent}
+                onChange={(e) =>
+                  setFormDataExpenses((expense) => ({
+                    ...expense,
+                    is_recurrent: e.target.checked,
+                  }))
+                }
+              />
             </div>
             {formDataExpenses.category_id === "outros" ? (
               <Button variant="primary" type="submit" className="w-full">

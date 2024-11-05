@@ -22,16 +22,20 @@ export default function Login() {
     >
       <InputComponent
         label="Digite o seu e-mail"
+        name="email"
         type="email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
+        required
       />
       <InputComponent
         label="Digite a sua senha"
+        name="password"
         type="password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
         placeholder="************"
+        required
       />
       <Button variant="primary" type="submit">
         Acessar

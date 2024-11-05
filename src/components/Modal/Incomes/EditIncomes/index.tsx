@@ -6,6 +6,7 @@ import DeleteIncomesModal from "../DeleteIncomes";
 import Income from "../../../../interfaces/income";
 import Button from "../../../Commons/Button";
 import { useEffect, useRef } from "react";
+import InputComponent from "../../../Commons/InputComponent";
 
 export default function EdiIncomesModal({ onClose }: { onClose: () => void }) {
   const {
@@ -85,8 +86,8 @@ export default function EdiIncomesModal({ onClose }: { onClose: () => void }) {
       description="Edite e exclua as suas receitas"
       className={
         isEditingIncome && !isDeleteIncome
-          ? "w-[1000px] sm:w-9/10"
-          : "w-[400px]"
+          ? "w-[1000px] sm:w-9/10 max-h-[80vh] overflow-y-auto"
+          : "w-[400px] max-h-[80vh] overflow-y-auto"
       }
     >
       <div className="mt-4" ref={modalRef}>
@@ -190,13 +191,13 @@ export default function EdiIncomesModal({ onClose }: { onClose: () => void }) {
                   >
                     Valor:
                   </label>
-                  <input
+                  <InputComponent
+                    label="Valor"
                     type="number"
                     name="amount"
                     value={formDataIncome.amount || ""}
                     onChange={handleChangeIncome}
                     required
-                    className="mt-1 block w-full border rounded-md p-2 text-primary-gray-900"
                     placeholder="Insira o valor"
                   />
                 </div>
@@ -218,39 +219,28 @@ export default function EdiIncomesModal({ onClose }: { onClose: () => void }) {
                   />
                 </div>
 
-                <div className="mb-4">
-                  <label
-                    htmlFor="receipt_date"
-                    className="block text-normal font-semibold text-primary-gray-900"
-                  >
-                    Data de Recebimento:
-                    <input
-                      type="date"
-                      name="receipt_date"
-                      value={formDataIncome.receipt_date || ""}
-                      onChange={handleChangeIncome}
-                      required
-                      className="mt-1 block w-full border rounded p-2 text-primary-gray-900"
-                    />
-                  </label>
-                </div>
-                <div className="mb-4">
-                  <label className="flex gap-2 h-8 text-start items-center sm:justify-start whitespace-nowrap">
-                    Receita Recorrente?
-                    <input
-                      type="checkbox"
-                      name="isRecurrent"
-                      className="text-black my-auto size-4 sm:size-3"
-                      checked={formDataIncome.isRecurrent}
-                      onChange={(e) =>
-                        setFormDataIncome((income) => ({
-                          ...income,
-                          isRecurrent: e.target.checked,
-                        }))
-                      }
-                    />
-                  </label>
-                </div>
+                <InputComponent
+                  label=" Data de Recebimento"
+                  type="date"
+                  name="receipt_date"
+                  value={formDataIncome.receipt_date || ""}
+                  onChange={handleChangeIncome}
+                  required
+                />
+
+                <InputComponent
+                  label=" Receita Recorrente?"
+                  className="flex whitespace-nowrap w-20 h-10 gap-2 items-center"
+                  type="checkbox"
+                  name="isRecurrent"
+                  checked={formDataIncome.isRecurrent}
+                  onChange={(e) =>
+                    setFormDataIncome((income) => ({
+                      ...income,
+                      isRecurrent: e.target.checked,
+                    }))
+                  }
+                />
                 <div className="flex  justify-between gap-4">
                   <Button variant="primary" type="submit" className="w-full">
                     Editar receita

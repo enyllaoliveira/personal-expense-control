@@ -6,6 +6,7 @@ import DeleteExpensesModal from "../DeleteExpenses";
 import { Expense } from "../../../../interfaces/expense";
 import Button from "../../../Commons/Button";
 import { useEffect, useRef } from "react";
+import InputComponent from "../../../Commons/InputComponent";
 
 export default function EditCrediCardExpensesModal({
   onClose,
@@ -99,8 +100,8 @@ export default function EditCrediCardExpensesModal({
       description="Edite e exclua as suas despesas"
       className={
         isEditingExpense && !isDeleteExpense
-          ? "w-[1000px] sm:w-9/10"
-          : "w-[400px]"
+          ? "w-[1000px] sm:w-9/10 max-h-[80vh] overflow-y-auto"
+          : "w-[400px] max-h-[80vh] overflow-y-auto"
       }
     >
       <div className="mt-4" ref={modalRef}>
@@ -206,23 +207,15 @@ export default function EditCrediCardExpensesModal({
                 id="expense-form"
                 onSubmit={handleEditExpense}
               >
-                <div className="mb-4 text-primary-gray-900">
-                  <label
-                    htmlFor="amount"
-                    className="block text-normal font-semibold text-primary-gray-900"
-                  >
-                    Valor:
-                  </label>
-                  <input
-                    type="number"
-                    name="amount"
-                    value={formDataExpenses.amount}
-                    onChange={handleChangeExpenses}
-                    required
-                    className="mt-1 block w-full border rounded-md p-2 text-primary-gray-900"
-                    placeholder="Insira o valor"
-                  />
-                </div>
+                <InputComponent
+                  label="Valor"
+                  type="number"
+                  name="amount"
+                  value={formDataExpenses.amount}
+                  onChange={handleChangeExpenses}
+                  required
+                  placeholder="Insira o valor"
+                />
                 <div className="mb-4">
                   <label
                     htmlFor="description"
@@ -239,22 +232,14 @@ export default function EditCrediCardExpensesModal({
                     placeholder="Descrição da despesa"
                   />
                 </div>
-                <div className="mb-4">
-                  <label
-                    htmlFor="receipt_date"
-                    className="block text-normal font-semibold text-primary-gray-900"
-                  >
-                    Data de pagamento:
-                  </label>
-                  <input
-                    type="date"
-                    name="payment_date"
-                    value={formDataExpenses.payment_date}
-                    onChange={handleChangeExpenses}
-                    required
-                    className="mt-1 block w-full border rounded-md p-2 text-primary-gray-900"
-                  />
-                </div>
+                <InputComponent
+                  label="Data de pagamento"
+                  type="date"
+                  name="payment_date"
+                  value={formDataExpenses.payment_date}
+                  onChange={handleChangeExpenses}
+                  required
+                />
                 <p className="block text-normal font-semibold text-primary-gray-900">
                   {" "}
                   Selecione a categoria{" "}
@@ -275,55 +260,43 @@ export default function EditCrediCardExpensesModal({
                       </option>
                     ))}
                 </select>
-                <div className="flex sm:flex-col justify-between mx-auto">
+                <div className="flex sm:flex-col justify-between gap-12">
                   <div className="flex gap-4 sm:gap-1 mb-4 h-8 sm:h-6">
-                    <label className="flex text-start justify-center items-center whitespace-nowrap">
-                      Número de Parcelas:
-                    </label>
-                    <input
+                    <InputComponent
+                      label="Número de Parcelas"
+                      className="flex whitespace-nowrap h-10 gap-2 items-center"
                       type="number"
                       name="installment_count"
                       value={formDataExpenses.installment_count}
                       min={1}
                       onChange={handleChangeExpenses}
                       required
-                      className="text-black rounded-md w-16 sm:w-12 pl-2"
                     />
                   </div>
 
-                  <div className="mb-4">
-                    <label className="flex gap-2 h-8 text-start justify-center items-center sm:justify-start whitespace-nowrap">
-                      Despesa recorrente?
-                      <input
-                        type="checkbox"
-                        name="is_recurrent"
-                        checked={formDataExpenses.is_recurrent}
-                        className="text-black my-auto size-4 sm:size-3"
-                        onChange={(e) =>
-                          setFormDataExpenses((prev) => ({
-                            ...prev,
-                            is_recurrent: e.target.checked,
-                          }))
-                        }
-                      />
-                    </label>
-                  </div>
+                  <InputComponent
+                    label="Despesa recorrente?"
+                    className="flex whitespace-nowrap h-10 gap-2 items-center"
+                    type="checkbox"
+                    name="is_recurrent"
+                    checked={formDataExpenses.is_recurrent}
+                    onChange={(e) =>
+                      setFormDataExpenses((prev) => ({
+                        ...prev,
+                        is_recurrent: e.target.checked,
+                      }))
+                    }
+                  />
                 </div>
                 {formDataExpenses.category_id === "18" && (
-                  <div className="mb-4">
-                    <label
-                      htmlFor="newCategorie"
-                      className="block text-normal font-semibold text-primary-gray-900"
-                    >
-                      Nova Categoria:
-                    </label>
-                    <input
+                  <>
+                    <InputComponent
+                      label="Nova Categoria"
                       type="text"
                       name="newCategorie"
                       value={formDataExpenses.newCategorie}
                       onChange={handleChangeExpenses}
                       required
-                      className="mt-1 block w-full border p-2 text-primary-900 rounded-md"
                       placeholder="Digite o nome da nova categoria"
                     />
                     <div className="flex justify-between mx-auto">
@@ -335,7 +308,7 @@ export default function EditCrediCardExpensesModal({
                         Criar nova categoria e atualizar despesa
                       </Button>
                     </div>
-                  </div>
+                  </>
                 )}
                 <div className="flex justify-between gap-4 h-12">
                   {formDataExpenses.category_id !== "18" && (

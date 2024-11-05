@@ -19,7 +19,7 @@ export default function DeleteExpensesModal({
     : "A despesa será excluída de todos os dashboards e não poderá ser utilizada.";
   return (
     <Modal
-      className="w-[400px] sm:w-9/10 "
+      className="w-[400px] sm:w-9/10 max-h-[80vh] overflow-y-auto"
       isOpen={isOpen}
       onClose={onClose}
       subtitle="A despesa será excluída "

@@ -19,7 +19,7 @@ export default function DeleteIncomesModal({
     : "A receita será excluída de todos os dashboards e não poderá ser utilizada.";
   return (
     <Modal
-      className="w-[400px] sm:w-9/10 text-primary-gray-900"
+      className="w-[400px] sm:w-9/10 text-primary-gray-900 max-h-[80vh] overflow-y-auto"
       isOpen={isOpen}
       onClose={onClose}
       subtitle="A receita será excluída."

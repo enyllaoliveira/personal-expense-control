@@ -26,10 +26,10 @@ export default function RegisterAndLoginForm({
       </div>
       <form
         onSubmit={onSubmit}
-        className="w-full max-w-xl flex flex-col px-2 gap-4 font-semibold"
+        className="w-full max-w-xl flex flex-col px-2 font-semibold"
       >
         {children}
-        <p>
+        <p className="flex gap-1 justify-center mt-2">
           {footerText}
           <a href={footerHref} className="underline">
             {footerLink}

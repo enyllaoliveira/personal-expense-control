@@ -6,6 +6,7 @@ import DoughnutChartComponent from "../Graphics/PierChart";
 import EditCrediCardExpensesModal from "../Modal/Expenses/EditCreditCardExpenses";
 import { Transaction } from "../../interfaces/transaction";
 import { toast } from "react-toastify";
+import InputComponent from "../Commons/InputComponent";
 // import ChartComponent from "../Graphics/LineChart";
 
 const CreditForm = () => {
@@ -100,58 +101,34 @@ const CreditForm = () => {
             className="text-start mb-6"
             id="expense-credit-card-form"
           >
-            <div className="mb-4 text-white">
-              <label
-                htmlFor="amount"
-                className="block text-normal font-semibold text-primary-gray-900"
-              >
-                Valor:
-              </label>
-              <input
-                type="number"
-                name="amount"
-                value={formDataExpenses.amount}
-                onChange={handleChangeExpenses}
-                required
-                className="mt-1 block w-full border rounded-md p-2 text-black"
-                placeholder="Insira o valor"
-              />
-            </div>
+            <InputComponent
+              label="Valor"
+              type="number"
+              name="amount"
+              value={formDataExpenses.amount}
+              onChange={handleChangeExpenses}
+              required
+              placeholder="Insira o valor"
+            />
 
-            <div className="mb-4 text-white">
-              <label
-                htmlFor="description"
-                className="block text-normal font-semibold text-primary-gray-900"
-              >
-                Descrição:
-              </label>
-              <input
-                type="text"
-                name="description"
-                value={formDataExpenses.description}
-                onChange={handleChangeExpenses}
-                required
-                className="mt-1 block w-full border rounded-md p-2 text-black"
-                placeholder="Descrição da despesa"
-              />
-            </div>
+            <InputComponent
+              label="Descrição"
+              type="text"
+              name="description"
+              value={formDataExpenses.description}
+              onChange={handleChangeExpenses}
+              required
+              placeholder="Descrição da despesa"
+            />
 
-            <div className="mb-4">
-              <label
-                htmlFor="payment_date"
-                className="block text-normal font-semibold text-primary-gray-900"
-              >
-                Data de Pagamento:
-              </label>
-              <input
-                type="date"
-                name="payment_date"
-                value={formDataExpenses.payment_date}
-                onChange={handleChangeExpenses}
-                required
-                className="mt-1 block w-full border rounded-md p-2 text-black"
-              />
-            </div>
+            <InputComponent
+              label=" Data de Pagamento"
+              type="date"
+              name="payment_date"
+              value={formDataExpenses.payment_date}
+              onChange={handleChangeExpenses}
+              required
+            />
 
             <label>Categoria:</label>
             <select
@@ -170,39 +147,33 @@ const CreditForm = () => {
                   </option>
                 ))}
             </select>
-            <div className="flex sm:flex-col justify-between mx-auto">
+            <div className="flex sm:flex-col justify-between gap-12">
               <div className="flex gap-4 sm:gap-1 mb-4 h-8 sm:h-6">
-                <label className="flex text-start justify-center items-center whitespace-nowrap">
-                  Número de Parcelas:
-                </label>
-                <input
+                <InputComponent
+                  className="flex whitespace-nowrap h-10 gap-2 items-center"
+                  label="Número de Parcelas"
                   type="number"
                   name="installment_count"
                   value={formDataExpenses.installment_count}
                   min={1}
                   onChange={handleChangeExpenses}
                   required
-                  className="text-black rounded-md w-16 sm:w-12 pl-2"
                 />
               </div>
 
-              <div className="mb-4 ">
-                <label className="flex gap-2 h-8 text-start justify-center items-center sm:justify-start whitespace-nowrap">
-                  Despesa recorrente?
-                  <input
-                    type="checkbox"
-                    name="is_recurrent"
-                    checked={formDataExpenses.is_recurrent}
-                    className="text-black my-auto size-4 sm:size-3"
-                    onChange={(e) =>
-                      setFormDataExpenses((expense) => ({
-                        ...expense,
-                        is_recurrent: e.target.checked,
-                      }))
-                    }
-                  />
-                </label>
-              </div>
+              <InputComponent
+                label="Despesa recorrente?"
+                className="flex whitespace-nowrap h-10 gap-2 items-center"
+                type="checkbox"
+                name="is_recurrent"
+                checked={formDataExpenses.is_recurrent}
+                onChange={(e) =>
+                  setFormDataExpenses((expense) => ({
+                    ...expense,
+                    is_recurrent: e.target.checked,
+                  }))
+                }
+              />
             </div>
 
             <Button variant="primary" type="submit" className="w-full">

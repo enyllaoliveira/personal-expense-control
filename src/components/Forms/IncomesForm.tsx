@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import Button from "../Commons/Button";
 import EditIncomeModal from "../Modal/Incomes/EditIncomes/index";
 import { Transaction } from "../../interfaces/transaction";
+import InputComponent from "../Commons/InputComponent";
 // import ChartComponent from "../Graphics/LineChart";
 
 export default function IncomeForm() {
@@ -73,23 +74,15 @@ export default function IncomeForm() {
             className="text-start mb-6"
             onSubmit={handleSubmit}
           >
-            <div className="mb-4">
-              <label
-                htmlFor="value"
-                className="block text-normal font-semibold"
-              >
-                Valor:
-              </label>
-              <input
-                type="number"
-                name="amount"
-                value={formDataIncome.amount}
-                onChange={handleChangeIncome}
-                required
-                className="mt-1 block w-full border rounded-md p-2 text-black"
-                placeholder="Insira o valor"
-              />
-            </div>
+            <InputComponent
+              label=" Valor"
+              type="number"
+              name="amount"
+              value={formDataIncome.amount}
+              onChange={handleChangeIncome}
+              required
+              placeholder="Insira o valor"
+            />
 
             <div className="mb-4">
               <label
@@ -108,39 +101,28 @@ export default function IncomeForm() {
               />
             </div>
 
-            <div className="mb-4">
-              <label
-                htmlFor="receipt_date"
-                className="block text-normal font-semibold"
-              >
-                Data de Recebimento:
-                <input
-                  type="date"
-                  name="receipt_date"
-                  value={formDataIncome.receipt_date || ""}
-                  onChange={handleChangeIncome}
-                  required
-                  className="mt-1 block w-full border rounded p-2 text-black"
-                />
-              </label>
-            </div>
-            <div className="mb-4">
-              <label className="flex gap-2 h-8 text-start items-center sm:justify-start whitespace-nowrap">
-                Receita Recorrente?
-                <input
-                  type="checkbox"
-                  name="isRecurrent"
-                  className="text-black my-auto size-4 sm:size-3"
-                  checked={formDataIncome.isRecurrent}
-                  onChange={(e) =>
-                    setFormDataIncome((income) => ({
-                      ...income,
-                      isRecurrent: e.target.checked,
-                    }))
-                  }
-                />
-              </label>
-            </div>
+            <InputComponent
+              label="Data de Recebimento"
+              type="date"
+              name="receipt_date"
+              value={formDataIncome.receipt_date || ""}
+              onChange={handleChangeIncome}
+              required
+            />
+
+            <InputComponent
+              label=" Receita Recorrente?"
+              className="flex whitespace-nowrap w-20 h-10 gap-2 items-center"
+              type="checkbox"
+              name="isRecurrent"
+              checked={formDataIncome.isRecurrent}
+              onChange={(e) =>
+                setFormDataIncome((income) => ({
+                  ...income,
+                  isRecurrent: e.target.checked,
+                }))
+              }
+            />
             <Button variant="primary" type="submit" className="w-full">
               Adicionar Receita
             </Button>
