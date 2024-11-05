@@ -6,6 +6,7 @@ import Button from "../Commons/Button";
 import EditIncomeModal from "../Modal/Incomes/EditIncomes/index";
 import { Transaction } from "../../interfaces/transaction";
 import InputComponent from "../Commons/InputComponent";
+import TextArea from "../Commons/TextArea";
 // import ChartComponent from "../Graphics/LineChart";
 
 export default function IncomeForm() {
@@ -84,22 +85,14 @@ export default function IncomeForm() {
               placeholder="Insira o valor"
             />
 
-            <div className="mb-4">
-              <label
-                htmlFor="description"
-                className="block text-normal font-semibold"
-              >
-                Descrição:
-              </label>
-              <textarea
-                name="description"
-                value={formDataIncome.description}
-                onChange={handleChangeIncome}
-                required
-                className="mt-1 block w-full border rounded p-2 text-black"
-                placeholder="Descrição da receita"
-              />
-            </div>
+            <TextArea
+              label="Descrição"
+              name="description"
+              value={formDataIncome.description}
+              onChange={handleChangeIncome}
+              required
+              placeholder="Descrição da receita"
+            />
 
             <InputComponent
               label="Data de Recebimento"

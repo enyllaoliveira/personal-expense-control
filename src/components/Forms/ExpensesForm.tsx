@@ -7,6 +7,7 @@ import EditExpensesModal from "../Modal/Expenses/EditExpenses";
 import { Transaction } from "../../interfaces/transaction";
 import { toast } from "react-toastify";
 import InputComponent from "../Commons/InputComponent";
+import TextArea from "../Commons/TextArea";
 // import BarChart from "../Graphics/BarChart";
 
 export default function ExpensesForm() {
@@ -98,22 +99,14 @@ export default function ExpensesForm() {
               required
               placeholder="Insira o valor"
             />
-            <div className="mb-4">
-              <label
-                htmlFor="description"
-                className="block text-normal font-semibold"
-              >
-                Descrição:
-              </label>
-              <textarea
-                name="description"
-                value={formDataExpenses.description}
-                onChange={handleChangeExpenses}
-                required
-                className="mt-1 block w-full border rounded-md p-2 text-black"
-                placeholder="Descrição da despesa"
-              />
-            </div>
+            <TextArea
+              label="Descrição"
+              name="description"
+              value={formDataExpenses.description}
+              onChange={handleChangeExpenses}
+              required
+              placeholder="Descrição da despesa"
+            />
             <InputComponent
               label="Data de Pagamento"
               type="date"

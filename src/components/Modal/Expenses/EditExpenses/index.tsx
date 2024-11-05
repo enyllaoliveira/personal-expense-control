@@ -7,6 +7,7 @@ import { Expense } from "../../../../interfaces/expense";
 import Button from "../../../Commons/Button";
 import { useEffect, useRef } from "react";
 import InputComponent from "../../../Commons/InputComponent";
+import TextArea from "../../../Commons/TextArea";
 
 export default function EditExpensesModal({
   onClose,
@@ -217,22 +218,15 @@ export default function EditExpensesModal({
                   required
                   placeholder="Insira o valor"
                 />
-                <div className="mb-4">
-                  <label
-                    htmlFor="description"
-                    className="block text-normal font-semibold text-primary-gray-900"
-                  >
-                    Descrição:
-                  </label>
-                  <textarea
-                    name="description"
-                    value={formDataExpenses.description}
-                    onChange={handleChangeExpenses}
-                    required
-                    className="mt-1 block w-full border rounded-md p-2 text-primary-gray-900"
-                    placeholder="Descrição da despesa"
-                  />
-                </div>
+                <TextArea
+                  label="Descrição"
+                  name="description"
+                  value={formDataExpenses.description}
+                  onChange={handleChangeExpenses}
+                  required
+                  placeholder="Descrição da despesa"
+                />
+
                 <InputComponent
                   label="Data de pagamento"
                   type="date"

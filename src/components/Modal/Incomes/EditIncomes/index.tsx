@@ -7,6 +7,7 @@ import Income from "../../../../interfaces/income";
 import Button from "../../../Commons/Button";
 import { useEffect, useRef } from "react";
 import InputComponent from "../../../Commons/InputComponent";
+import TextArea from "../../../Commons/TextArea";
 
 export default function EdiIncomesModal({ onClose }: { onClose: () => void }) {
   const {
@@ -202,22 +203,14 @@ export default function EdiIncomesModal({ onClose }: { onClose: () => void }) {
                   />
                 </div>
 
-                <div className="mb-4">
-                  <label
-                    htmlFor="description"
-                    className="block text-normal font-semibold text-primary-gray-900"
-                  >
-                    Descrição:
-                  </label>
-                  <textarea
-                    name="description"
-                    value={formDataIncome.description || ""}
-                    onChange={handleChangeIncome}
-                    required
-                    className="mt-1 block w-full border rounded p-2 text-primary-gray-900"
-                    placeholder="Descrição da receita"
-                  />
-                </div>
+                <TextArea
+                  label="Descrição"
+                  name="description"
+                  value={formDataIncome.description || ""}
+                  onChange={handleChangeIncome}
+                  required
+                  placeholder="Descrição da receita"
+                />
 
                 <InputComponent
                   label=" Data de Recebimento"
