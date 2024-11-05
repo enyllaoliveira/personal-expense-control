@@ -8,6 +8,7 @@ import { Transaction } from "../../interfaces/transaction";
 import { toast } from "react-toastify";
 import InputComponent from "../Commons/InputComponent";
 import TextArea from "../Commons/TextArea";
+import SelectComponente from "../Commons/SelectComponenet";
 // import BarChart from "../Graphics/BarChart";
 
 export default function ExpensesForm() {
@@ -115,23 +116,18 @@ export default function ExpensesForm() {
               onChange={handleChangeExpenses}
               required
             />
-
-            <select
+            <SelectComponente
+              label="Categoria"
               name="category_id"
               value={formDataExpenses.category_id}
-              className="w-full border p-2 mb-4 text-primary-gray-800 rounded-md font-semibold"
               onChange={handleChangeExpenses}
-            >
-              <option value="">Selecione uma opção</option>
-              {categories
+              options={categories
                 .filter((category) => category.type === "despesa")
-                .map((category) => (
-                  <option key={category.id} value={category.id}>
-                    {category.name}
-                  </option>
-                ))}
-            </select>
-
+                .map((category) => ({
+                  value: category.id,
+                  label: category.name,
+                }))}
+            />
             {formDataExpenses.category_id === "18" && (
               <div className="my-2 flex flex-col gap-2 text-black">
                 <InputComponent
@@ -143,14 +139,11 @@ export default function ExpensesForm() {
                   required
                   placeholder="Digite o nome da nova categoria"
                 />
-                <Button variant="secondary" type="submit" className="w-full">
-                  Criar nova categoria e salvar despesa
-                </Button>
               </div>
             )}
             <div className="flex sm:flex-col justify-between gap-12">
               <InputComponent
-                className="flex whitespace-nowrap h-10 gap-2 items-center sm:gap-1 mb-4 sm:h-6"
+                className="flex whitespace-nowrap h-8 gap-2 items-center sm:gap-1 mb-4 sm:h-6"
                 label="Número de Parcelas"
                 type="number"
                 name="installment_count"
@@ -162,7 +155,7 @@ export default function ExpensesForm() {
 
               <InputComponent
                 label="Despesa recorrente?"
-                className="flex whitespace-nowrap h-10 gap-2 items-center"
+                className="flex whitespace-nowrap h-8 gap-2 items-center"
                 type="checkbox"
                 name="is_recurrent"
                 checked={formDataExpenses.is_recurrent}
@@ -174,13 +167,13 @@ export default function ExpensesForm() {
                 }
               />
             </div>
-            {formDataExpenses.category_id === "outros" ? (
-              <Button variant="primary" type="submit" className="w-full">
-                Adicionar Despessa{" "}
+            {formDataExpenses.category_id === "18" ? (
+              <Button variant="secondary" type="submit" className="w-full">
+                Criar nova categoria e salvar despesa
               </Button>
             ) : (
               <Button variant="primary" type="submit" className="w-full">
-                Adicionar Despesa{" "}
+                Adicionar Despesass{" "}
               </Button>
             )}
             {commonExpenses.length > 0 && (

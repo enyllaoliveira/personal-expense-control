@@ -8,6 +8,7 @@ import Button from "../../../Commons/Button";
 import { useEffect, useRef } from "react";
 import InputComponent from "../../../Commons/InputComponent";
 import TextArea from "../../../Commons/TextArea";
+import SelectComponente from "../../../Commons/SelectComponenet";
 
 export default function EditCrediCardExpensesModal({
   onClose,
@@ -235,29 +236,25 @@ export default function EditCrediCardExpensesModal({
                 />
                 <p className="block text-normal font-semibold text-primary-gray-900">
                   {" "}
-                  Selecione a categoria{" "}
                 </p>
 
-                <select
+                <SelectComponente
+                  label=" Selecione a categoria"
                   name="category_id"
                   value={formDataExpenses.category_id}
-                  className="w-full border p-2 mb-4 text-primary-gray-800 rounded-md font-semibold bg-white"
                   onChange={handleChangeExpenses}
-                >
-                  <option value="">Selecione uma opção</option>
-                  {categories
+                  options={categories
                     .filter((category) => category.type === "despesa")
-                    .map((category) => (
-                      <option key={category.id} value={category.id}>
-                        {category.name}
-                      </option>
-                    ))}
-                </select>
+                    .map((category) => ({
+                      value: category.id,
+                      label: category.name,
+                    }))}
+                />
                 <div className="flex sm:flex-col justify-between gap-12">
                   <div className="flex gap-4 sm:gap-1 mb-4 h-8 sm:h-6">
                     <InputComponent
                       label="Número de Parcelas"
-                      className="flex whitespace-nowrap h-10 gap-2 items-center"
+                      className="flex whitespace-nowrap h-8 gap-2 items-center"
                       type="number"
                       name="installment_count"
                       value={formDataExpenses.installment_count}
@@ -269,7 +266,7 @@ export default function EditCrediCardExpensesModal({
 
                   <InputComponent
                     label="Despesa recorrente?"
-                    className="flex whitespace-nowrap h-10 gap-2 items-center"
+                    className="flex whitespace-nowrap h-8 gap-2 items-center"
                     type="checkbox"
                     name="is_recurrent"
                     checked={formDataExpenses.is_recurrent}

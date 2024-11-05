@@ -105,7 +105,7 @@ export default function IncomeForm() {
 
             <InputComponent
               label=" Receita Recorrente?"
-              className="flex whitespace-nowrap w-20 h-10 gap-2 items-center"
+              className="flex whitespace-nowrap w-20 h-8 gap-2 items-center"
               type="checkbox"
               name="isRecurrent"
               checked={formDataIncome.isRecurrent}

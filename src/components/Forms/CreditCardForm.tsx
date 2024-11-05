@@ -7,6 +7,7 @@ import EditCrediCardExpensesModal from "../Modal/Expenses/EditCreditCardExpenses
 import { Transaction } from "../../interfaces/transaction";
 import { toast } from "react-toastify";
 import InputComponent from "../Commons/InputComponent";
+import SelectComponente from "../Commons/SelectComponenet";
 // import ChartComponent from "../Graphics/LineChart";
 
 const CreditForm = () => {
@@ -130,27 +131,25 @@ const CreditForm = () => {
               required
             />
 
-            <label>Categoria:</label>
-            <select
+            <SelectComponente
+              label="Categoria"
               name="category_id"
               value={formDataExpenses.category_id}
-              className="w-full border p-2 mb-4 text-primary-gray-800 rounded-md font-semibold"
               onChange={handleChangeExpenses}
               required
-            >
-              <option value="">Selecione uma opção</option>
-              {categories
+              options={categories
                 .filter((category) => category.type === "cartao")
-                .map((category) => (
-                  <option key={category.id} value={category.id}>
-                    {category.name}
-                  </option>
-                ))}
-            </select>
+                .map((category) => ({
+                  value: category.id,
+                  label: category.name,
+                }))}
+              placeholder="Selecione uma opção"
+            />
+
             <div className="flex sm:flex-col justify-between gap-12">
               <div className="flex gap-4 sm:gap-1 mb-4 h-8 sm:h-6">
                 <InputComponent
-                  className="flex whitespace-nowrap h-10 gap-2 items-center"
+                  className="flex whitespace-nowrap h-8 gap-2 items-center"
                   label="Número de Parcelas"
                   type="number"
                   name="installment_count"
@@ -163,7 +162,7 @@ const CreditForm = () => {
 
               <InputComponent
                 label="Despesa recorrente?"
-                className="flex whitespace-nowrap h-10 gap-2 items-center"
+                className="flex whitespace-nowrap h-8 gap-2 items-center"
                 type="checkbox"
                 name="is_recurrent"
                 checked={formDataExpenses.is_recurrent}

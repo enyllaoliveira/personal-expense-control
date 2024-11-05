@@ -6,6 +6,7 @@ import { Expense } from "../../interfaces/expense";
 import { TransactionFilter } from "../../interfaces/transactionFilterYear";
 import { toast } from "react-toastify";
 import InputComponent from "../Commons/InputComponent";
+import SelectComponente from "../Commons/SelectComponenet";
 
 export default function Dashboard() {
   const api = new useApi();
@@ -84,20 +85,16 @@ export default function Dashboard() {
 
   return (
     <div>
-      <label>
-        Mês:
-        <select
-          value={isSelectedMonth}
-          onChange={(e) => setIsSelectedMonth(Number(e.target.value))}
-        >
-          <option value="">Selecione o mês</option>
-          {months.map((month) => (
-            <option key={month.value} value={month.value}>
-              {month.label}
-            </option>
-          ))}
-        </select>
-      </label>
+      <SelectComponente
+        name="month"
+        label="Mês"
+        value={isSelectedMonth}
+        onChange={(e) => setIsSelectedMonth(Number(e.target.value))}
+        options={months.map((month) => ({
+          value: month.value,
+          label: month.label,
+        }))}
+      />
 
       <InputComponent
         label="Selecione o ano"
