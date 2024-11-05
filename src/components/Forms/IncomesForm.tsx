@@ -73,10 +73,10 @@ export default function IncomeForm() {
             className="text-start mb-6"
             onSubmit={handleSubmit}
           >
-            <div className="mb-4 text-primary-gray-600">
+            <div className="mb-4">
               <label
                 htmlFor="value"
-                className="block text-normal font-semibold text-primary-gray-600"
+                className="block text-normal font-semibold"
               >
                 Valor:
               </label>
@@ -94,7 +94,7 @@ export default function IncomeForm() {
             <div className="mb-4">
               <label
                 htmlFor="description"
-                className="block text-normal font-semibold text-primary-gray-600"
+                className="block text-normal font-semibold"
               >
                 Descrição:
               </label>
@@ -111,7 +111,7 @@ export default function IncomeForm() {
             <div className="mb-4">
               <label
                 htmlFor="receipt_date"
-                className="block text-normal font-semibold text-primary-gray-600"
+                className="block text-normal font-semibold"
               >
                 Data de Recebimento:
                 <input

@@ -27,7 +27,7 @@ export default function MeuPainel() {
   const logout = userContext?.logout;
 
   return (
-    <main className="w-full  text-white font-semibold sm:font-extralight">
+    <main className="w-full  text-primary-gray-900 font-semibold sm:font-extralight">
       <div className="border-b flex justify-between mt-16 sm:mt-4 ">
         <nav className="flex gap-24 sm:gap-1">
           <button

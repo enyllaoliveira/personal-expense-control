@@ -58,30 +58,31 @@ export default function YearDashboard() {
   }, [isSelectedYear]);
 
   return (
-    <div className="px-4 flex flex-col gap-12 my-12">
-      <label className="flex gap-4 text-center justify-center h-8 items-center">
-        Selecione o ano:{" "}
-        <input
-          type="number"
-          value={isSelectedYear}
-          onChange={(e) => setIsSelectedYear(parseInt(e.target.value))}
-          min="2000"
-          max={new Date().getFullYear()}
-          className="text-black w-20 px-1 h-8 rounded "
-        />
-      </label>
-      <div className="my-auto flex items-center justify-center h-screen mt-0">
-        {dadosGrafico.length > 0 ? (
-          <BarChart
-            transactions={dadosGrafico}
-            title="Gráfico Anual de Receitas e Despesas"
-            textColor="#ffffff"
-            titleColor="#ffffff"
+    <div className="px-4 flex flex-col gap-4 my-12">
+      <div className="bg-slate-200 max-w-[500px] mx-auto px-8 py-2 rounded-2xl">
+        <label className="flex gap-4 text-center justify-center h-8 items-center">
+          Selecione o ano:{" "}
+          <input
+            type="number"
+            value={isSelectedYear}
+            onChange={(e) => setIsSelectedYear(parseInt(e.target.value))}
+            min="2000"
+            max={new Date().getFullYear()}
+            className="text-black w-20 px-2 h-8 border border-slate-400 bg-slate-200 rounded-lg"
           />
-        ) : (
-          <p>Sem dados disponíveis para o gráfico</p>
-        )}
+        </label>
       </div>
+
+      {dadosGrafico.length > 0 ? (
+        <BarChart
+          transactions={dadosGrafico}
+          title="Gráfico anual de receitas e despesas"
+          textColor="#201F1B"
+          titleColor="#201F1B"
+        />
+      ) : (
+        <p>Sem dados disponíveis para o gráfico</p>
+      )}
     </div>
   );
 }

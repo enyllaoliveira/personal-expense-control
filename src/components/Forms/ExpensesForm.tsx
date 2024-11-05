@@ -88,10 +88,10 @@ export default function ExpensesForm() {
         <div className="w-1/3 ml-auto sm:w-full ">
           <h2 className="text-xl font-bold mb-4">Adicionar Despesa</h2>
           <form className="text-start mb-6" onSubmit={handleSubmit}>
-            <div className="mb-4 text-white">
+            <div className="mb-4">
               <label
                 htmlFor="amount"
-                className="block text-normal font-semibold text-primary-gray-600"
+                className="block text-normal font-semibold"
               >
                 Valor:
               </label>
@@ -108,7 +108,7 @@ export default function ExpensesForm() {
             <div className="mb-4">
               <label
                 htmlFor="description"
-                className="block text-normal font-semibold text-primary-gray-600"
+                className="block text-normal font-semibold"
               >
                 Descrição:
               </label>
@@ -124,7 +124,7 @@ export default function ExpensesForm() {
             <div className="mb-4">
               <label
                 htmlFor="receipt_date"
-                className="block text-normal font-semibold text-primary-gray-600"
+                className="block text-normal font-semibold"
               >
                 Data de Pagamento:
               </label>
@@ -158,7 +158,7 @@ export default function ExpensesForm() {
               <div className="my-2 flex flex-col gap-2">
                 <label
                   htmlFor="newCategorie"
-                  className="block text-normal font-semibold text-primary-gray-600"
+                  className="block text-normal font-semibold"
                 >
                   Nova Categoria:
                 </label>

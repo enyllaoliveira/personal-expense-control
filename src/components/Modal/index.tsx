@@ -11,32 +11,20 @@ export default function Modal({
   Icon = ({ className }: { className: string }) => (
     <svg
       className={className}
-      width="24"
-      height="25"
-      viewBox="0 0 24 25"
-      fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      width="32"
+      height="32"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1"
+      stroke-linecap="round"
+      stroke-linejoin="round"
     >
-      {status === "suport" ? (
-        <path
-          d="M9.13626 9.13628L4.92893 4.92896M4.92893 19.0711L9.16797 14.8321M14.8611 14.8638L19.0684 19.0711M19.0684 4.92896L14.8287 9.16862M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12ZM16 12C16 14.2091 14.2091 16 12 16C9.79086 16 8 14.2091 8 12C8 9.79086 9.79086 8 12 8C14.2091 8 16 9.79086 16 12Z"
-          stroke="#5E9ECF"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      ) : (
-        <path
-          d="M8 8.5H8.01M4.56274 3.43726L2.93726 5.06274C2.59136 5.40864 2.4184 5.5816 2.29472 5.78343C2.18506 5.96237 2.10425 6.15746 2.05526 6.36154C2 6.59171 2 6.8363 2 7.32548L2 10.1745C2 10.6637 2 10.9083 2.05526 11.1385C2.10425 11.3425 2.18506 11.5376 2.29472 11.7166C2.4184 11.9184 2.59135 12.0914 2.93726 12.4373L10.6059 20.1059C11.7939 21.2939 12.388 21.888 13.0729 22.1105C13.6755 22.3063 14.3245 22.3063 14.927 22.1105C15.612 21.888 16.2061 21.2939 17.3941 20.1059L19.6059 17.8941C20.7939 16.7061 21.388 16.112 21.6105 15.427C21.8063 14.8245 21.8063 14.1755 21.6105 13.5729C21.388 12.888 20.7939 12.2939 19.6059 11.1059L11.9373 3.43726C11.5914 3.09136 11.4184 2.9184 11.2166 2.79472C11.0376 2.68506 10.8425 2.60425 10.6385 2.55526C10.4083 2.5 10.1637 2.5 9.67452 2.5L6.82548 2.5C6.3363 2.5 6.09171 2.5 5.86154 2.55526C5.65746 2.60425 5.46237 2.68506 5.28343 2.79472C5.0816 2.9184 4.90865 3.09135 4.56274 3.43726ZM8.5 8.5C8.5 8.77614 8.27614 9 8 9C7.72386 9 7.5 8.77614 7.5 8.5C7.5 8.22386 7.72386 8 8 8C8.27614 8 8.5 8.22386 8.5 8.5Z"
-          className={clsx({
-            "stroke-gray-700": status !== "warning",
-            "stroke-black": status === "warning",
-          })}
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      )}
+      <rect x="3" y="10" width="4" height="11" />
+      <rect x="10" y="6" width="4" height="15" />
+      <rect x="17" y="3" width="4" height="18" />
+      <path d="M22 6L15 13l-4-4-5 5" />
     </svg>
   ),
   status = "normal",
@@ -122,9 +110,7 @@ export default function Modal({
                     [colors[status].secondary]: status !== "normal",
                   })}
                 />
-                <div
-                  className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 rounded-circular ${colors[status].primary}`}
-                />
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 rounded-circular" />
                 <Icon
                   className={clsx(
                     "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20",
@@ -137,24 +123,23 @@ export default function Modal({
             )}
 
             {status === "warning" && (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="32"
-                height="32"
-                viewBox="0 0 24 24"
-                className="rounded"
-              >
-                <rect width="24" height="24" fill="#ffffff" rx="4" />
-
-                <path
+              <div className="absolute p-2 border rounded-xl">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 20 20"
                   fill="none"
-                  stroke="#111827"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M9 3.75h6M4.5 6.75h15M18.75 6.75l-.75 12.75a2.25 2.25 0 01-2.25 2.25H8.25a2.25 2.25 0 01-2.25-2.25l-.75-12.75m10.5 0V5.25A2.25 2.25 0 0012 3H9a2.25 2.25 0 00-2.25 2.25v1.5"
-                />
-              </svg>
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M13.3333 4.99984V4.33317C13.3333 3.39975 13.3333 2.93304 13.1517 2.57652C12.9919 2.26292 12.7369 2.00795 12.4233 1.84816C12.0668 1.6665 11.6001 1.6665 10.6667 1.6665H9.33333C8.39991 1.6665 7.9332 1.6665 7.57668 1.84816C7.26308 2.00795 7.00811 2.26292 6.84832 2.57652C6.66667 2.93304 6.66667 3.39975 6.66667 4.33317V4.99984M8.33333 9.58317V13.7498M11.6667 9.58317V13.7498M2.5 4.99984H17.5M15.8333 4.99984V14.3332C15.8333 15.7333 15.8333 16.4334 15.5608 16.9681C15.3212 17.4386 14.9387 17.821 14.4683 18.0607C13.9335 18.3332 13.2335 18.3332 11.8333 18.3332H8.16667C6.76654 18.3332 6.06647 18.3332 5.53169 18.0607C5.06129 17.821 4.67883 17.4386 4.43915 16.9681C4.16667 16.4334 4.16667 15.7333 4.16667 14.3332V4.99984"
+                    className="stroke-gray-900"
+                    strokeWidth="1.66667"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </div>
             )}
             <div className="flex flex-col gap-1 ">
               <h1 className="text-gray-900 text-lg font-semibold my-auto ">
@@ -183,7 +168,7 @@ export default function Modal({
               >
                 <path
                   d="M18 6L6 18M6 6L18 18"
-                  className="stroke-primary-700"
+                  className="stroke-black"
                   strokeWidth="2"
                   strokeLinecap="round"
                   strokeLinejoin="round"

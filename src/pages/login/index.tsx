@@ -10,14 +10,16 @@ export default function Login() {
   const { handleLogin, email, password, setEmail, setPassword } = userContext;
 
   return (
-    <div className="flex w-full h-screen items-center justify-center flex-col font-semibold gap-4 text-primary-gray-600">
+    <div className="flex w-full h-screen items-center justify-center flex-col mx-auto text-primary-gray-900 gap-4">
       <div className="gap-1 flex flex-col">
         <h1 className="text-lg font-extrabold"> Área de login</h1>
-        <h2> Bem-vindo de volta! Preencha os dados para acessar seu painel.</h2>
+        <h2 className="text-base font-medium">
+          Bem-vindo de volta! Preencha os dados para acessar seu painel
+        </h2>
       </div>
       <form
         onSubmit={handleLogin}
-        className="w-full max-w-xl flex flex-col px-2 gap-4"
+        className="w-full max-w-xl flex flex-col px-2 gap-4 font-semibold  "
       >
         <label className="flex flex-col items-start gap-1">
           {" "}

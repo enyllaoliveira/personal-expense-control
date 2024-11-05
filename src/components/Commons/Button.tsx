@@ -17,9 +17,10 @@ export default function Button({
 
         props?.className,
         {
-          "bg-primary-orange-100 border-none text-white border-0 hover:bg-primary-700 focus:outline focus:outline-4 focus:outline-gray-100 items-center justify-center ":
+          "bg-slate-400  border-none text-black border-0 hover:bg-primary-700 focus:outline focus:outline-4 focus:outline-gray-100 items-center justify-center hover:bg-slate-500":
             variant === "primary",
-          "bg-primary-gray-600 border hover:bg-primary-50 text-black focus:outline focus:outline-4 focus:outline-gray-100 items-center justify-center hover:bg-slate-200":
+
+          "bg-slate-200 border hover:bg-primary-50 text-black focus:outline focus:outline-4 focus:outline-gray-100 items-center justify-center hover:bg-slate-300":
             variant === "secondary",
           "": variant === "link",
           "bg-white text-gray-700 border border-gray-300 focus:outline focus:outline-4 focus:outline-gray-100 items-center justify-center ":

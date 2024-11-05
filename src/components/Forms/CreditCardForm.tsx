@@ -103,7 +103,7 @@ const CreditForm = () => {
             <div className="mb-4 text-white">
               <label
                 htmlFor="amount"
-                className="block text-normal font-semibold text-primary-gray-600"
+                className="block text-normal font-semibold text-primary-gray-900"
               >
                 Valor:
               </label>
@@ -121,7 +121,7 @@ const CreditForm = () => {
             <div className="mb-4 text-white">
               <label
                 htmlFor="description"
-                className="block text-normal font-semibold text-primary-gray-600"
+                className="block text-normal font-semibold text-primary-gray-900"
               >
                 Descrição:
               </label>
@@ -139,7 +139,7 @@ const CreditForm = () => {
             <div className="mb-4">
               <label
                 htmlFor="payment_date"
-                className="block text-normal font-semibold text-primary-gray-600"
+                className="block text-normal font-semibold text-primary-gray-900"
               >
                 Data de Pagamento:
               </label>

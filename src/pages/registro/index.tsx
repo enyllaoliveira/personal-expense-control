@@ -18,10 +18,13 @@ export default function Registro() {
   } = userContext;
 
   return (
-    <div className="flex w-full h-screen items-center justify-center flex-col mx-auto text-primary-gray-600 gap-4">
+    <div className="flex w-full h-screen items-center justify-center flex-col mx-auto text-primary-gray-900 gap-4">
       <div className="gap-1 flex flex-col">
         <h1 className="text-lg font-extrabold"> Área de registro</h1>
-        <h2> Digite os dados abaixo para se cadastrar</h2>
+        <h2 className="text-base font-medium">
+          {" "}
+          Digite os dados abaixo para se cadastrar
+        </h2>
       </div>
 
       <form
