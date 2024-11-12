@@ -45,6 +45,7 @@ Inicie o servidor
 
 ```bash
   npm start
+```
 
 ## Aprendizados
 
