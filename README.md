@@ -46,14 +46,14 @@ Inicie o servidor
 
 ## Aprendizados
 
-Gosto da área financeira e isso com certeza ajudou a tornar este projeto um desafio empolgante. Ser/dar suporte aos usuários que não sabem para aonde vão seus recursos financeiros é gratificante. Todavia, ele foi cheio de aprendizados e desafios técnicos.
+Gosto da área financeira e isso com certeza ajudou a tornar este projeto um desafio empolgante. Ser/dar suporte aos usuários que não sabem para aonde vão seus recursos financeiros é gratificante. O projeto foi feito com foco na experiência de usuário, com uma interface amigável e componentes reutilizáveis para o registro e visualização de despesas e receitas. Todavia, ele foi cheio de aprendizados e desafios técnicos. 
 
-Um exemplo foi o reforço do uso do Context API para gerenciamento de estados globais. Outro detalhe foi o processo de autenticação, cuja utilização de tokens JWT foi fundamental para assegurar o acesso e manipulação dos dados financeiros com segurança.
+Um dos destaques foi a utilização de Chart.js para a criação de gráficos interativos, que permitiram visualizar as despesas e receitas de forma clara e intuitiva. Os gráficos foram configurados para exibir dados como gastos mensais, categorias mais utilizadas e comparativos entre receitas e despesas. 
 
-Trabalhar com PostgreSQL trouxe maior compreensão a respeito da modelagem relacional e manipulação de dados complexos, além da prática em criar e configurar tabelas para usuários, transações (de receitas e de despesas) e categorias de despesas.
+Outro exemplo foi o uso do Context API para gerenciamento e organização de estados globais. Apesar de já estar familiarizada com Context API, é sempre bom utilizá-lo para que o código fique mais performático. Outro detalhe foi o processo de autenticação, cuja utilização de tokens JWT foi fundamental para assegurar o acesso e manipulação dos dados financeiros com segurança.
+
 
 Por fim, a integração entre frontend e backend e seus desafios práticos.
-
 
 ## Roadmap
 
