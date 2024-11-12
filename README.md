@@ -1,13 +1,14 @@
 # Personal expenses control
 
-Sistema de controle de despesas e receitas pessoais, com objetivo de ajudar pessoas que têm dificuldade em controlar suas finanças.
+Este repositório contém a implementação do front-end para o aplicativo de controle de despesas pessoais, com objetivo de ajudar pessoas que têm dificuldade em controlar suas finanças.
+
 
 ## Funcionalidades
 
-Suas principais funcionalidades são voltadas à(aos):
+Suas principais funcionalidades são voltadas à(ao):
 
-- Cadastro, login e logout de usuário;
-- Registro de despesas, divididas em despesas comuns e despesas no cartão de crédito: adição, edição e exclusão de despesas com detalhes como valor (parcelado, recorrente ou integral), categoria e data de vencimento;
+- Cadastro, login e logout de usuário; 
+- Registro de despesas, divididas em despesas comuns e despesas no cartão de crédito: adição, edição e exclusão de despesas com detalhes como valor (parcelado, recorrente ou integral), categoria e data de vencimento; 
 - Registro de receitas: adição, edição e exclusão de receitas com detalhes como valor (recorrente ou receita comum), categoria e data de recebimento;
 - Visualização de gastos: interface para visualizar e analisar os gastos registrados, separados como gastos em cartão de crédito e gastos comuns;
 - Visualização de ganhos: iterface para visualizar e analisar os ganhos do usuário; e
@@ -15,7 +16,7 @@ Suas principais funcionalidades são voltadas à(aos):
 
 ## Stack utilizada
 
-**Front-end:** React.js e TailwindCSS;
+React.js e TailwindCSS;
 
 ## Rodando localmente
 
