@@ -17,10 +17,6 @@ Suas principais funcionalidades são voltadas à(aos):
 
 **Front-end:** React.js e TailwindCSS;
 
-**Back-end:** Node.js e Express.js; e
-
-**Banco de dados:** MongoDB.
-
 ## Rodando localmente
 
 Clone o projeto
