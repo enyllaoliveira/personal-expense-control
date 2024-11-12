@@ -16,7 +16,7 @@ Suas principais funcionalidades são voltadas à(ao):
 
 ## Stack utilizada
 
-React.js e TailwindCSS;
+React.js, Chartjs e TailwindCSS;
 
 ## Rodando localmente
 
