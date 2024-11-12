@@ -62,23 +62,17 @@ Por fim, a integração entre frontend e backend e seus desafios práticos.
 
 - criação do dashboard inicial - ok 
 - criação telas de registro e login - ok
-- criação das rotas de usuário - ok
-- conectar ao banco de dados - back
 - conectar front ao back - ok
-- autenticação do usuário - axios e usercontext para gerenciamento do estado do - usuário usando cors para conectar o front ao back + token para autenticar - ok
+- autenticação do usuário - axios e usercontext para gerenciamento do estado do usuário usando cors para conectar o front ao back + token para autenticar - ok
 - persistencia de autenticação do usuário, por meio do armazenamento do token JWT no localStorage ou cookies - ok
 - context API para despesas e receitas no frontend, facilitando o gerenciamento do estado em toda a aplicação - ok
 - criar formulários e interfaces para gerenciar os dados do cartão de crédito no frontend e conectar isso às rotas do backend - ok
 - criar a interface para o usuário inserir, visualizar e gerenciar despesas e receitas. Conectar isso com as rotas do backend - ok
 - formatar para real - ok
 - trabalhar com regex para trabalhar com vírgula (valor financeiro) - ok
-- criar rotas para adicionar, editar, listar e deletar valores de cartão de crédito - ok
-- criar rotas para adicionar, listar, editar e deletar despesas e receitas - ok
-- Filtros e visualizações: Criar filtros para que o usuário visualize despesas e receitas por categoria, período, etc - ok
-- Segurança JWT: Garantir que todas as rotas protegidas do backend exijam autenticação usando JWT - ok
 
 backlog:
 - Deploy: Preparar o frontend e o backend para deploy (ex: frontend no Vercel/Netlify e backend no Heroku ou servidor VPS).
 - Testes: Realizar testes manuais ou automatizados para garantir que todas as rotas, tanto do frontend quanto do backend, estejam funcionando corretamente.
-- melhorar filtragem
-- criar tabelas de alerta de limite ultrapassado
+- melhorar e inserir mais filtragem no front
+- inserir tabelas de expectativas/realidade de orçamento com alerta de limite ultrapassado
