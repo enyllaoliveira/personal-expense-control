@@ -97,9 +97,9 @@ const CreditForm = () => {
         </div>
 
         <FormComponente
-          className="w-1/3 ml-auto sm:w-full h-full"
+          className="w-1/3 ml-auto sm:w-full h-full mt-12"
           onSubmit={handleSubmit}
-          title="Adicionar Despesa"
+          title="Adicionar Despesas"
           id="expense-credit-card-form"
         >
           <InputComponent
@@ -146,7 +146,7 @@ const CreditForm = () => {
             placeholder="Selecione uma opção"
           />
 
-          <div className="flex sm:flex-col justify-between gap-12">
+          <div className="flex sm:flex-col justify-between gap-12 sm:gap-3">
             <div className="flex gap-4 sm:gap-1 mb-4 h-8 sm:h-6">
               <InputComponent
                 className="flex whitespace-nowrap h-8 gap-2 items-center"
@@ -162,7 +162,7 @@ const CreditForm = () => {
 
             <InputComponent
               label="Despesa recorrente?"
-              className="flex whitespace-nowrap h-8 gap-2 items-center"
+              className="flex whitespace-nowrap w-20 h-8 gap-2 items-center"
               type="checkbox"
               name="is_recurrent"
               checked={formDataExpenses.is_recurrent}

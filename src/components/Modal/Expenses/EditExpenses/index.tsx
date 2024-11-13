@@ -265,7 +265,7 @@ export default function EditExpensesModal({
 
                   <InputComponent
                     label="Despesa recorrente?"
-                    className="flex whitespace-nowrap h-8 gap-2 items-center"
+                    className="flex whitespace-nowrap w-20 h-8 gap-2 items-center"
                     type="checkbox"
                     name="is_recurrent"
                     checked={formDataExpenses.is_recurrent}
