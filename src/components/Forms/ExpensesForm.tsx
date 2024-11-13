@@ -157,7 +157,7 @@ export default function ExpensesForm() {
 
             <InputComponent
               label="Despesa recorrente?"
-              className="flex whitespace-nowrap w-auto h-8 gap-2 items-center"
+              className="flex whitespace-nowrap w-auto 2xl:w-fit h-8 gap-2 items-center"
               type="checkbox"
               name="is_recurrent"
               checked={formDataExpenses.is_recurrent}

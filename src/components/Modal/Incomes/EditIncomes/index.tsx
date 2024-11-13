@@ -92,8 +92,8 @@ export default function EdiIncomesModal({ onClose }: { onClose: () => void }) {
           : "w-[400px] max-h-[80vh] overflow-y-auto"
       }
     >
-      <div className="mt-4" ref={modalRef}>
-        <h2 className="text-xl font-bold mb-4 text-black">Suas Receitas</h2>
+      <div ref={modalRef}>
+        <h2 className="text-xl font-bold mb-4 text-black ">Suas Receitas</h2>
         <div className="flex sm:flex-col justify-between text-primary-gray-900">
           <ul className="flex flex-col gap-2 mx-auto">
             {incomes.map((income) => (
