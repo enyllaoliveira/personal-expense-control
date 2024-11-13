@@ -104,7 +104,7 @@ const BarChart = ({
       <p className="font-semibold text-center my-auto">Carregando gráfico...</p>
     );
 
-  return <Bar data={chartData} options={options} />;
+  return <Bar style={{ height: "400px" }} data={chartData} options={options} />;
 };
 
 export default BarChart;

@@ -5,8 +5,14 @@ import Income from "../../interfaces/income";
 import { Expense } from "../../interfaces/expense";
 import { TransactionFilter } from "../../interfaces/transactionFilterYear";
 import InputComponent from "../Commons/InputComponent";
+import Button from "../Commons/Button";
+import { AuthContext } from "../../context/AuthContext/AuthContext";
 
 export default function YearDashboard() {
+  const userContext = AuthContext();
+
+  const logout = userContext?.logout;
+
   const api = new useApi();
   const [isSelectedYear, setIsSelectedYear] = useState(
     new Date().getFullYear()
@@ -59,7 +65,7 @@ export default function YearDashboard() {
   }, [isSelectedYear]);
 
   return (
-    <div className="px-4 flex flex-col gap-4 my-12">
+    <div className="px-4 flex flex-col gap-4 my-12 min-h-screen">
       <div className="bg-slate-200 max-w-[500px] mx-auto px-8 py-2 rounded-2xl">
         <InputComponent
           label="Selecione o ano:"
@@ -83,6 +89,14 @@ export default function YearDashboard() {
       ) : (
         <p>Sem dados disponíveis para o gráfico</p>
       )}
+
+      <Button
+        variant="secondary"
+        className="px-4 sm:px-2 md:px-6 tablet:px-6 lg:px-8 py-2 sm:block hidden whitespace-nowrap mt-auto"
+        onClick={logout}
+      >
+        Sair do sistema
+      </Button>
     </div>
   );
 }

@@ -143,7 +143,7 @@ export default function ExpensesForm() {
               placeholder="Digite o nome da nova categoria"
             />
           )}
-          <div className="flex sm:flex-col justify-between gap-12 sm:gap-3">
+          <div className="flex sm:flex-col justify-between gap-12 sm:gap-3 2xl:gap-4">
             <InputComponent
               className="flex whitespace-nowrap h-8 gap-2 items-center sm:gap-1 mb-4 sm:h-6"
               label="Número de Parcelas"
@@ -157,7 +157,7 @@ export default function ExpensesForm() {
 
             <InputComponent
               label="Despesa recorrente?"
-              className="flex whitespace-nowrap w-20 h-8 gap-2 items-center"
+              className="flex whitespace-nowrap w-auto h-8 gap-2 items-center"
               type="checkbox"
               name="is_recurrent"
               checked={formDataExpenses.is_recurrent}
