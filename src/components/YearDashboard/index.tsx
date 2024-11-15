@@ -65,7 +65,7 @@ export default function YearDashboard() {
   }, [isSelectedYear]);
 
   return (
-    <div className="px-4 flex flex-col gap-4 my-12 min-h-screen">
+    <div className="px-4 flex flex-col gap-28 my-12">
       <div className="bg-slate-200 max-w-[500px] mx-auto px-8 py-2 rounded-2xl">
         <InputComponent
           label="Selecione o ano:"
