@@ -28,11 +28,11 @@ export default function MeuPainel() {
 
   return (
     <main className="w-full  text-primary-gray-900 font-semibold sm:font-extralight">
-      <div className="border-b flex justify-between mt-16 sm:mt-4 ">
-        <nav className="flex gap-24 sm:gap-1 md:gap-6 tablet:gap-8 lg:gap-16 ">
+      <div className="border-b flex justify-between mt-16 sm:mt-4 px-0 sm:px-1">
+        <nav className="flex gap-24 sm:gap-1 md:gap-8 tablet:gap-8 lg:gap-16 ">
           <button
             onClick={() => setActiveTab("dashboard")}
-            className={`px-12 md:px-6 tablet:px-6 lg:px-8 sm:px-2 py-2 ${
+            className={`px-12 md:px-43tablet:px-6 lg:px-8 sm:px-2 py-2 ${
               activeTab === "dashboard"
                 ? "border-b-2 border-primary-orange-100 bg-slate-200 text-black rounded-t-sm sm:font-medium font-bold px-20"
                 : ""
@@ -42,7 +42,7 @@ export default function MeuPainel() {
           </button>
           <button
             onClick={() => setActiveTab("receitas")}
-            className={`px-24 sm:px-2 md:px-6 tablet:px-6 lg:px-8 2xl:px-8 py-2 ${
+            className={`px-24 sm:px-2 md:px-3 tablet:px-6 lg:px-8 2xl:px-8 py-2 ${
               activeTab === "receitas"
                 ? "border-b-2 border-primary-orange-100 bg-slate-200 text-black rounded-t-sm sm:font-medium font-bold px-20"
                 : ""
@@ -52,7 +52,7 @@ export default function MeuPainel() {
           </button>
           <button
             onClick={() => setActiveTab("despesas")}
-            className={`px-12 sm:px-2 md:px-6 tablet:px-6 lg:px-8 py-2 ${
+            className={`px-12 sm:px-2 md:px-3 tablet:px-6 lg:px-8 py-2 ${
               activeTab === "despesas"
                 ? "border-b-2 border-primary-orange-100 bg-slate-200 text-black rounded-t-sm sm:font-medium font-bold px-20"
                 : ""
@@ -62,7 +62,7 @@ export default function MeuPainel() {
           </button>
           <button
             onClick={() => setActiveTab("cartao")}
-            className={`px-12 sm:px-2 md:px-6 tablet:px-6 lg:px-8 py-2 whitespace-nowrap sm:whitespace-normal ${
+            className={`px-12 sm:px-2 md:px-3 tablet:px-6 lg:px-8 py-2 whitespace-nowrap sm:whitespace-normal ${
               activeTab === "cartao"
                 ? "border-b-2 border-primary-orange-100 bg-slate-200 text-black rounded-t-sm sm:font-medium font-bold px-20"
                 : ""
@@ -73,7 +73,7 @@ export default function MeuPainel() {
         </nav>
         <Button
           variant="secondary"
-          className="px-4 sm:px-2 md:px-6 tablet:px-6 lg:px-8 py-2 sm:hidden mb-1 whitespace-nowrap"
+          className="px-4 sm:px-2 md:px-3 tablet:px-6 lg:px-8 py-2 sm:hidden mb-1 whitespace-nowrap"
           onClick={logout}
         >
           {" "}

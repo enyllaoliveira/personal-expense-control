@@ -79,7 +79,7 @@ export default function ExpensesForm() {
     <main className="flex flex-col gap-4 sm:flex-col px-4 my-8">
       <div className="flex sm:flex-col">
         {commonExpenses.length > 0 ? (
-          <div className="w-[700px] sm:px-4 sm:w-full max-h-[600px]">
+          <div className="w-[700px] md:w-[400px] sm:px-4 sm:w-full max-h-[600px]">
             <DoughnutChartComponent
               data={formatIncomesForChartToExpense(commonExpenses)}
             />
@@ -90,7 +90,7 @@ export default function ExpensesForm() {
           </p>
         )}
         <FormComponente
-          className="w-1/3 ml-auto sm:w-full h-full mt-12"
+          className="w-1/3 md:w-2/3 ml-auto sm:w-full h-full mt-12"
           onSubmit={handleSubmit}
           id="expense-comun-form"
           title="Adicionar Despesas"
@@ -143,7 +143,8 @@ export default function ExpensesForm() {
               placeholder="Digite o nome da nova categoria"
             />
           )}
-          <div className="flex sm:flex-col justify-between gap-12 sm:gap-3 2xl:gap-4">
+          <div className="flex md:flex-col sm:flex-col justify-between gap-12 sm:gap-3 md:gap-1 2xl:gap-4">
+            {" "}
             <InputComponent
               className="flex whitespace-nowrap h-8 gap-2 items-center sm:gap-1 mb-4 sm:h-6"
               label="Número de Parcelas"
@@ -154,7 +155,6 @@ export default function ExpensesForm() {
               onChange={handleChangeExpenses}
               required
             />
-
             <InputComponent
               label="Despesa recorrente?"
               className="flex whitespace-nowrap w-auto 2xl:w-fit h-8 gap-2 items-center"
@@ -170,11 +170,19 @@ export default function ExpensesForm() {
             />
           </div>
           {formDataExpenses.category_id === "18" ? (
-            <Button variant="secondary" type="submit" className="w-full">
+            <Button
+              variant="secondary"
+              type="submit"
+              className="w-full mt-0 md:mt-4"
+            >
               Criar nova categoria e salvar despesa
             </Button>
           ) : (
-            <Button variant="primary" type="submit" className="w-full">
+            <Button
+              variant="primary"
+              type="submit"
+              className="w-full mt-0 md:mt-4"
+            >
               Adicionar Despesass{" "}
             </Button>
           )}

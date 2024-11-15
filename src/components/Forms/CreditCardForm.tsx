@@ -84,7 +84,7 @@ const CreditForm = () => {
   return (
     <main className="flex flex-col gap-4 sm:flex-col px-4 my-8 overflow-y-visible">
       <div className="flex sm:flex-col">
-        <div className="w-[700px] sm:px-4 sm:w-full max-h-[600px]">
+        <div className="w-[700px] md:w-[400px] sm:px-4 sm:w-full max-h-[600px]">
           {expensesCard.length > 0 ? (
             <DoughnutChartComponent
               data={formatIncomesForChartToExpense(expensesCard)}
@@ -97,7 +97,7 @@ const CreditForm = () => {
         </div>
 
         <FormComponente
-          className="w-1/3 ml-auto sm:w-full h-full mt-12"
+          className="w-1/3 md:w-2/3 ml-auto sm:w-full h-full mt-12"
           onSubmit={handleSubmit}
           title="Adicionar Despesas"
           id="expense-credit-card-form"
@@ -146,7 +146,7 @@ const CreditForm = () => {
             placeholder="Selecione uma opção"
           />
 
-          <div className="flex sm:flex-col justify-between gap-12 sm:gap-3 2xl:gap-4">
+          <div className="flex md:flex-col sm:flex-col justify-between gap-12 sm:gap-3 md:gap-1 2xl:gap-4">
             <InputComponent
               className="flex whitespace-nowrap h-8 gap-2 items-center sm:gap-1 mb-4 sm:h-6"
               label="Número de Parcelas"
@@ -173,7 +173,11 @@ const CreditForm = () => {
             />
           </div>
 
-          <Button variant="primary" type="submit" className="w-full">
+          <Button
+            variant="primary"
+            type="submit"
+            className="w-full mt-0 md:mt-4"
+          >
             Adicionar Despesa do Cartão
           </Button>
           {expensesCard.length > 0 && (

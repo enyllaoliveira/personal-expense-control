@@ -60,7 +60,7 @@ export default function IncomeForm() {
     <main className="flex flex-col gap-4 sm:flex-col px-4 my-8">
       <div className="flex sm:flex-col">
         {incomes.length > 0 ? (
-          <div className="w-[700px] sm:px-4 sm:w-full max-h-[600px]">
+          <div className="w-[700px] md:w-[400px] sm:px-4 sm:w-full max-h-[600px]">
             <DoughnutChartComponent data={formatIncomesForChart(incomes)} />
           </div>
         ) : (
@@ -73,7 +73,7 @@ export default function IncomeForm() {
           title="Adicionar Receita"
           id="income-form"
           onSubmit={handleSubmit}
-          className="w-1/3 ml-auto sm:w-full h-full"
+          className="w-1/3 md:w-2/3 ml-auto sm:w-full h-full"
         >
           <InputComponent
             label=" Valor"
