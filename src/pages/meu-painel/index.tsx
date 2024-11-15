@@ -28,11 +28,11 @@ export default function MeuPainel() {
 
   return (
     <main className="w-full  text-primary-gray-900 font-semibold sm:font-extralight">
-      <div className="border-b flex justify-between mt-16 sm:mt-4 px-0 sm:px-1">
+      <div className="border-b flex justify-between mt-16 sm:mt-4">
         <nav className="flex gap-24 sm:gap-1 md:gap-8 tablet:gap-8 lg:gap-16 ">
           <button
             onClick={() => setActiveTab("dashboard")}
-            className={`px-12 md:px-43tablet:px-6 lg:px-8 sm:px-2 py-2 ${
+            className={`px-12 md:px-4 tablet:px-6 lg:px-8 sm:px-2 py-2 ${
               activeTab === "dashboard"
                 ? "border-b-2 border-primary-orange-100 bg-slate-200 text-black rounded-t-sm sm:font-medium font-bold px-20"
                 : ""

@@ -146,7 +146,7 @@ const CreditForm = () => {
             placeholder="Selecione uma opção"
           />
 
-          <div className="flex md:flex-col sm:flex-col justify-between gap-12 sm:gap-3 md:gap-1 2xl:gap-4">
+          <div className="flex md:flex-col tablet:flex-col lg:flex-col sm:flex-col justify-between gap-12 sm:gap-3 md:gap-1 2xl:gap-4 tablet:gap-1 lg:gap-1">
             <InputComponent
               className="flex whitespace-nowrap h-8 gap-2 items-center sm:gap-1 mb-4 sm:h-6"
               label="Número de Parcelas"
