@@ -24,7 +24,7 @@ export default function FormComponente({
 }: RegisterAndLoginFormProps) {
   return (
     <div
-      className={` flex-col mx-auto text-primary-gray-900 gap-4 ${className}`}
+      className={`flex-col mx-auto text-primary-gray-900 gap-4 ${className}`}
     >
       <div className="gap-1 flex flex-col ">
         <h1 className="text-lg font-extrabold">{title}</h1>
@@ -36,7 +36,7 @@ export default function FormComponente({
         id={id}
       >
         {children}
-        <p className="flex gap-1 justify-center mt-2">
+        <p className="flex gap-1 justify-center mt-2 sm:mt-3 sm:flex-col">
           {footerText}
           <a href={footerHref} className="underline">
             {footerLink}

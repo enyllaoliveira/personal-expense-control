@@ -19,6 +19,7 @@ export default function Login() {
       footerText="Ainda não tem uma conta?"
       footerLink="Clique aqui para fazer o seu cadastro"
       footerHref="/registro"
+      className="flex items-center mt-48 sm:mt-20 tablet:mt-60"
     >
       <InputComponent
         label="Digite o seu e-mail"
