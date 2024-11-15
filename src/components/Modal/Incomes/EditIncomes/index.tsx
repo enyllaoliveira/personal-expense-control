@@ -79,7 +79,21 @@ export default function EdiIncomesModal({ onClose }: { onClose: () => void }) {
 
     setIsEditingIncome(true);
   };
+  const filteredIncomes = Array.from(
+    incomes
+      .reduce((acc, income) => {
+        const key = `${income.description}-${income.userId}-${income.isRecurrent}`;
 
+        if (!acc.has(key)) {
+          acc.set(key, income);
+        } else {
+          console.log(income);
+        }
+
+        return acc;
+      }, new Map<string, Income>())
+      .values()
+  );
   return (
     <Modal
       isOpen={true}
@@ -96,7 +110,7 @@ export default function EdiIncomesModal({ onClose }: { onClose: () => void }) {
         <h2 className="text-xl font-bold mb-4 text-black ">Suas Receitas</h2>
         <div className="flex sm:flex-col justify-between text-primary-gray-900">
           <ul className="flex flex-col gap-2 mx-auto">
-            {incomes.map((income) => (
+            {filteredIncomes.map((income) => (
               <div
                 key={income.id}
                 className="border rounded-md border-primary-gray-700 px-2 py-1 text-primary-900"
@@ -116,7 +130,7 @@ export default function EdiIncomesModal({ onClose }: { onClose: () => void }) {
                     </div>
                     <div className="flex text-start">
                       <p className="w-32 sm:w-28">Recebimento:</p>{" "}
-                      {formatDate(income.created_at)}{" "}
+                      {formatDate(income.date)}{" "}
                     </div>
                   </li>
                   <div className="flex my-auto gap-3">

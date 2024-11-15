@@ -48,7 +48,11 @@ export default function InputComponent({
         required={required}
         min={type === "number" ? min : undefined}
         max={type === "number" ? max : undefined}
-        className="border rounded-md px-2 h-10 border-gray-400 w-full text-primary-gray-800"
+        className={
+          type === "checkbox"
+            ? "border rounded-md px-2 h-10 border-gray-400 w-auto text-primary-gray-800"
+            : "border rounded-md px-2 h-10 border-gray-400 w-full text-primary-gray-800"
+        }
       />
     </label>
   );

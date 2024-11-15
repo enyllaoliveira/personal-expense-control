@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 import InputComponent from "../Commons/InputComponent";
 import SelectComponente from "../Commons/SelectComponenet";
 import FormComponente from "../Commons/FormComponent";
+import TextArea from "../Commons/TextArea";
 // import ChartComponent from "../Graphics/LineChart";
 
 const CreditForm = () => {
@@ -112,9 +113,8 @@ const CreditForm = () => {
             placeholder="Insira o valor"
           />
 
-          <InputComponent
+          <TextArea
             label="Descrição"
-            type="text"
             name="description"
             value={formDataExpenses.description}
             onChange={handleChangeExpenses}

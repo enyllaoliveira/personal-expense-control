@@ -30,7 +30,7 @@ export default function TextArea({
         onChange={onChange}
         required={required}
         placeholder={placeholder}
-        className={`mt-1 mb-4 block w-full border rounded-md p-2 text-black ${className}`}
+        className={`mt-1 mb-4 block w-full border rounded-md p-2 text-black h-20 ${className}`}
       />
     </>
   );

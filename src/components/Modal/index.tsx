@@ -53,8 +53,8 @@ export default function Modal({
       secondary: "bg-gray-200",
     },
     warning: {
-      primary: "bg-orange-100",
-      secondary: "bg-orange-50",
+      primary: "bg-white",
+      secondary: "bg-white",
     },
     success: {
       primary: "bg-green-100",

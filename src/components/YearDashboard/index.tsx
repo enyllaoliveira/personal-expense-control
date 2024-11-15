@@ -23,33 +23,87 @@ export default function YearDashboard() {
     try {
       const response = await api.getYearData(isSelectedYear);
       if (response && response.incomes && response.expenses) {
-        const incomeTransactions: TransactionFilter[] = response.incomes.map(
-          (income: Income) => ({
-            id: income.id,
-            userId: income.userId,
-            amount:
-              typeof income.amount === "string"
-                ? parseFloat(income.amount)
-                : income.amount,
-            description: income.description,
-            date: income.date,
-            type: "Receita",
-          })
-        );
+        const incomeTransactions: TransactionFilter[] =
+          response.incomes.flatMap((income: Income) => {
+            const transactions = [];
+            const date = new Date(income.date || new Date());
+            const endOfYear = new Date(isSelectedYear, 11, 31);
 
-        const expenseTransactions: TransactionFilter[] = response.expenses.map(
-          (expense: Expense) => ({
-            id: expense.id,
-            userId: expense.userId,
-            amount:
-              typeof expense.amount === "string"
-                ? parseFloat(expense.amount)
-                : expense.amount,
-            description: expense.description,
-            date: expense.payment_date || "",
-            type: "Despesa",
-          })
-        );
+            if (income.isRecurrent) {
+              while (
+                date.getFullYear() === isSelectedYear &&
+                date <= endOfYear
+              ) {
+                transactions.push({
+                  id: income.id,
+                  userId: income.userId,
+                  amount:
+                    typeof income.amount === "string"
+                      ? parseFloat(income.amount)
+                      : income.amount,
+                  description: income.description,
+                  date: date.toISOString().split("T")[0],
+                  type: "Receita",
+                });
+                date.setMonth(date.getMonth() + 1);
+              }
+            } else {
+              transactions.push({
+                id: income.id,
+                userId: income.userId,
+                amount:
+                  typeof income.amount === "string"
+                    ? parseFloat(income.amount)
+                    : income.amount,
+                description: income.description,
+                date: income.date || "",
+                type: "Receita",
+              });
+            }
+
+            return transactions;
+          });
+
+        const expenseTransactions: TransactionFilter[] =
+          response.expenses.flatMap((expense: Expense) => {
+            const transactions = [];
+            const date = new Date(expense.payment_date || new Date());
+            const endOfYear = new Date(isSelectedYear, 11, 31);
+
+            if (expense.is_recurrent) {
+              while (
+                date.getFullYear() === isSelectedYear &&
+                date <= endOfYear
+              ) {
+                transactions.push({
+                  id: expense.id,
+                  userId: expense.userId,
+                  amount:
+                    typeof expense.amount === "string"
+                      ? parseFloat(expense.amount)
+                      : expense.amount,
+                  description: expense.description,
+                  date: date.toISOString().split("T")[0],
+                  type: "Despesa",
+                });
+                date.setMonth(date.getMonth() + 1);
+              }
+            } else {
+              transactions.push({
+                id: expense.id,
+                userId: expense.userId,
+                amount:
+                  typeof expense.amount === "string"
+                    ? parseFloat(expense.amount)
+                    : expense.amount,
+                description: expense.description,
+                date: expense.payment_date || "",
+                type: "Despesa",
+              });
+            }
+
+            return transactions;
+          });
 
         setDadosGrafico([...incomeTransactions, ...expenseTransactions]);
       }
