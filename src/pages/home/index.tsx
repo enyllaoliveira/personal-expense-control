@@ -12,8 +12,8 @@ import { doughnutDataToIncome } from "../../components/MockDataPierAndLineChart/
 export default function DashboardHome() {
   return (
     <RootLayout>
-      <div className="flex flex-col overflow-auto mx-auto my-12 sm:my-4">
-        <div className="flex sm:flex-col justify-between mx-auto gap-36 sm:gap-1">
+      <div className="flex flex-col overflow-hidden mx-auto">
+        <div className="flex sm:flex-col justify-between mx-auto gap-8 sm:gap-1">
           <div className="flex sm:flex-col items-center">
             <div className="w-full sm:w-full md:w-1/2">
               {" "}

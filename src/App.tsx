@@ -12,7 +12,7 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 
 function App() {
   return (
-    <div className="flex flex-col py-24 sm:py-8 items-start sm:gap-8 gap-16 w-full max-w-[1440px] mx-auto px-4 md:px-5 tablet:px-2 sm:px-2">
+    <div className="flex flex-col py-2 sm:py-8 items-start sm:gap-8 gap-16 w-full max-w-[1440px] mx-auto px-4 md:px-5 tablet:px-2 sm:px-2">
       <UserProvider>
         <DataProvider>
           <Routes>

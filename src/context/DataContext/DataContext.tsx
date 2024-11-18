@@ -634,9 +634,7 @@ export function DataProvider({ children }: DataProviderProps) {
             "rgba(75, 192, 192, 0.6)",
             "rgba(95, 202, 192, 0.6)",
             "rgba(45, 162, 172, 0.6)",
-
             "rgba(75, 192, 162, 0.6)",
-
             "rgba(55, 172, 182, 0.6)",
             "rgba(105, 212, 202, 0.6)",
           ],
@@ -644,9 +642,7 @@ export function DataProvider({ children }: DataProviderProps) {
             "rgba(75, 192, 192, 1)",
             "rgba(95, 202, 192, 1)",
             "rgba(45, 162, 172, 1)",
-
             "rgba(75, 192, 162, 1)",
-
             "rgba(55, 172, 182, 1)",
             "rgba(105, 212, 202, 1)",
           ],

@@ -49,8 +49,8 @@ export default function RevenueLineChart() {
         data: [
           1200, 1900, 3000, 500, 2000, 1800, 2200, 1500, 2500, 2100, 2300, 2400,
         ],
-        backgroundColor: "rgba(75, 192, 192, 0.2)",
-        borderColor: "rgba(65, 105, 225, 1)",
+        backgroundColor: "rgba(55, 172, 182, 0.6)",
+        borderColor: "rgba(105, 212, 202, 0.6)",
         borderWidth: 1,
       },
       {
@@ -59,9 +59,9 @@ export default function RevenueLineChart() {
         data: [
           1000, 1700, 2800, 400, 1800, 1600, 2100, 1400, 2300, 2000, 2200, 2300,
         ],
-        borderColor: "#4169E1",
+        borderColor: "rgba(75, 192, 192, 0.6)",
         backgroundColor: "rgba(135, 206, 235, 1)",
-        pointBackgroundColor: "#4169E1",
+        pointBackgroundColor: "rgba(75, 192, 192, 0.6)",
         pointBorderColor: "#fff",
         pointRadius: 0,
         fill: false,
