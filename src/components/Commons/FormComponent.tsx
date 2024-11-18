@@ -32,7 +32,7 @@ export default function FormComponente({
       </div>
       <form
         onSubmit={onSubmit}
-        className="w-full max-w-xl flex flex-col px-2 font-semibold"
+        className="w-full max-w-xl flex flex-col font-semibold"
         id={id}
       >
         {children}

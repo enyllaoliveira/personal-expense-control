@@ -30,10 +30,7 @@ export default function YearDashboard() {
             const endOfYear = new Date(isSelectedYear, 11, 31);
 
             if (income.isRecurrent) {
-              while (
-                date.getFullYear() === isSelectedYear &&
-                date <= endOfYear
-              ) {
+              while (date <= endOfYear) {
                 transactions.push({
                   id: income.id,
                   userId: income.userId,
@@ -71,10 +68,7 @@ export default function YearDashboard() {
             const endOfYear = new Date(isSelectedYear, 11, 31);
 
             if (expense.is_recurrent) {
-              while (
-                date.getFullYear() === isSelectedYear &&
-                date <= endOfYear
-              ) {
+              while (date <= endOfYear) {
                 transactions.push({
                   id: expense.id,
                   userId: expense.userId,
@@ -129,7 +123,7 @@ export default function YearDashboard() {
           value={isSelectedYear}
           onChange={(e) => setIsSelectedYear(parseInt(e.target.value))}
           min={2000}
-          max={new Date().getFullYear()}
+          max={2100}
         />
       </div>
 
@@ -141,7 +135,10 @@ export default function YearDashboard() {
           titleColor="#201F1B"
         />
       ) : (
-        <p>Sem dados disponíveis para o gráfico</p>
+        <div className="flex flex-col gap-2">
+          <p>Sem dados disponíveis para o gráfico e tabela.</p>
+          <p>Adicione receitas e despesas para criar o gráfico</p>
+        </div>
       )}
 
       <Button

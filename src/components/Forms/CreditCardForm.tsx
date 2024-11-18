@@ -83,24 +83,24 @@ const CreditForm = () => {
   };
 
   return (
-    <main className="flex flex-col gap-4 sm:flex-col px-4 my-8 overflow-y-visible">
+    <main className="flex flex-col gap-4 sm:flex-col px-4 overflow-y-visible my-8">
       <div className="flex sm:flex-col">
-        <div className="w-[700px] md:w-[400px] sm:px-4 sm:w-full max-h-[600px]">
-          {expensesCard.length > 0 ? (
+        {expensesCard.length > 0 ? (
+          <div className="w-[700px] md:w-[400px] sm:px-4 sm:w-full max-h-[600px]">
             <DoughnutChartComponent
               data={formatIncomesForChartToExpense(expensesCard)}
             />
-          ) : (
-            <p className="text-center mx-auto ">
-              Adicione uma despesa para criar seu gráfico.
-            </p>
-          )}
-        </div>
+          </div>
+        ) : (
+          <p className="text-center mx-auto my-auto">
+            Adicione uma despesa para criar seu gráfico.
+          </p>
+        )}
 
         <FormComponente
-          className="w-1/3 md:w-2/3 ml-auto sm:w-full h-full mt-12"
+          className="w-1/3 md:w-2/3 ml-auto sm:w-full h-full"
           onSubmit={handleSubmit}
-          title="Adicionar Despesas"
+          title="Adicionar despesa do cartão de crédito"
           id="expense-credit-card-form"
         >
           <InputComponent
@@ -178,7 +178,7 @@ const CreditForm = () => {
             type="submit"
             className="w-full mt-0 md:mt-4"
           >
-            Adicionar Despesa do Cartão
+            Adicionar despesa do cartão
           </Button>
           {expensesCard.length > 0 && (
             <Button

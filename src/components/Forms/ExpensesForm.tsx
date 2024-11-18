@@ -86,14 +86,14 @@ export default function ExpensesForm() {
           </div>
         ) : (
           <p className="text-center mx-auto my-auto">
-            Adicione uma receita para criar seu gráfico.
+            Adicione uma despesa para criar seu gráfico.
           </p>
         )}
         <FormComponente
-          className="w-1/3 md:w-2/3 ml-auto sm:w-full h-full mt-12"
+          className="w-1/3 md:w-2/3 ml-auto sm:w-full h-full"
           onSubmit={handleSubmit}
           id="expense-comun-form"
-          title="Adicionar Despesas"
+          title="Adicionar despesa"
         >
           <InputComponent
             label="Valor"
@@ -183,7 +183,7 @@ export default function ExpensesForm() {
               type="submit"
               className="w-full mt-0 md:mt-4"
             >
-              Adicionar Despesass{" "}
+              Adicionar despesa{" "}
             </Button>
           )}
           {commonExpenses.length > 0 && (

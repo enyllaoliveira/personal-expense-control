@@ -70,7 +70,7 @@ export default function IncomeForm() {
         )}
 
         <FormComponente
-          title="Adicionar Receita"
+          title="Adicionar receita"
           id="income-form"
           onSubmit={handleSubmit}
           className="w-1/3 md:w-2/3 ml-auto sm:w-full h-full"
@@ -117,7 +117,7 @@ export default function IncomeForm() {
             }
           />
           <Button variant="primary" type="submit" className="w-full">
-            Adicionar Receita
+            Adicionar receita
           </Button>
           {incomes.length > 0 && (
             <Button
