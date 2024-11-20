@@ -19,10 +19,21 @@ export const doughnutDataToIncome = {
         "rgba(95, 202, 192, 1)",
         "rgba(45, 162, 172, 1)",
       ],
+      borderWidth: 1,
     },
   ],
 };
 
-export default function DoughnutChartComponent() {
-  return <Doughnut data={doughnutDataToIncome} />;
+interface DoughnutChartProps {
+  data?: typeof doughnutDataToIncome;
+}
+
+export default function DoughnutChartComponent({
+  data = doughnutDataToIncome,
+}: DoughnutChartProps) {
+  return (
+    <div style={{ maxWidth: "400px", margin: "0 auto" }}>
+      <Doughnut data={data} />
+    </div>
+  );
 }

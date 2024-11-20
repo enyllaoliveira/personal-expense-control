@@ -1,9 +1,6 @@
-import { Doughnut } from "react-chartjs-2";
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import { ChartData } from "chart.js";
 
-ChartJS.register(ArcElement, Tooltip, Legend);
-
-export const doughnutDataToRevenue = {
+export const doughnutDataToRevenue: ChartData<"doughnut", number[], unknown> = {
   labels: [
     "Aluguel",
     "Alimentação",
@@ -32,10 +29,7 @@ export const doughnutDataToRevenue = {
         "rgba(200, 30, 60, 1)",
         "rgba(255, 210, 220, 1)",
       ],
+      borderWidth: 1,
     },
   ],
 };
-
-export default function DoughnutChartComponent() {
-  return <Doughnut data={doughnutDataToRevenue} />;
-}

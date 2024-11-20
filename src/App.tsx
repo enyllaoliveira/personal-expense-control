@@ -8,6 +8,8 @@ import { UserProvider } from "./context/AuthContext/AuthContext";
 import MeuPainel from "./pages/meu-painel";
 import { DataProvider } from "./context/DataContext/DataContext";
 import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 function App() {

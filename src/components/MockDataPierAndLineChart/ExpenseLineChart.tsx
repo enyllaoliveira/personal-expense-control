@@ -50,7 +50,7 @@ export default function ExpenseLineChart() {
           1200, 1900, 3000, 500, 2000, 1800, 2200, 1500, 2500, 2100, 2300, 2400,
         ],
         backgroundColor: "rgba(255, 99, 132, 0.2)",
-        borderColor: "rgba(255, 178, 178, 0.2)",
+        borderColor: "rgba(255, 99, 132, 1)",
         borderWidth: 1,
       },
       {
@@ -60,12 +60,12 @@ export default function ExpenseLineChart() {
           1000, 1700, 2800, 400, 1800, 1600, 2100, 1400, 2300, 2000, 2200, 2300,
         ],
         borderColor: "rgba(255, 99, 132, 1)",
-        backgroundColor: "rgba(255, 99, 132, 1)",
+        backgroundColor: "rgba(255, 99, 132, 0.2)",
         pointBackgroundColor: "#4169E1",
         pointBorderColor: "#fff",
-        pointRadius: 0,
+        pointRadius: 4,
         fill: false,
-        tension: 0.1,
+        tension: 0.4,
       },
     ],
   };
@@ -82,7 +82,10 @@ export default function ExpenseLineChart() {
         callbacks: {
           label: function (context: TooltipItem<"bar" | "line">) {
             const value = context.raw as number;
-            return `R$ ${value.toFixed(2)}`;
+            return `R$ ${value.toLocaleString("pt-BR", {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })}`;
           },
         },
       },
@@ -93,7 +96,7 @@ export default function ExpenseLineChart() {
         ticks: {
           callback: (tickValue: string | number) => {
             if (typeof tickValue === "number") {
-              return `R$ ${tickValue}`;
+              return `R$ ${tickValue.toLocaleString("pt-BR")}`;
             }
             return tickValue;
           },
