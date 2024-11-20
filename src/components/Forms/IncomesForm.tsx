@@ -31,8 +31,10 @@ export default function IncomeForm() {
   const handleOpenListModalIncome = () => setIsListIncomeModalOpen(true);
 
   useEffect(() => {
-    if (user?.id) handleGetIncomes(user.id);
-  }, [user]);
+    if (user?.id) {
+      handleGetIncomes(user.id);
+    }
+  }, [user?.id]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -46,6 +48,10 @@ export default function IncomeForm() {
     addTransaction(newTransaction);
 
     await handleAddIncome(formDataIncome);
+
+    if (user?.id) {
+      await handleGetIncomes(user.id);
+    }
 
     setFormDataIncome((prev) => ({
       ...prev,

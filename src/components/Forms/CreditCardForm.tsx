@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { formatDate } from "../../utils/FormattedValues";
 import { useDataInformation } from "../../context/DataContext/DataContext";
 import Button from "../Commons/Button";
@@ -10,9 +10,11 @@ import InputComponent from "../Commons/InputComponent";
 import SelectComponente from "../Commons/SelectComponenet";
 import FormComponente from "../Commons/FormComponent";
 import TextArea from "../Commons/TextArea";
-// import ChartComponent from "../Graphics/LineChart";
+import { AuthContext } from "../../context/AuthContext/AuthContext";
 
 const CreditForm = () => {
+  const userContext = AuthContext();
+  const user = userContext?.user;
   const {
     handleAddExpense,
     categories,
@@ -20,9 +22,9 @@ const CreditForm = () => {
     formatIncomesForChartToExpense,
     groupExpensesByDescriptionToGraphics,
     addTransaction,
-    // filterTransactions,
     formDataExpenses,
     setFormDataExpenses,
+    handleGetExpense,
   } = useDataInformation();
 
   const [isListExpenseModalOpen, setIsListExpenseModalOpen] = useState(false);
@@ -41,18 +43,22 @@ const CreditForm = () => {
     }));
   };
 
-  const expensesCard = groupExpensesByDescriptionToGraphics(
-    expenses.filter((expense) => expense.payment_type === "cartao_credito")
-  );
+  const expensesCard = useMemo(() => {
+    return groupExpensesByDescriptionToGraphics(
+      expenses.filter((expense) => expense.payment_type === "cartao_credito")
+    );
+  }, [expenses]);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    setFormDataExpenses((expense) => ({
-      ...expense,
+    const updatedExpense = {
+      ...formDataExpenses,
       payment_type: "cartao_credito",
-    }));
-    if (!formDataExpenses.category_id) {
+    };
+
+    setFormDataExpenses(updatedExpense);
+    if (!updatedExpense.category_id) {
       toast.error("Selecione uma categoria válida.", {
         autoClose: 2000,
       });
@@ -60,13 +66,14 @@ const CreditForm = () => {
     }
 
     const newTransaction: Transaction = {
-      amount: parseFloat(formDataExpenses.amount),
-      date: formDataExpenses.payment_date,
+      amount: parseFloat(updatedExpense.amount),
+      date: updatedExpense.payment_date,
       type: "credit",
     };
 
     addTransaction(newTransaction);
-    handleAddExpense(formDataExpenses);
+    await handleAddExpense(updatedExpense);
+    await handleGetExpense(String(user?.id));
 
     setFormDataExpenses({
       id: "",
@@ -81,6 +88,12 @@ const CreditForm = () => {
       is_recurrent: false,
     });
   };
+  useEffect(() => {
+    setFormDataExpenses((expense) => ({
+      ...expense,
+      payment_type: "cartao_credito",
+    }));
+  }, []);
 
   return (
     <main className="flex flex-col gap-4 sm:flex-col px-4 overflow-y-visible my-8">
@@ -193,11 +206,6 @@ const CreditForm = () => {
           )}
         </FormComponente>
       </div>
-      {/* <ChartComponent
-        transactions={filterTransactions("credit")}
-        title="Gastos mensais com cartão de crédito"
-        type="bar"
-      /> */}
       {isListExpenseModalOpen && (
         <EditCrediCardExpensesModal
           onClose={() => setIsListExpenseModalOpen(false)}

@@ -171,8 +171,7 @@ export function DataProvider({ children }: DataProviderProps) {
     try {
       const response = await api.getExpensesById(String(user?.id));
       if (response?.status === 200) {
-        const allExpenses = response.data || [];
-        setExpenses(allExpenses);
+        setExpenses(response.data);
       } else if (response?.status === 404) {
         toast.error("Nenhuma despesa encontrada.", { autoClose: 2000 });
         setExpenses([]);
@@ -224,6 +223,11 @@ export function DataProvider({ children }: DataProviderProps) {
     }
 
     try {
+      if (!payment_type) {
+        toast.error("O tipo de pagamento é obrigatório.");
+        return;
+      }
+
       const finalCategoryId = category_id;
       if (!user?.id) {
         toast.error("Usuário não autenticado.");
@@ -243,9 +247,8 @@ export function DataProvider({ children }: DataProviderProps) {
             amount: (parseFloat(amount) / installment_count).toFixed(2),
             payment_date: dateInstallment.toISOString().split("T")[0],
             category_id: finalCategoryId,
-
             user_id: String(user.id),
-            payment_type: payment_type || "comum",
+            payment_type: payment_type,
             installment_count: installment_count,
             current_installment: i + 1,
           });
@@ -261,7 +264,7 @@ export function DataProvider({ children }: DataProviderProps) {
             description: description,
             payment_date: recurringDate.toISOString().split("T")[0],
             category_id: finalCategoryId,
-            payment_type: payment_type || "comum",
+            payment_type: payment_type,
             installment_count: 12,
             current_installment: i + 1,
           });
@@ -273,7 +276,7 @@ export function DataProvider({ children }: DataProviderProps) {
           description: description,
           payment_date: payment_date,
           category_id: finalCategoryId,
-          payment_type: payment_type || "comum",
+          payment_type: payment_type,
           installment_count: 1,
           current_installment: 1,
         });
@@ -282,7 +285,12 @@ export function DataProvider({ children }: DataProviderProps) {
 
       if (response?.status === 201) {
         setExpenses((prevExpenses) => [...prevExpenses, ...response.data]);
-        toast.success("Despesa criada com sucesso.", { autoClose: 2000 });
+        toast.success(
+          `Despesa ${response.data[0].description} criada com sucesso.`,
+          {
+            autoClose: 2000,
+          }
+        );
       }
     } catch (error) {
       toast.error("Erro ao adicionar despesa.", { autoClose: 2000 });
@@ -295,7 +303,10 @@ export function DataProvider({ children }: DataProviderProps) {
 
     const updatedFields: ExpenseUpdateProps = {};
 
-    if (formDataExpenses.is_recurrent && formDataExpenses.installment_count) {
+    if (
+      formDataExpenses.is_recurrent &&
+      formDataExpenses.installment_count > 2
+    ) {
       toast.error(
         "A despesa não pode ser recorrente e parcelada ao mesmo tempo."
       );
@@ -374,7 +385,9 @@ export function DataProvider({ children }: DataProviderProps) {
     return Array.from(groupedExpenses.values());
   };
 
-  const groupExpensesByDescriptionToGraphics = (expenses: Expense[]) => {
+  const groupExpensesByDescriptionToGraphics = (
+    expenses: Expense[]
+  ): Expense[] => {
     const groupedExpenses = new Map<string, Expense>();
 
     expenses.forEach((expense) => {
@@ -386,14 +399,12 @@ export function DataProvider({ children }: DataProviderProps) {
         const existingExpense = groupedExpenses.get(baseDescription);
 
         if (existingExpense) {
-          const existingAmount = parseFloat(
-            String(existingExpense.amount) || "0"
-          );
-          const currentValue = parseFloat(String(expense.amount) || "0");
+          const existingAmount = parseFloat(existingExpense.amount) || 0;
+          const currentAmount = parseFloat(expense.amount) || 0;
 
           groupedExpenses.set(baseDescription, {
             ...existingExpense,
-            amount: (existingAmount + currentValue).toFixed(2),
+            amount: (existingAmount + currentAmount).toFixed(2),
           });
         }
       } else {
@@ -490,8 +501,8 @@ export function DataProvider({ children }: DataProviderProps) {
           autoClose: 2000,
         });
 
-        setFormDataIncome((prev) => ({
-          ...prev,
+        setFormDataIncome((income) => ({
+          ...income,
           amount: "",
           description: "",
           receipt_date: "",
@@ -567,7 +578,7 @@ export function DataProvider({ children }: DataProviderProps) {
 
     setFormDataIncome({
       id: String(income.id),
-      userId: user?.id || 0, // Garantir valor numérico
+      userId: user?.id || 0,
       amount: income.amount.toString(),
       description: income.description,
       receipt_date: formattedDate,
@@ -578,16 +589,10 @@ export function DataProvider({ children }: DataProviderProps) {
   const handleUpdateIncome = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const updatedFields: IncomeUpdate = {};
-
-    if (formDataIncome.amount)
-      updatedFields.amount = formDataIncome.amount.toString();
-    if (formDataIncome.description)
-      updatedFields.description = formDataIncome.description;
-    if (formDataIncome.receipt_date)
-      updatedFields.date = formDataIncome.receipt_date;
-    if (formDataIncome.isRecurrent !== undefined)
-      updatedFields.isRecurrent = formDataIncome.isRecurrent;
+    const updatedFields: IncomeUpdate = {
+      ...formDataIncome,
+      date: formDataIncome.receipt_date,
+    };
 
     try {
       const response = await api.editIncome(
@@ -596,9 +601,7 @@ export function DataProvider({ children }: DataProviderProps) {
       );
 
       if (response?.status === 200) {
-        toast.success(`Receita editada.`, {
-          autoClose: 2000,
-        });
+        toast.success(`Receita editada.`, { autoClose: 2000 });
         await handleGetIncomes();
         setIsEditingIncome(false);
       }
@@ -606,22 +609,17 @@ export function DataProvider({ children }: DataProviderProps) {
       toast.error("Erro ao editar receita. Tente novamente mais tarde.", {
         autoClose: 2000,
       });
-      throw error;
+      console.error(error);
     }
   };
-
   const formatIncomesForChart = (incomes: Income[]): DoughnutChartData => {
     const groupedIncomes: { [key: string]: number } = {};
 
     incomes.forEach((income) => {
-      const { description, amount } = income;
-      const value = typeof amount === "string" ? parseFloat(amount) : amount;
+      const description = income.description || "Sem descrição";
+      const value = parseFloat(income.amount) || 0;
 
-      if (groupedIncomes[description]) {
-        groupedIncomes[description] += value;
-      } else {
-        groupedIncomes[description] = value;
-      }
+      groupedIncomes[description] = (groupedIncomes[description] || 0) + value;
     });
 
     return {
@@ -634,17 +632,11 @@ export function DataProvider({ children }: DataProviderProps) {
             "rgba(75, 192, 192, 0.6)",
             "rgba(95, 202, 192, 0.6)",
             "rgba(45, 162, 172, 0.6)",
-            "rgba(75, 192, 162, 0.6)",
-            "rgba(55, 172, 182, 0.6)",
-            "rgba(105, 212, 202, 0.6)",
           ],
           borderColor: [
             "rgba(75, 192, 192, 1)",
             "rgba(95, 202, 192, 1)",
             "rgba(45, 162, 172, 1)",
-            "rgba(75, 192, 162, 1)",
-            "rgba(55, 172, 182, 1)",
-            "rgba(105, 212, 202, 1)",
           ],
           borderWidth: 1,
         },
@@ -699,10 +691,18 @@ export function DataProvider({ children }: DataProviderProps) {
 
       await fetchCategories();
 
-      setFormDataExpenses((expenses) => ({
-        ...expenses,
+      setFormDataExpenses({
+        userId: user?.id,
+        id: "",
+        amount: "",
+        description: "",
+        payment_date: formatDate(new Date()),
+        category_id: "",
         newCategorie: "",
-      }));
+        payment_type: "comum",
+        installment_count: 1,
+        is_recurrent: false,
+      });
     } catch (error) {
       toast.error("Erro ao criar categoria.", { autoClose: 2000 });
 

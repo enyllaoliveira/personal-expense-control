@@ -1,5 +1,5 @@
 import { useDataInformation } from "../../context/DataContext/DataContext";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { AuthContext } from "../../context/AuthContext/AuthContext";
 import DoughnutChartComponent from "../MockDataPierAndLineChart/ExpenseAndIncomesPierChat";
 import Button from "../Commons/Button";
@@ -10,6 +10,7 @@ import InputComponent from "../Commons/InputComponent";
 import TextArea from "../Commons/TextArea";
 import SelectComponente from "../Commons/SelectComponenet";
 import FormComponente from "../Commons/FormComponent";
+import { formatDate } from "../../utils/FormattedValues";
 // import BarChart from "../Graphics/BarChart";
 
 export default function ExpensesForm() {
@@ -46,11 +47,13 @@ export default function ExpensesForm() {
     fetchCategories();
   }, []);
 
-  const commonExpenses = groupExpensesByDescriptionToGraphics(
-    expenses.filter((expense) => expense.payment_type === "comum")
-  );
+  const commonExpenses = useMemo(() => {
+    return groupExpensesByDescriptionToGraphics(
+      expenses.filter((expense) => expense.payment_type === "comum")
+    );
+  }, [expenses]);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!formDataExpenses.category_id) {
@@ -73,6 +76,20 @@ export default function ExpensesForm() {
     } else {
       handleAddExpense(formDataExpenses);
     }
+    await handleGetExpense(String(user?.id));
+
+    setFormDataExpenses({
+      userId: user?.id,
+      id: "",
+      amount: "",
+      description: "",
+      payment_date: formatDate(new Date()),
+      category_id: "",
+      newCategorie: "",
+      payment_type: "comum",
+      installment_count: 1,
+      is_recurrent: false,
+    });
   };
 
   return (
@@ -165,6 +182,7 @@ export default function ExpensesForm() {
                 setFormDataExpenses((expense) => ({
                   ...expense,
                   is_recurrent: e.target.checked,
+                  payment_type: "comum",
                 }))
               }
             />
