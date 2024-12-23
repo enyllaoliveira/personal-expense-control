@@ -23,7 +23,7 @@ export class useApi {
   public async login(userData: { email: string; password: string }) {
     try {
       const response = await api.post(
-        `${import.meta.env.VITE_API_URL}/users/login`,
+        `${import.meta.env.VITE_API_URL}/api/users/login`,
         userData
       );
       return response;
