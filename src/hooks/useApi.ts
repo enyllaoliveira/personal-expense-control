@@ -10,7 +10,7 @@ export class useApi {
   }) {
     try {
       const response = await api.post(
-        `${import.meta.env.VITE_API_URL}/register`,
+        `${import.meta.env.VITE_API_URL}/users/register`,
         userData
       );
       return response;
@@ -23,7 +23,7 @@ export class useApi {
   public async login(userData: { email: string; password: string }) {
     try {
       const response = await api.post(
-        `${import.meta.env.VITE_API_URL}/login`,
+        `${import.meta.env.VITE_API_URL}/users/login`,
         userData
       );
       return response;
@@ -35,7 +35,11 @@ export class useApi {
 
   public async logout(): Promise<AxiosResponse> {
     try {
-      const response = await api.post("/logout", {}, { withCredentials: true });
+      const response = await api.post(
+        "/users/logout",
+        {},
+        { withCredentials: true }
+      );
       return response;
     } catch (error) {
       console.error("Erro ao realizar logout:", error);
