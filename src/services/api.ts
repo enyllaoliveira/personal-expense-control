@@ -3,6 +3,7 @@ import axios from "axios";
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
   withCredentials: true,
+  timeout: 10000,
 });
 
 api.interceptors.response.use(
@@ -16,11 +17,7 @@ api.interceptors.response.use(
       originalRequest._retry = true;
 
       try {
-        await axios.post(
-          `${import.meta.env.VITE_API_URL}/refresh-token`,
-          {},
-          { withCredentials: true }
-        );
+        await axios.post(`${import.meta.env.VITE_API_URL}/refresh-token`, {});
 
         return api(originalRequest);
       } catch (err) {
