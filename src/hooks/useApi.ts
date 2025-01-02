@@ -10,7 +10,7 @@ export class useApi {
   }) {
     try {
       const response = await api.post(
-        `${import.meta.env.VITE_API_URL}/users/register`,
+        `${import.meta.env.VITE_API_URL}/api/users/register`,
         userData
       );
       return response;
