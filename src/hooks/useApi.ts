@@ -9,10 +9,7 @@ export class useApi {
     password: string;
   }) {
     try {
-      const response = await api.post(
-        `${import.meta.env.VITE_API_URL}/api/users/register`,
-        userData
-      );
+      const response = await api.post(`/api/users/register`, userData);
       return response;
     } catch (error) {
       console.error("Erro ao registrar usuário:", error);
@@ -22,10 +19,7 @@ export class useApi {
 
   public async login(userData: { email: string; password: string }) {
     try {
-      const response = await api.post(
-        `${import.meta.env.VITE_API_URL}/api/users/login`,
-        userData
-      );
+      const response = await api.post(`/api/users/login`, userData);
       return response;
     } catch (error) {
       console.error("Erro ao logar usuário:", error);
@@ -45,9 +39,7 @@ export class useApi {
 
   public async getIncomesById(userId: string | number) {
     try {
-      const response = await api.get(
-        `${import.meta.env.VITE_API_URL}/api/incomes?userId=${userId}`
-      );
+      const response = await api.get(`/api/incomes?userId=${userId}`);
       return response;
     } catch (error) {
       console.error("Erro ao adicionar receita:", error);
@@ -63,10 +55,7 @@ export class useApi {
     isRecurrent: boolean;
   }) {
     try {
-      const response = await api.post(
-        `${import.meta.env.VITE_API_URL}/api/incomes`,
-        incomesData
-      );
+      const response = await api.post(`/api/incomes`, incomesData);
       return response;
     } catch (error) {
       console.error("Erro ao adicionar receita:", error);
@@ -79,10 +68,7 @@ export class useApi {
     updateData: Partial<Income>
   ): Promise<AxiosResponse<unknown>> {
     try {
-      const response = await api.put(
-        `${import.meta.env.VITE_API_URL}api/incomes/${id}`,
-        updateData
-      );
+      const response = await api.put(`api/incomes/${id}`, updateData);
       return response;
     } catch (error) {
       console.error("Erro ao editar lançamento:", error);
@@ -92,9 +78,7 @@ export class useApi {
 
   public async deleteIncome(id: string) {
     try {
-      const response = await api.delete(
-        `${import.meta.env.VITE_API_URL}/api/incomes/${id}`
-      );
+      const response = await api.delete(`/api/incomes/${id}`);
       return response;
     } catch (error) {
       console.error(error);
@@ -104,9 +88,7 @@ export class useApi {
 
   public async getExpensesById(id: string | number) {
     try {
-      const response = await api.get(
-        `${import.meta.env.VITE_API_URL}/api/expenses?userId=${id}`
-      );
+      const response = await api.get(`/api/expenses?userId=${id}`);
       return response;
     } catch (error) {
       console.error("Erro ao adicionar receita:", error);
@@ -128,10 +110,7 @@ export class useApi {
     }[]
   ) {
     try {
-      const response = await api.post(
-        `${import.meta.env.VITE_API_URL}/api/expenses`,
-        expensesData
-      );
+      const response = await api.post(`/api/expenses`, expensesData);
       return response;
     } catch (error) {
       console.error("Erro ao adicionar despesa:", error);
@@ -141,10 +120,7 @@ export class useApi {
 
   public async editExpenses(id: string, updateData: Partial<Expense>) {
     try {
-      const response = await api.put(
-        `${import.meta.env.VITE_API_URL}/api/expenses/${id}`,
-        updateData
-      );
+      const response = await api.put(`/api/expenses/${id}`, updateData);
       return response;
     } catch (error) {
       console.error("Erro ao editar despesa:", error);
@@ -154,9 +130,7 @@ export class useApi {
 
   public async deleteExpenses(id: string) {
     try {
-      const response = await api.delete(
-        `${import.meta.env.VITE_API_URL}/api/expenses/${id}`
-      );
+      const response = await api.delete(`/api/expenses/${id}`);
       return response;
     } catch (error) {
       console.error("Erro ao excluir despesa:", error);
@@ -166,13 +140,10 @@ export class useApi {
 
   public async getYearData(year: number) {
     try {
-      const response = await api.get(
-        `${import.meta.env.VITE_API_URL}/api/graphics/year`,
-        {
-          params: { year },
-          withCredentials: true,
-        }
-      );
+      const response = await api.get(`/api/graphics/year`, {
+        params: { year },
+        withCredentials: true,
+      });
       if (response && response.data) {
         return response.data;
       } else {
@@ -186,13 +157,10 @@ export class useApi {
 
   public async getMonthData(month: number, year: number) {
     try {
-      const response = await api.get(
-        `${import.meta.env.VITE_API_URL}/api/graphics/month`,
-        {
-          params: { month, year },
-          withCredentials: true,
-        }
-      );
+      const response = await api.get(`/api/graphics/month`, {
+        params: { month, year },
+        withCredentials: true,
+      });
       if (response && response.data) {
         return response.data;
       } else {
@@ -206,9 +174,7 @@ export class useApi {
 
   public async getCategories() {
     try {
-      const response = await api.get(
-        `${import.meta.env.VITE_API_URL}/api/categories`
-      );
+      const response = await api.get(`/api/categories`);
       return response;
     } catch (error) {
       console.error("Erro ao buscar categorias:", error);
@@ -223,10 +189,7 @@ export class useApi {
     id: string | number;
   }) {
     try {
-      const response = await api.post(
-        `${import.meta.env.VITE_API_URL}/api/categories`,
-        categoriesData
-      );
+      const response = await api.post(`/api/categories`, categoriesData);
       return response.data;
     } catch (error) {
       console.error("Erro ao buscar categorias:", error);
@@ -241,7 +204,7 @@ export class useApi {
   }) {
     try {
       const response = await api.put(
-        `${import.meta.env.VITE_API_URL}/api/categories/${categoriesData.id}`,
+        `/api/categories/${categoriesData.id}`,
         categoriesData
       );
       return response.data;
@@ -253,9 +216,7 @@ export class useApi {
 
   public async deleteCategories(id: string) {
     try {
-      const response = await api.delete(
-        `${import.meta.env.VITE_API_URL}/api/categories/${id}`
-      );
+      const response = await api.delete(`/api/categories/${id}`);
       return response;
     } catch (error) {
       console.error("Erro ao excluir despesa:", error);
