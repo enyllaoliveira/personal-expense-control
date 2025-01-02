@@ -36,7 +36,7 @@ export class useApi {
   public async logout(): Promise<AxiosResponse> {
     try {
       const response = await api.post(
-        "/users/logout",
+        "/api/users/logout",
         {},
         { withCredentials: true }
       );
@@ -50,7 +50,7 @@ export class useApi {
   public async getIncomesById(userId: string | number) {
     try {
       const response = await api.get(
-        `${import.meta.env.VITE_API_URL}/incomes?userId=${userId}`,
+        `${import.meta.env.VITE_API_URL}/api/incomes?userId=${userId}`,
         { withCredentials: true }
       );
       return response;
@@ -69,7 +69,7 @@ export class useApi {
   }) {
     try {
       const response = await api.post(
-        `${import.meta.env.VITE_API_URL}/incomes`,
+        `${import.meta.env.VITE_API_URL}/api/incomes`,
         incomesData,
         { withCredentials: true }
       );
@@ -86,7 +86,7 @@ export class useApi {
   ): Promise<AxiosResponse<unknown>> {
     try {
       const response = await api.put(
-        `${import.meta.env.VITE_API_URL}/incomes/${id}`,
+        `${import.meta.env.VITE_API_URL}api//incomes/${id}`,
         updateData,
         { withCredentials: true }
       );
@@ -100,7 +100,7 @@ export class useApi {
   public async deleteIncome(id: string) {
     try {
       const response = await api.delete(
-        `${import.meta.env.VITE_API_URL}/incomes/${id}`,
+        `${import.meta.env.VITE_API_URL}/api/incomes/${id}`,
         { withCredentials: true }
       );
       return response;
@@ -113,7 +113,7 @@ export class useApi {
   public async getExpensesById(id: string | number) {
     try {
       const response = await api.get(
-        `${import.meta.env.VITE_API_URL}/expenses?userId=${id}`,
+        `${import.meta.env.VITE_API_URL}/api/expenses?userId=${id}`,
         { withCredentials: true }
       );
       return response;
@@ -138,7 +138,7 @@ export class useApi {
   ) {
     try {
       const response = await api.post(
-        `${import.meta.env.VITE_API_URL}/expenses`,
+        `${import.meta.env.VITE_API_URL}/api/expenses`,
         expensesData,
         { withCredentials: true }
       );
@@ -152,7 +152,7 @@ export class useApi {
   public async editExpenses(id: string, updateData: Partial<Expense>) {
     try {
       const response = await api.put(
-        `${import.meta.env.VITE_API_URL}/expenses/${id}`,
+        `${import.meta.env.VITE_API_URL}/api/expenses/${id}`,
         updateData,
         { withCredentials: true }
       );
@@ -166,7 +166,7 @@ export class useApi {
   public async deleteExpenses(id: string) {
     try {
       const response = await api.delete(
-        `${import.meta.env.VITE_API_URL}/expenses/${id}`,
+        `${import.meta.env.VITE_API_URL}/api/expenses/${id}`,
         { withCredentials: true }
       );
       return response;
@@ -179,7 +179,7 @@ export class useApi {
   public async getYearData(year: number) {
     try {
       const response = await api.get(
-        `${import.meta.env.VITE_API_URL}/graphics/year`,
+        `${import.meta.env.VITE_API_URL}/api/graphics/year`,
         {
           params: { year },
           withCredentials: true,
@@ -199,7 +199,7 @@ export class useApi {
   public async getMonthData(month: number, year: number) {
     try {
       const response = await api.get(
-        `${import.meta.env.VITE_API_URL}/graphics/month`,
+        `${import.meta.env.VITE_API_URL}/api/graphics/month`,
         {
           params: { month, year },
           withCredentials: true,
@@ -219,7 +219,7 @@ export class useApi {
   public async getCategories() {
     try {
       const response = await api.get(
-        `${import.meta.env.VITE_API_URL}/categories`,
+        `${import.meta.env.VITE_API_URL}/api/categories`,
         { withCredentials: true }
       );
       return response;
@@ -237,7 +237,7 @@ export class useApi {
   }) {
     try {
       const response = await api.post(
-        `${import.meta.env.VITE_API_URL}/categories`,
+        `${import.meta.env.VITE_API_URL}/api/categories`,
         categoriesData,
         { withCredentials: true }
       );
@@ -255,7 +255,7 @@ export class useApi {
   }) {
     try {
       const response = await api.put(
-        `${import.meta.env.VITE_API_URL}/categories/${categoriesData.id}`,
+        `${import.meta.env.VITE_API_URL}/api/categories/${categoriesData.id}`,
         categoriesData,
         { withCredentials: true }
       );
@@ -269,7 +269,7 @@ export class useApi {
   public async deleteCategories(id: string) {
     try {
       const response = await api.delete(
-        `${import.meta.env.VITE_API_URL}/categories/${id}`,
+        `${import.meta.env.VITE_API_URL}/api/categories/${id}`,
         { withCredentials: true }
       );
       return response;
