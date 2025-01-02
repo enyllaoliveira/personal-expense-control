@@ -68,7 +68,7 @@ export class useApi {
     updateData: Partial<Income>
   ): Promise<AxiosResponse<unknown>> {
     try {
-      const response = await api.put(`api/incomes/${id}`, updateData);
+      const response = await api.put(`/api/incomes/${id}`, updateData);
       return response;
     } catch (error) {
       console.error("Erro ao editar lançamento:", error);
