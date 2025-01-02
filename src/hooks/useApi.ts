@@ -35,11 +35,7 @@ export class useApi {
 
   public async logout(): Promise<AxiosResponse> {
     try {
-      const response = await api.post(
-        "/api/users/logout",
-        {},
-        { withCredentials: true }
-      );
+      const response = await api.post("/api/users/logout", {});
       return response;
     } catch (error) {
       console.error("Erro ao realizar logout:", error);
@@ -50,8 +46,7 @@ export class useApi {
   public async getIncomesById(userId: string | number) {
     try {
       const response = await api.get(
-        `${import.meta.env.VITE_API_URL}/api/incomes?userId=${userId}`,
-        { withCredentials: true }
+        `${import.meta.env.VITE_API_URL}/api/incomes?userId=${userId}`
       );
       return response;
     } catch (error) {
@@ -70,8 +65,7 @@ export class useApi {
     try {
       const response = await api.post(
         `${import.meta.env.VITE_API_URL}/api/incomes`,
-        incomesData,
-        { withCredentials: true }
+        incomesData
       );
       return response;
     } catch (error) {
@@ -87,8 +81,7 @@ export class useApi {
     try {
       const response = await api.put(
         `${import.meta.env.VITE_API_URL}api/incomes/${id}`,
-        updateData,
-        { withCredentials: true }
+        updateData
       );
       return response;
     } catch (error) {
@@ -100,8 +93,7 @@ export class useApi {
   public async deleteIncome(id: string) {
     try {
       const response = await api.delete(
-        `${import.meta.env.VITE_API_URL}/api/incomes/${id}`,
-        { withCredentials: true }
+        `${import.meta.env.VITE_API_URL}/api/incomes/${id}`
       );
       return response;
     } catch (error) {
@@ -113,8 +105,7 @@ export class useApi {
   public async getExpensesById(id: string | number) {
     try {
       const response = await api.get(
-        `${import.meta.env.VITE_API_URL}/api/expenses?userId=${id}`,
-        { withCredentials: true }
+        `${import.meta.env.VITE_API_URL}/api/expenses?userId=${id}`
       );
       return response;
     } catch (error) {
@@ -139,8 +130,7 @@ export class useApi {
     try {
       const response = await api.post(
         `${import.meta.env.VITE_API_URL}/api/expenses`,
-        expensesData,
-        { withCredentials: true }
+        expensesData
       );
       return response;
     } catch (error) {
@@ -153,8 +143,7 @@ export class useApi {
     try {
       const response = await api.put(
         `${import.meta.env.VITE_API_URL}/api/expenses/${id}`,
-        updateData,
-        { withCredentials: true }
+        updateData
       );
       return response;
     } catch (error) {
@@ -166,8 +155,7 @@ export class useApi {
   public async deleteExpenses(id: string) {
     try {
       const response = await api.delete(
-        `${import.meta.env.VITE_API_URL}/api/expenses/${id}`,
-        { withCredentials: true }
+        `${import.meta.env.VITE_API_URL}/api/expenses/${id}`
       );
       return response;
     } catch (error) {
@@ -219,8 +207,7 @@ export class useApi {
   public async getCategories() {
     try {
       const response = await api.get(
-        `${import.meta.env.VITE_API_URL}/api/categories`,
-        { withCredentials: true }
+        `${import.meta.env.VITE_API_URL}/api/categories`
       );
       return response;
     } catch (error) {
@@ -238,8 +225,7 @@ export class useApi {
     try {
       const response = await api.post(
         `${import.meta.env.VITE_API_URL}/api/categories`,
-        categoriesData,
-        { withCredentials: true }
+        categoriesData
       );
       return response.data;
     } catch (error) {
@@ -256,8 +242,7 @@ export class useApi {
     try {
       const response = await api.put(
         `${import.meta.env.VITE_API_URL}/api/categories/${categoriesData.id}`,
-        categoriesData,
-        { withCredentials: true }
+        categoriesData
       );
       return response.data;
     } catch (error) {
@@ -269,8 +254,7 @@ export class useApi {
   public async deleteCategories(id: string) {
     try {
       const response = await api.delete(
-        `${import.meta.env.VITE_API_URL}/api/categories/${id}`,
-        { withCredentials: true }
+        `${import.meta.env.VITE_API_URL}/api/categories/${id}`
       );
       return response;
     } catch (error) {
