@@ -142,7 +142,6 @@ export class useApi {
     try {
       const response = await api.get(`/api/graphics/year`, {
         params: { year },
-        withCredentials: true,
       });
       if (response && response.data) {
         return response.data;
@@ -159,7 +158,6 @@ export class useApi {
     try {
       const response = await api.get(`/api/graphics/month`, {
         params: { month, year },
-        withCredentials: true,
       });
       if (response && response.data) {
         return response.data;
