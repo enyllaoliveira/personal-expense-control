@@ -86,7 +86,7 @@ export class useApi {
   ): Promise<AxiosResponse<unknown>> {
     try {
       const response = await api.put(
-        `${import.meta.env.VITE_API_URL}api//incomes/${id}`,
+        `${import.meta.env.VITE_API_URL}api/incomes/${id}`,
         updateData,
         { withCredentials: true }
       );
